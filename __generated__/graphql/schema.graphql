@@ -1,0 +1,3164 @@
+type Query {
+  getFrontendVersion: FrontendVersion!
+  budgetConfig: BudgetConfig!
+  budget(id: ID!): Budget!
+  budgets: [Budget!]!
+  contacts: [Contact!]!
+  searchServices(text: String!): [Service!]!
+  searchPassengers(email: String!): [Passenger!]!
+  searchDrivers(text: String, drivingCompanyId: String): [Driver!]!
+  passengers: [Passenger!]!
+  passengersForUser(id: ID!): [Passenger!]!
+  passenger(id: String!): Passenger!
+  service(id: ID!): Service
+  serviceTypes: [ServiceType!]!
+  services(
+    """If not provided, corresponds to current day, server time"""
+    departureDateMin: String
+
+    """If not provided, corresponds to current day, server time"""
+    departureDateMax: String
+  ): [Service!]
+  clients: [Client!]
+  client(
+    """Client id"""
+    id: ID
+
+    """If not provided, corresponds to current day, server time"""
+    departureDateMin: String
+
+    """If not provided, corresponds to current day, server time"""
+    departureDateMax: String
+  ): Client
+  clientEmployees: [ClientEmployee!]!
+  clientEmployee(id: ID!): ClientEmployee!
+  drivers: [Driver!]
+  driversByDrivingCompany(drivingCompanyId: ID!): [Driver!]!
+  user: PUser!
+  driver(
+    id: ID
+
+    """If not provided, corresponds to current day, server time"""
+    departureDateMin: String
+
+    """If not provided, corresponds to current day, server time"""
+    departureDateMax: String
+  ): Driver
+  drivingCompany(id: ID!): DrivingCompany!
+  drivingCompanies: [DrivingCompany!]!
+  vehicle(id: ID!): Vehicle!
+  vehicles(status: String, type: String): [Vehicle!]!
+  vehicleTypes: [VehicleType!]!
+  vehicleBrandModels: [VehicleBrandModels!]!
+  vehicleBrand(id: ID!): VehicleBrandModels!
+  vehicleModel(id: ID!): VehicleModel!
+  globalRate(clientId: ID): Rate
+  getServiceSubtypes(id: ID!): [ServiceSubtype!]!
+  computeItineraryPrice(departure: DepartureOrArrivalInput, arrival: DepartureOrArrivalInput, serviceTypeId: String!, clientId: String!, vehicleTypeId: String!, vehicleModelId: String, vehicleBrandId: String, hours: Int, numPassengers: Int): CandidateAmount!
+}
+
+type FrontendVersion {
+  version: String!
+}
+
+type BudgetConfig {
+  status: [BudgetStatus!]!
+  metThrough: [BudgetMetThrough!]!
+  requestSource: [BudgetRequestSource!]!
+  companies: [Company!]!
+  templates: [BudgetTemplate!]!
+  vatTypes: [VAT!]!
+  driverFeatures: [ItineraryFeature!]!
+  vehicleFeatures: [ItineraryFeature!]!
+}
+
+type BudgetStatus {
+  code: String!
+  locale: [Locale!]!
+}
+
+type Locale {
+  code: CountryLocales!
+  value: String!
+}
+
+enum CountryLocales {
+  esES
+}
+
+type BudgetMetThrough {
+  code: String!
+  locale: [Locale!]!
+}
+
+type BudgetRequestSource {
+  code: String!
+  locale: [Locale!]!
+}
+
+type Company {
+  code: CompanyCode!
+  data: CompanyData!
+}
+
+enum CompanyCode {
+  MINI_BUSES_VIPS_BARCELONA
+  MINI_VIPS_CAR_DRIVERS
+}
+
+type CompanyData {
+  cif: String!
+  name: String!
+  address: String!
+  zip: String!
+  location: String!
+  region: String!
+  phone: String!
+  fax: String!
+  email: String!
+  web: String!
+  country: CompanyDataCountry!
+}
+
+type CompanyDataCountry {
+  esES: String!
+  enEN: String!
+  enUS: String!
+}
+
+type BudgetTemplate {
+  code: String!
+  translation: String!
+  template: Template!
+}
+
+type Template {
+  heading: String!
+  body: String!
+}
+
+type VAT {
+  translation: String!
+  code: String!
+  value: Float!
+}
+
+type ItineraryFeature {
+  id: ID!
+  description: String!
+  required: Boolean!
+}
+
+type Budget {
+  id: ID!
+  readableId: String!
+  validityPeriodStart: String!
+  validityPeriodEnd: String!
+  creationDate: String!
+  attendedBy: String!
+  client: Client!
+  status: BudgetStatus!
+  company: Company!
+  reference: String
+  contact: Contact
+  metThrough: BudgetMetThrough
+  requestSource: BudgetRequestSource
+  templateHeading: String
+  templateBody: String
+  itineraries: [Itinerary!]!
+}
+
+type Client {
+  id: ID!
+  services: [Service!]!
+  nif: String
+  name: String
+  phone: String
+  alternatePhone: String
+  volcanoClientId: String
+  volcanoEmail: String
+  email: String
+  communicationLocale: String
+  firebaseId: String
+  hasWebPanelAccount: Boolean
+  loginEnabled: Boolean
+}
+
+type Service {
+  id: ID!
+  volcanoServiceId: String
+  providerId: Int
+  budgetReadableId: String
+  notes: String
+  type: String
+  typeId: String
+  status: String
+  disturbance: Boolean
+  description: String
+  reference: String
+  serieFact: String
+  itineraryDescription: String
+  numOfPassengers: Int
+  vehicle: Vehicle
+  departure: DepartureOrArrival
+  arrival: DepartureOrArrival
+  presentationTime: String
+  driver: Driver
+  alternateDriver: Driver
+  client: Client
+  passengers: [Passenger!]!
+  drivers: [Driver!]!
+  drivingCompany: DrivingCompany
+}
+
+type Vehicle {
+  id: ID!
+  volcanoVehicleId: String
+  type: String
+  typeID: Int
+  typeDescription: String
+  status: String
+  licensePlate: String
+  location: Location
+  brand: String
+  model: String
+}
+
+type Location {
+  longitude: String
+  latitude: String
+}
+
+type DepartureOrArrival {
+  date: String
+  address: String
+  lat: Float
+  lon: Float
+  time: String
+}
+
+type Driver {
+  id: ID
+  providerId: ID
+  received: Boolean
+  firebaseId: String
+  name: String
+  phone: String
+  alternatePhone: String
+  loginMethod: LoginMethod
+  loginEnabled: Boolean
+  email: String
+  type: String
+  status: String
+  notificationsToken: String
+  volcanoEmail: String
+  volcanoDriverId: String
+  hasLoginCredentials: Boolean
+  inPrisma: Boolean
+  inVolcano: Boolean
+  services: [Service!]!
+  profilePicURI: String
+  communicationLocale: String
+  drivingCompany: DrivingCompany
+  location: Location
+}
+
+enum LoginMethod {
+  PHONE
+  EMAIL
+}
+
+type DrivingCompany {
+  id: ID!
+  volcanoId: String
+  name: String
+  email: String
+  phone: String
+  drivers: [Driver!]!
+}
+
+type Passenger {
+  id: ID!
+  email: String!
+  phone: String
+  name: String
+}
+
+type Contact {
+  id: ID!
+  name: String!
+  phone: String
+  email: String
+}
+
+type Itinerary {
+  id: ID!
+  realized: Boolean!
+  amounts: [Amount!]!
+  hours: Int
+  departureDate: String!
+  departureTime: String!
+  arrivalDate: String!
+  arrivalTime: String!
+  presentationTime: String!
+  serviceTypeId: String!
+  dinner: Boolean!
+  reference: String
+  departureType: String
+  departureCity: String
+  departureAddress: String
+  departureLat: Float!
+  departureLon: Float!
+  arrivalType: String
+  arrivalCity: String
+  arrivalAddress: String
+  arrivalLat: Float!
+  arrivalLon: Float!
+  numVehicles: Int
+  vehicleModelId: String
+  vehicleBrandId: String
+  vehicleTypeId: String
+  numPassengers: Int
+  itineraryDescription: String!
+  groupName: String
+  flightNumber: String
+  notes: String
+  driverFeatures: [ItineraryFeature!]!
+  vehicleFeatures: [ItineraryFeature!]!
+}
+
+type Amount {
+  id: ID!
+  vat: Float!
+  amount: Float!
+  concept: String
+}
+
+type ServiceType {
+  id: String!
+  typeId: String!
+  description: String!
+  name: String!
+}
+
+type ClientEmployee {
+  id: ID!
+  createdAt: String!
+  email: String
+  name: String!
+  phone: String
+  loginEnabled: Boolean!
+  hasWebPanelAccount: Boolean!
+}
+
+type PUser {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  firebaseId: String
+  disabled: Boolean!
+  name: String
+  phone: String
+  volcanoClientId: String
+  isClient: Boolean!
+  isAdmin: Boolean!
+  clientRole: ClientRole
+  clientEmployees(where: PUserWhereInput, orderBy: PUserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PUser!]
+  clientEmployer: PUser
+  passengers(where: PPassengerWhereInput, orderBy: PPassengerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PPassenger!]
+  services(where: PServiceWhereInput, orderBy: PServiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PService!]
+  clientServices(where: PServiceWhereInput, orderBy: PServiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PService!]
+  contacts(where: PContactWhereInput, orderBy: PContactOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PContact!]
+  clientBudgets(where: PBudgetWhereInput, orderBy: PBudgetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PBudget!]
+  createdBudgets(where: PBudgetWhereInput, orderBy: PBudgetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PBudget!]
+  createdItineraries(where: PItineraryWhereInput, orderBy: PItineraryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PItinerary!]
+  createdItineraryDriverFeatures(where: PItineraryDriverFeatureWhereInput, orderBy: PItineraryDriverFeatureOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PItineraryDriverFeature!]
+  createdItineraryVehicleFeatures(where: PItineraryVehicleFeatureWhereInput, orderBy: PItineraryVehicleFeatureOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PItineraryVehicleFeature!]
+}
+
+scalar DateTime
+
+enum ClientRole {
+  ADMIN
+  EMPLOYEE
+}
+
+input PUserWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  firebaseId: String
+  firebaseId_not: String
+  firebaseId_in: [String!]
+  firebaseId_not_in: [String!]
+  firebaseId_lt: String
+  firebaseId_lte: String
+  firebaseId_gt: String
+  firebaseId_gte: String
+  firebaseId_contains: String
+  firebaseId_not_contains: String
+  firebaseId_starts_with: String
+  firebaseId_not_starts_with: String
+  firebaseId_ends_with: String
+  firebaseId_not_ends_with: String
+  disabled: Boolean
+  disabled_not: Boolean
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  phone: String
+  phone_not: String
+  phone_in: [String!]
+  phone_not_in: [String!]
+  phone_lt: String
+  phone_lte: String
+  phone_gt: String
+  phone_gte: String
+  phone_contains: String
+  phone_not_contains: String
+  phone_starts_with: String
+  phone_not_starts_with: String
+  phone_ends_with: String
+  phone_not_ends_with: String
+  volcanoClientId: String
+  volcanoClientId_not: String
+  volcanoClientId_in: [String!]
+  volcanoClientId_not_in: [String!]
+  volcanoClientId_lt: String
+  volcanoClientId_lte: String
+  volcanoClientId_gt: String
+  volcanoClientId_gte: String
+  volcanoClientId_contains: String
+  volcanoClientId_not_contains: String
+  volcanoClientId_starts_with: String
+  volcanoClientId_not_starts_with: String
+  volcanoClientId_ends_with: String
+  volcanoClientId_not_ends_with: String
+  isClient: Boolean
+  isClient_not: Boolean
+  isAdmin: Boolean
+  isAdmin_not: Boolean
+  clientRole: ClientRole
+  clientRole_not: ClientRole
+  clientRole_in: [ClientRole!]
+  clientRole_not_in: [ClientRole!]
+  clientEmployees_every: PUserWhereInput
+  clientEmployees_some: PUserWhereInput
+  clientEmployees_none: PUserWhereInput
+  clientEmployer: PUserWhereInput
+  passengers_every: PPassengerWhereInput
+  passengers_some: PPassengerWhereInput
+  passengers_none: PPassengerWhereInput
+  services_every: PServiceWhereInput
+  services_some: PServiceWhereInput
+  services_none: PServiceWhereInput
+  clientServices_every: PServiceWhereInput
+  clientServices_some: PServiceWhereInput
+  clientServices_none: PServiceWhereInput
+  contacts_every: PContactWhereInput
+  contacts_some: PContactWhereInput
+  contacts_none: PContactWhereInput
+  clientBudgets_every: PBudgetWhereInput
+  clientBudgets_some: PBudgetWhereInput
+  clientBudgets_none: PBudgetWhereInput
+  createdBudgets_every: PBudgetWhereInput
+  createdBudgets_some: PBudgetWhereInput
+  createdBudgets_none: PBudgetWhereInput
+  createdItineraries_every: PItineraryWhereInput
+  createdItineraries_some: PItineraryWhereInput
+  createdItineraries_none: PItineraryWhereInput
+  createdItineraryDriverFeatures_every: PItineraryDriverFeatureWhereInput
+  createdItineraryDriverFeatures_some: PItineraryDriverFeatureWhereInput
+  createdItineraryDriverFeatures_none: PItineraryDriverFeatureWhereInput
+  createdItineraryVehicleFeatures_every: PItineraryVehicleFeatureWhereInput
+  createdItineraryVehicleFeatures_some: PItineraryVehicleFeatureWhereInput
+  createdItineraryVehicleFeatures_none: PItineraryVehicleFeatureWhereInput
+  AND: [PUserWhereInput!]
+  OR: [PUserWhereInput!]
+  NOT: [PUserWhereInput!]
+}
+
+input PPassengerWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  belongsToUser: PUserWhereInput
+  services_every: PServiceWhereInput
+  services_some: PServiceWhereInput
+  services_none: PServiceWhereInput
+  email: String
+  email_not: String
+  email_in: [String!]
+  email_not_in: [String!]
+  email_lt: String
+  email_lte: String
+  email_gt: String
+  email_gte: String
+  email_contains: String
+  email_not_contains: String
+  email_starts_with: String
+  email_not_starts_with: String
+  email_ends_with: String
+  email_not_ends_with: String
+  phone: String
+  phone_not: String
+  phone_in: [String!]
+  phone_not_in: [String!]
+  phone_lt: String
+  phone_lte: String
+  phone_gt: String
+  phone_gte: String
+  phone_contains: String
+  phone_not_contains: String
+  phone_starts_with: String
+  phone_not_starts_with: String
+  phone_ends_with: String
+  phone_not_ends_with: String
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  AND: [PPassengerWhereInput!]
+  OR: [PPassengerWhereInput!]
+  NOT: [PPassengerWhereInput!]
+}
+
+input PServiceWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  owner: PUserWhereInput
+  client: PUserWhereInput
+  itinerary: PItineraryWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  volcanoServiceId: String
+  volcanoServiceId_not: String
+  volcanoServiceId_in: [String!]
+  volcanoServiceId_not_in: [String!]
+  volcanoServiceId_lt: String
+  volcanoServiceId_lte: String
+  volcanoServiceId_gt: String
+  volcanoServiceId_gte: String
+  volcanoServiceId_contains: String
+  volcanoServiceId_not_contains: String
+  volcanoServiceId_starts_with: String
+  volcanoServiceId_not_starts_with: String
+  volcanoServiceId_ends_with: String
+  volcanoServiceId_not_ends_with: String
+  driver: PDriverWhereInput
+  secondaryDriver: PDriverWhereInput
+  passengers_every: PPassengerWhereInput
+  passengers_some: PPassengerWhereInput
+  passengers_none: PPassengerWhereInput
+  canceled: Boolean
+  canceled_not: Boolean
+  departureAddress: String
+  departureAddress_not: String
+  departureAddress_in: [String!]
+  departureAddress_not_in: [String!]
+  departureAddress_lt: String
+  departureAddress_lte: String
+  departureAddress_gt: String
+  departureAddress_gte: String
+  departureAddress_contains: String
+  departureAddress_not_contains: String
+  departureAddress_starts_with: String
+  departureAddress_not_starts_with: String
+  departureAddress_ends_with: String
+  departureAddress_not_ends_with: String
+  departureLat: Float
+  departureLat_not: Float
+  departureLat_in: [Float!]
+  departureLat_not_in: [Float!]
+  departureLat_lt: Float
+  departureLat_lte: Float
+  departureLat_gt: Float
+  departureLat_gte: Float
+  departureLon: Float
+  departureLon_not: Float
+  departureLon_in: [Float!]
+  departureLon_not_in: [Float!]
+  departureLon_lt: Float
+  departureLon_lte: Float
+  departureLon_gt: Float
+  departureLon_gte: Float
+  arrivalAddress: String
+  arrivalAddress_not: String
+  arrivalAddress_in: [String!]
+  arrivalAddress_not_in: [String!]
+  arrivalAddress_lt: String
+  arrivalAddress_lte: String
+  arrivalAddress_gt: String
+  arrivalAddress_gte: String
+  arrivalAddress_contains: String
+  arrivalAddress_not_contains: String
+  arrivalAddress_starts_with: String
+  arrivalAddress_not_starts_with: String
+  arrivalAddress_ends_with: String
+  arrivalAddress_not_ends_with: String
+  arrivalLat: Float
+  arrivalLat_not: Float
+  arrivalLat_in: [Float!]
+  arrivalLat_not_in: [Float!]
+  arrivalLat_lt: Float
+  arrivalLat_lte: Float
+  arrivalLat_gt: Float
+  arrivalLat_gte: Float
+  arrivalLon: Float
+  arrivalLon_not: Float
+  arrivalLon_in: [Float!]
+  arrivalLon_not_in: [Float!]
+  arrivalLon_lt: Float
+  arrivalLon_lte: Float
+  arrivalLon_gt: Float
+  arrivalLon_gte: Float
+  type: PServiceTypeWhereInput
+  AND: [PServiceWhereInput!]
+  OR: [PServiceWhereInput!]
+  NOT: [PServiceWhereInput!]
+}
+
+input PItineraryWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  realized: Boolean
+  realized_not: Boolean
+  service: PServiceWhereInput
+  createdBy: PUserWhereInput
+  budget: PBudgetWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  departureDate: DateTime
+  departureDate_not: DateTime
+  departureDate_in: [DateTime!]
+  departureDate_not_in: [DateTime!]
+  departureDate_lt: DateTime
+  departureDate_lte: DateTime
+  departureDate_gt: DateTime
+  departureDate_gte: DateTime
+  arrivalDate: DateTime
+  arrivalDate_not: DateTime
+  arrivalDate_in: [DateTime!]
+  arrivalDate_not_in: [DateTime!]
+  arrivalDate_lt: DateTime
+  arrivalDate_lte: DateTime
+  arrivalDate_gt: DateTime
+  arrivalDate_gte: DateTime
+  departureTime: DateTime
+  departureTime_not: DateTime
+  departureTime_in: [DateTime!]
+  departureTime_not_in: [DateTime!]
+  departureTime_lt: DateTime
+  departureTime_lte: DateTime
+  departureTime_gt: DateTime
+  departureTime_gte: DateTime
+  arrivalTime: DateTime
+  arrivalTime_not: DateTime
+  arrivalTime_in: [DateTime!]
+  arrivalTime_not_in: [DateTime!]
+  arrivalTime_lt: DateTime
+  arrivalTime_lte: DateTime
+  arrivalTime_gt: DateTime
+  arrivalTime_gte: DateTime
+  presentationTime: DateTime
+  presentationTime_not: DateTime
+  presentationTime_in: [DateTime!]
+  presentationTime_not_in: [DateTime!]
+  presentationTime_lt: DateTime
+  presentationTime_lte: DateTime
+  presentationTime_gt: DateTime
+  presentationTime_gte: DateTime
+  serviceType: PServiceTypeWhereInput
+  reference: String
+  reference_not: String
+  reference_in: [String!]
+  reference_not_in: [String!]
+  reference_lt: String
+  reference_lte: String
+  reference_gt: String
+  reference_gte: String
+  reference_contains: String
+  reference_not_contains: String
+  reference_starts_with: String
+  reference_not_starts_with: String
+  reference_ends_with: String
+  reference_not_ends_with: String
+  serviceDescription: String
+  serviceDescription_not: String
+  serviceDescription_in: [String!]
+  serviceDescription_not_in: [String!]
+  serviceDescription_lt: String
+  serviceDescription_lte: String
+  serviceDescription_gt: String
+  serviceDescription_gte: String
+  serviceDescription_contains: String
+  serviceDescription_not_contains: String
+  serviceDescription_starts_with: String
+  serviceDescription_not_starts_with: String
+  serviceDescription_ends_with: String
+  serviceDescription_not_ends_with: String
+  itineraryDescription: String
+  itineraryDescription_not: String
+  itineraryDescription_in: [String!]
+  itineraryDescription_not_in: [String!]
+  itineraryDescription_lt: String
+  itineraryDescription_lte: String
+  itineraryDescription_gt: String
+  itineraryDescription_gte: String
+  itineraryDescription_contains: String
+  itineraryDescription_not_contains: String
+  itineraryDescription_starts_with: String
+  itineraryDescription_not_starts_with: String
+  itineraryDescription_ends_with: String
+  itineraryDescription_not_ends_with: String
+  departureType: String
+  departureType_not: String
+  departureType_in: [String!]
+  departureType_not_in: [String!]
+  departureType_lt: String
+  departureType_lte: String
+  departureType_gt: String
+  departureType_gte: String
+  departureType_contains: String
+  departureType_not_contains: String
+  departureType_starts_with: String
+  departureType_not_starts_with: String
+  departureType_ends_with: String
+  departureType_not_ends_with: String
+  departureCity: String
+  departureCity_not: String
+  departureCity_in: [String!]
+  departureCity_not_in: [String!]
+  departureCity_lt: String
+  departureCity_lte: String
+  departureCity_gt: String
+  departureCity_gte: String
+  departureCity_contains: String
+  departureCity_not_contains: String
+  departureCity_starts_with: String
+  departureCity_not_starts_with: String
+  departureCity_ends_with: String
+  departureCity_not_ends_with: String
+  departureAddress: String
+  departureAddress_not: String
+  departureAddress_in: [String!]
+  departureAddress_not_in: [String!]
+  departureAddress_lt: String
+  departureAddress_lte: String
+  departureAddress_gt: String
+  departureAddress_gte: String
+  departureAddress_contains: String
+  departureAddress_not_contains: String
+  departureAddress_starts_with: String
+  departureAddress_not_starts_with: String
+  departureAddress_ends_with: String
+  departureAddress_not_ends_with: String
+  departureLat: Float
+  departureLat_not: Float
+  departureLat_in: [Float!]
+  departureLat_not_in: [Float!]
+  departureLat_lt: Float
+  departureLat_lte: Float
+  departureLat_gt: Float
+  departureLat_gte: Float
+  departureLon: Float
+  departureLon_not: Float
+  departureLon_in: [Float!]
+  departureLon_not_in: [Float!]
+  departureLon_lt: Float
+  departureLon_lte: Float
+  departureLon_gt: Float
+  departureLon_gte: Float
+  arrivalCity: String
+  arrivalCity_not: String
+  arrivalCity_in: [String!]
+  arrivalCity_not_in: [String!]
+  arrivalCity_lt: String
+  arrivalCity_lte: String
+  arrivalCity_gt: String
+  arrivalCity_gte: String
+  arrivalCity_contains: String
+  arrivalCity_not_contains: String
+  arrivalCity_starts_with: String
+  arrivalCity_not_starts_with: String
+  arrivalCity_ends_with: String
+  arrivalCity_not_ends_with: String
+  arrivalType: String
+  arrivalType_not: String
+  arrivalType_in: [String!]
+  arrivalType_not_in: [String!]
+  arrivalType_lt: String
+  arrivalType_lte: String
+  arrivalType_gt: String
+  arrivalType_gte: String
+  arrivalType_contains: String
+  arrivalType_not_contains: String
+  arrivalType_starts_with: String
+  arrivalType_not_starts_with: String
+  arrivalType_ends_with: String
+  arrivalType_not_ends_with: String
+  arrivalAddress: String
+  arrivalAddress_not: String
+  arrivalAddress_in: [String!]
+  arrivalAddress_not_in: [String!]
+  arrivalAddress_lt: String
+  arrivalAddress_lte: String
+  arrivalAddress_gt: String
+  arrivalAddress_gte: String
+  arrivalAddress_contains: String
+  arrivalAddress_not_contains: String
+  arrivalAddress_starts_with: String
+  arrivalAddress_not_starts_with: String
+  arrivalAddress_ends_with: String
+  arrivalAddress_not_ends_with: String
+  arrivalLat: Float
+  arrivalLat_not: Float
+  arrivalLat_in: [Float!]
+  arrivalLat_not_in: [Float!]
+  arrivalLat_lt: Float
+  arrivalLat_lte: Float
+  arrivalLat_gt: Float
+  arrivalLat_gte: Float
+  arrivalLon: Float
+  arrivalLon_not: Float
+  arrivalLon_in: [Float!]
+  arrivalLon_not_in: [Float!]
+  arrivalLon_lt: Float
+  arrivalLon_lte: Float
+  arrivalLon_gt: Float
+  arrivalLon_gte: Float
+  numVehicles: Int
+  numVehicles_not: Int
+  numVehicles_in: [Int!]
+  numVehicles_not_in: [Int!]
+  numVehicles_lt: Int
+  numVehicles_lte: Int
+  numVehicles_gt: Int
+  numVehicles_gte: Int
+  vehicleModel: PVehicleModelWhereInput
+  vehicleBrand: PVehicleBrandWhereInput
+  vehicleType: PVehicleTypeWhereInput
+  numPassengers: Int
+  numPassengers_not: Int
+  numPassengers_in: [Int!]
+  numPassengers_not_in: [Int!]
+  numPassengers_lt: Int
+  numPassengers_lte: Int
+  numPassengers_gt: Int
+  numPassengers_gte: Int
+  groupName: String
+  groupName_not: String
+  groupName_in: [String!]
+  groupName_not_in: [String!]
+  groupName_lt: String
+  groupName_lte: String
+  groupName_gt: String
+  groupName_gte: String
+  groupName_contains: String
+  groupName_not_contains: String
+  groupName_starts_with: String
+  groupName_not_starts_with: String
+  groupName_ends_with: String
+  groupName_not_ends_with: String
+  flightNumber: String
+  flightNumber_not: String
+  flightNumber_in: [String!]
+  flightNumber_not_in: [String!]
+  flightNumber_lt: String
+  flightNumber_lte: String
+  flightNumber_gt: String
+  flightNumber_gte: String
+  flightNumber_contains: String
+  flightNumber_not_contains: String
+  flightNumber_starts_with: String
+  flightNumber_not_starts_with: String
+  flightNumber_ends_with: String
+  flightNumber_not_ends_with: String
+  notes: String
+  notes_not: String
+  notes_in: [String!]
+  notes_not_in: [String!]
+  notes_lt: String
+  notes_lte: String
+  notes_gt: String
+  notes_gte: String
+  notes_contains: String
+  notes_not_contains: String
+  notes_starts_with: String
+  notes_not_starts_with: String
+  notes_ends_with: String
+  notes_not_ends_with: String
+  hours: Float
+  hours_not: Float
+  hours_in: [Float!]
+  hours_not_in: [Float!]
+  hours_lt: Float
+  hours_lte: Float
+  hours_gt: Float
+  hours_gte: Float
+  dinner: Boolean
+  dinner_not: Boolean
+  amounts_every: PAmountWhereInput
+  amounts_some: PAmountWhereInput
+  amounts_none: PAmountWhereInput
+  driverFeatures_every: PItineraryDriverFeatureWhereInput
+  driverFeatures_some: PItineraryDriverFeatureWhereInput
+  driverFeatures_none: PItineraryDriverFeatureWhereInput
+  vehicleFeatures_every: PItineraryVehicleFeatureWhereInput
+  vehicleFeatures_some: PItineraryVehicleFeatureWhereInput
+  vehicleFeatures_none: PItineraryVehicleFeatureWhereInput
+  AND: [PItineraryWhereInput!]
+  OR: [PItineraryWhereInput!]
+  NOT: [PItineraryWhereInput!]
+}
+
+input PBudgetWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  readableId: String
+  readableId_not: String
+  readableId_in: [String!]
+  readableId_not_in: [String!]
+  readableId_lt: String
+  readableId_lte: String
+  readableId_gt: String
+  readableId_gte: String
+  readableId_contains: String
+  readableId_not_contains: String
+  readableId_starts_with: String
+  readableId_not_starts_with: String
+  readableId_ends_with: String
+  readableId_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  creationDate: DateTime
+  creationDate_not: DateTime
+  creationDate_in: [DateTime!]
+  creationDate_not_in: [DateTime!]
+  creationDate_lt: DateTime
+  creationDate_lte: DateTime
+  creationDate_gt: DateTime
+  creationDate_gte: DateTime
+  validityPeriodStart: DateTime
+  validityPeriodStart_not: DateTime
+  validityPeriodStart_in: [DateTime!]
+  validityPeriodStart_not_in: [DateTime!]
+  validityPeriodStart_lt: DateTime
+  validityPeriodStart_lte: DateTime
+  validityPeriodStart_gt: DateTime
+  validityPeriodStart_gte: DateTime
+  validityPeriodEnd: DateTime
+  validityPeriodEnd_not: DateTime
+  validityPeriodEnd_in: [DateTime!]
+  validityPeriodEnd_not_in: [DateTime!]
+  validityPeriodEnd_lt: DateTime
+  validityPeriodEnd_lte: DateTime
+  validityPeriodEnd_gt: DateTime
+  validityPeriodEnd_gte: DateTime
+  creator: PUserWhereInput
+  client: PUserWhereInput
+  status: String
+  status_not: String
+  status_in: [String!]
+  status_not_in: [String!]
+  status_lt: String
+  status_lte: String
+  status_gt: String
+  status_gte: String
+  status_contains: String
+  status_not_contains: String
+  status_starts_with: String
+  status_not_starts_with: String
+  status_ends_with: String
+  status_not_ends_with: String
+  company: String
+  company_not: String
+  company_in: [String!]
+  company_not_in: [String!]
+  company_lt: String
+  company_lte: String
+  company_gt: String
+  company_gte: String
+  company_contains: String
+  company_not_contains: String
+  company_starts_with: String
+  company_not_starts_with: String
+  company_ends_with: String
+  company_not_ends_with: String
+  contact: PContactWhereInput
+  reference: String
+  reference_not: String
+  reference_in: [String!]
+  reference_not_in: [String!]
+  reference_lt: String
+  reference_lte: String
+  reference_gt: String
+  reference_gte: String
+  reference_contains: String
+  reference_not_contains: String
+  reference_starts_with: String
+  reference_not_starts_with: String
+  reference_ends_with: String
+  reference_not_ends_with: String
+  metThrough: String
+  metThrough_not: String
+  metThrough_in: [String!]
+  metThrough_not_in: [String!]
+  metThrough_lt: String
+  metThrough_lte: String
+  metThrough_gt: String
+  metThrough_gte: String
+  metThrough_contains: String
+  metThrough_not_contains: String
+  metThrough_starts_with: String
+  metThrough_not_starts_with: String
+  metThrough_ends_with: String
+  metThrough_not_ends_with: String
+  requestSource: String
+  requestSource_not: String
+  requestSource_in: [String!]
+  requestSource_not_in: [String!]
+  requestSource_lt: String
+  requestSource_lte: String
+  requestSource_gt: String
+  requestSource_gte: String
+  requestSource_contains: String
+  requestSource_not_contains: String
+  requestSource_starts_with: String
+  requestSource_not_starts_with: String
+  requestSource_ends_with: String
+  requestSource_not_ends_with: String
+  templateHeading: String
+  templateHeading_not: String
+  templateHeading_in: [String!]
+  templateHeading_not_in: [String!]
+  templateHeading_lt: String
+  templateHeading_lte: String
+  templateHeading_gt: String
+  templateHeading_gte: String
+  templateHeading_contains: String
+  templateHeading_not_contains: String
+  templateHeading_starts_with: String
+  templateHeading_not_starts_with: String
+  templateHeading_ends_with: String
+  templateHeading_not_ends_with: String
+  templateBody: String
+  templateBody_not: String
+  templateBody_in: [String!]
+  templateBody_not_in: [String!]
+  templateBody_lt: String
+  templateBody_lte: String
+  templateBody_gt: String
+  templateBody_gte: String
+  templateBody_contains: String
+  templateBody_not_contains: String
+  templateBody_starts_with: String
+  templateBody_not_starts_with: String
+  templateBody_ends_with: String
+  templateBody_not_ends_with: String
+  itineraries_every: PItineraryWhereInput
+  itineraries_some: PItineraryWhereInput
+  itineraries_none: PItineraryWhereInput
+  AND: [PBudgetWhereInput!]
+  OR: [PBudgetWhereInput!]
+  NOT: [PBudgetWhereInput!]
+}
+
+input PContactWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  belongsToUser: PUserWhereInput
+  email: String
+  email_not: String
+  email_in: [String!]
+  email_not_in: [String!]
+  email_lt: String
+  email_lte: String
+  email_gt: String
+  email_gte: String
+  email_contains: String
+  email_not_contains: String
+  email_starts_with: String
+  email_not_starts_with: String
+  email_ends_with: String
+  email_not_ends_with: String
+  phone: String
+  phone_not: String
+  phone_in: [String!]
+  phone_not_in: [String!]
+  phone_lt: String
+  phone_lte: String
+  phone_gt: String
+  phone_gte: String
+  phone_contains: String
+  phone_not_contains: String
+  phone_starts_with: String
+  phone_not_starts_with: String
+  phone_ends_with: String
+  phone_not_ends_with: String
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  budgets_every: PBudgetWhereInput
+  budgets_some: PBudgetWhereInput
+  budgets_none: PBudgetWhereInput
+  AND: [PContactWhereInput!]
+  OR: [PContactWhereInput!]
+  NOT: [PContactWhereInput!]
+}
+
+input PServiceTypeWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  volcanoCode: String
+  volcanoCode_not: String
+  volcanoCode_in: [String!]
+  volcanoCode_not_in: [String!]
+  volcanoCode_lt: String
+  volcanoCode_lte: String
+  volcanoCode_gt: String
+  volcanoCode_gte: String
+  volcanoCode_contains: String
+  volcanoCode_not_contains: String
+  volcanoCode_starts_with: String
+  volcanoCode_not_starts_with: String
+  volcanoCode_ends_with: String
+  volcanoCode_not_ends_with: String
+  subtypes_every: PServiceSubtypeWhereInput
+  subtypes_some: PServiceSubtypeWhereInput
+  subtypes_none: PServiceSubtypeWhereInput
+  AND: [PServiceTypeWhereInput!]
+  OR: [PServiceTypeWhereInput!]
+  NOT: [PServiceTypeWhereInput!]
+}
+
+input PServiceSubtypeWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  parentType: PServiceTypeWhereInput
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  code: String
+  code_not: String
+  code_in: [String!]
+  code_not_in: [String!]
+  code_lt: String
+  code_lte: String
+  code_gt: String
+  code_gte: String
+  code_contains: String
+  code_not_contains: String
+  code_starts_with: String
+  code_not_starts_with: String
+  code_ends_with: String
+  code_not_ends_with: String
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  dinner: Boolean
+  dinner_not: Boolean
+  hours: Float
+  hours_not: Float
+  hours_in: [Float!]
+  hours_not_in: [Float!]
+  hours_lt: Float
+  hours_lte: Float
+  hours_gt: Float
+  hours_gte: Float
+  priceConditions_every: PRateConditionWhereInput
+  priceConditions_some: PRateConditionWhereInput
+  priceConditions_none: PRateConditionWhereInput
+  fulfillingCondition: PRateConditionWhereInput
+  AND: [PServiceSubtypeWhereInput!]
+  OR: [PServiceSubtypeWhereInput!]
+  NOT: [PServiceSubtypeWhereInput!]
+}
+
+input PRateConditionWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  executionOrderIndex: Int
+  executionOrderIndex_not: Int
+  executionOrderIndex_in: [Int!]
+  executionOrderIndex_not_in: [Int!]
+  executionOrderIndex_lt: Int
+  executionOrderIndex_lte: Int
+  executionOrderIndex_gt: Int
+  executionOrderIndex_gte: Int
+  visibleForClient: Boolean
+  visibleForClient_not: Boolean
+  rate: PRateWhereInput
+  client: PUserWhereInput
+  switchSubject: ConditionSwitchSubject
+  switchSubject_not: ConditionSwitchSubject
+  switchSubject_in: [ConditionSwitchSubject!]
+  switchSubject_not_in: [ConditionSwitchSubject!]
+  vehicleType: PVehicleTypeWhereInput
+  vehicleBrand: PVehicleBrandWhereInput
+  vehicleModel: PVehicleModelWhereInput
+  numPassengers: Int
+  numPassengers_not: Int
+  numPassengers_in: [Int!]
+  numPassengers_not_in: [Int!]
+  numPassengers_lt: Int
+  numPassengers_lte: Int
+  numPassengers_gt: Int
+  numPassengers_gte: Int
+  serviceType: ConditionAllowedServiceType
+  serviceType_not: ConditionAllowedServiceType
+  serviceType_in: [ConditionAllowedServiceType!]
+  serviceType_not_in: [ConditionAllowedServiceType!]
+  basePrice: Float
+  basePrice_not: Float
+  basePrice_in: [Float!]
+  basePrice_not_in: [Float!]
+  basePrice_lt: Float
+  basePrice_lte: Float
+  basePrice_gt: Float
+  basePrice_gte: Float
+  conditionType: ConditionType
+  conditionType_not: ConditionType
+  conditionType_in: [ConditionType!]
+  conditionType_not_in: [ConditionType!]
+  conditionActivation: ConditionActivationType
+  conditionActivation_not: ConditionActivationType
+  conditionActivation_in: [ConditionActivationType!]
+  conditionActivation_not_in: [ConditionActivationType!]
+  threshold: Float
+  threshold_not: Float
+  threshold_in: [Float!]
+  threshold_not_in: [Float!]
+  threshold_lt: Float
+  threshold_lte: Float
+  threshold_gt: Float
+  threshold_gte: Float
+  switchValues_every: PRateConditionWhereInput
+  switchValues_some: PRateConditionWhereInput
+  switchValues_none: PRateConditionWhereInput
+  AND: [PRateConditionWhereInput!]
+  OR: [PRateConditionWhereInput!]
+  NOT: [PRateConditionWhereInput!]
+}
+
+input PRateWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  client: PUserWhereInput
+  isGlobal: Boolean
+  isGlobal_not: Boolean
+  serviceTypes_every: PServiceTypeWhereInput
+  serviceTypes_some: PServiceTypeWhereInput
+  serviceTypes_none: PServiceTypeWhereInput
+  vehicleVariables_every: VehiclePricingWhereInput
+  vehicleVariables_some: VehiclePricingWhereInput
+  vehicleVariables_none: VehiclePricingWhereInput
+  AND: [PRateWhereInput!]
+  OR: [PRateWhereInput!]
+  NOT: [PRateWhereInput!]
+}
+
+input VehiclePricingWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  client: PUserWhereInput
+  rate: PRateWhereInput
+  vehicleBrand: PVehicleBrandWhereInput
+  vehicleModel: PVehicleModelWhereInput
+  vehicleType: PVehicleTypeWhereInput
+  kmPrice: Float
+  kmPrice_not: Float
+  kmPrice_in: [Float!]
+  kmPrice_not_in: [Float!]
+  kmPrice_lt: Float
+  kmPrice_lte: Float
+  kmPrice_gt: Float
+  kmPrice_gte: Float
+  tollPrice: Float
+  tollPrice_not: Float
+  tollPrice_in: [Float!]
+  tollPrice_not_in: [Float!]
+  tollPrice_lt: Float
+  tollPrice_lte: Float
+  tollPrice_gt: Float
+  tollPrice_gte: Float
+  airportPrice: Float
+  airportPrice_not: Float
+  airportPrice_in: [Float!]
+  airportPrice_not_in: [Float!]
+  airportPrice_lt: Float
+  airportPrice_lte: Float
+  airportPrice_gt: Float
+  airportPrice_gte: Float
+  parkingMontserrat: Float
+  parkingMontserrat_not: Float
+  parkingMontserrat_in: [Float!]
+  parkingMontserrat_not_in: [Float!]
+  parkingMontserrat_lt: Float
+  parkingMontserrat_lte: Float
+  parkingMontserrat_gt: Float
+  parkingMontserrat_gte: Float
+  extraHourPrice: Float
+  extraHourPrice_not: Float
+  extraHourPrice_in: [Float!]
+  extraHourPrice_not_in: [Float!]
+  extraHourPrice_lt: Float
+  extraHourPrice_lte: Float
+  extraHourPrice_gt: Float
+  extraHourPrice_gte: Float
+  serviceType: PServiceTypeWhereInput
+  serviceSubtype: PServiceSubtypeWhereInput
+  pax: Int
+  pax_not: Int
+  pax_in: [Int!]
+  pax_not_in: [Int!]
+  pax_lt: Int
+  pax_lte: Int
+  pax_gt: Int
+  pax_gte: Int
+  AND: [VehiclePricingWhereInput!]
+  OR: [VehiclePricingWhereInput!]
+  NOT: [VehiclePricingWhereInput!]
+}
+
+input PVehicleBrandWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  models_every: PVehicleModelWhereInput
+  models_some: PVehicleModelWhereInput
+  models_none: PVehicleModelWhereInput
+  pricing_every: VehiclePricingWhereInput
+  pricing_some: VehiclePricingWhereInput
+  pricing_none: VehiclePricingWhereInput
+  AND: [PVehicleBrandWhereInput!]
+  OR: [PVehicleBrandWhereInput!]
+  NOT: [PVehicleBrandWhereInput!]
+}
+
+input PVehicleModelWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  brand: PVehicleBrandWhereInput
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  pricing_every: VehiclePricingWhereInput
+  pricing_some: VehiclePricingWhereInput
+  pricing_none: VehiclePricingWhereInput
+  AND: [PVehicleModelWhereInput!]
+  OR: [PVehicleModelWhereInput!]
+  NOT: [PVehicleModelWhereInput!]
+}
+
+input PVehicleTypeWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  category: VehicleTypeCategory
+  category_not: VehicleTypeCategory
+  category_in: [VehicleTypeCategory!]
+  category_not_in: [VehicleTypeCategory!]
+  pricing_every: VehiclePricingWhereInput
+  pricing_some: VehiclePricingWhereInput
+  pricing_none: VehiclePricingWhereInput
+  AND: [PVehicleTypeWhereInput!]
+  OR: [PVehicleTypeWhereInput!]
+  NOT: [PVehicleTypeWhereInput!]
+}
+
+enum VehicleTypeCategory {
+  CAR
+  VAN
+  BUS
+  MINIBUS
+  OTHER
+}
+
+enum ConditionSwitchSubject {
+  VEHICLE
+  SERVICE
+}
+
+enum ConditionAllowedServiceType {
+  TR
+  DIS
+}
+
+enum ConditionType {
+  DISTANCE
+  TIME
+  SWITCH
+  VALUE
+  LOCATION
+  VEHICLE
+}
+
+enum ConditionActivationType {
+  LT
+  LTEQ
+  EQ
+  BTEQ
+  BT
+}
+
+input PAmountWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  itinerary: PItineraryWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  amount: Float
+  amount_not: Float
+  amount_in: [Float!]
+  amount_not_in: [Float!]
+  amount_lt: Float
+  amount_lte: Float
+  amount_gt: Float
+  amount_gte: Float
+  vat: Float
+  vat_not: Float
+  vat_in: [Float!]
+  vat_not_in: [Float!]
+  vat_lt: Float
+  vat_lte: Float
+  vat_gt: Float
+  vat_gte: Float
+  concept: String
+  concept_not: String
+  concept_in: [String!]
+  concept_not_in: [String!]
+  concept_lt: String
+  concept_lte: String
+  concept_gt: String
+  concept_gte: String
+  concept_contains: String
+  concept_not_contains: String
+  concept_starts_with: String
+  concept_not_starts_with: String
+  concept_ends_with: String
+  concept_not_ends_with: String
+  AND: [PAmountWhereInput!]
+  OR: [PAmountWhereInput!]
+  NOT: [PAmountWhereInput!]
+}
+
+input PItineraryDriverFeatureWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdBy: PUserWhereInput
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  required: Boolean
+  required_not: Boolean
+  itineraries_every: PItineraryWhereInput
+  itineraries_some: PItineraryWhereInput
+  itineraries_none: PItineraryWhereInput
+  AND: [PItineraryDriverFeatureWhereInput!]
+  OR: [PItineraryDriverFeatureWhereInput!]
+  NOT: [PItineraryDriverFeatureWhereInput!]
+}
+
+input PItineraryVehicleFeatureWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdBy: PUserWhereInput
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  required: Boolean
+  required_not: Boolean
+  itineraries_every: PItineraryWhereInput
+  itineraries_some: PItineraryWhereInput
+  itineraries_none: PItineraryWhereInput
+  AND: [PItineraryVehicleFeatureWhereInput!]
+  OR: [PItineraryVehicleFeatureWhereInput!]
+  NOT: [PItineraryVehicleFeatureWhereInput!]
+}
+
+input PDriverWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  servicesMain_every: PServiceWhereInput
+  servicesMain_some: PServiceWhereInput
+  servicesMain_none: PServiceWhereInput
+  servicesSecondary_every: PServiceWhereInput
+  servicesSecondary_some: PServiceWhereInput
+  servicesSecondary_none: PServiceWhereInput
+  firebaseId: String
+  firebaseId_not: String
+  firebaseId_in: [String!]
+  firebaseId_not_in: [String!]
+  firebaseId_lt: String
+  firebaseId_lte: String
+  firebaseId_gt: String
+  firebaseId_gte: String
+  firebaseId_contains: String
+  firebaseId_not_contains: String
+  firebaseId_starts_with: String
+  firebaseId_not_starts_with: String
+  firebaseId_ends_with: String
+  firebaseId_not_ends_with: String
+  notificationsToken: String
+  notificationsToken_not: String
+  notificationsToken_in: [String!]
+  notificationsToken_not_in: [String!]
+  notificationsToken_lt: String
+  notificationsToken_lte: String
+  notificationsToken_gt: String
+  notificationsToken_gte: String
+  notificationsToken_contains: String
+  notificationsToken_not_contains: String
+  notificationsToken_starts_with: String
+  notificationsToken_not_starts_with: String
+  notificationsToken_ends_with: String
+  notificationsToken_not_ends_with: String
+  volcanoDriverId: String
+  volcanoDriverId_not: String
+  volcanoDriverId_in: [String!]
+  volcanoDriverId_not_in: [String!]
+  volcanoDriverId_lt: String
+  volcanoDriverId_lte: String
+  volcanoDriverId_gt: String
+  volcanoDriverId_gte: String
+  volcanoDriverId_contains: String
+  volcanoDriverId_not_contains: String
+  volcanoDriverId_starts_with: String
+  volcanoDriverId_not_starts_with: String
+  volcanoDriverId_ends_with: String
+  volcanoDriverId_not_ends_with: String
+  profilePicURI: String
+  profilePicURI_not: String
+  profilePicURI_in: [String!]
+  profilePicURI_not_in: [String!]
+  profilePicURI_lt: String
+  profilePicURI_lte: String
+  profilePicURI_gt: String
+  profilePicURI_gte: String
+  profilePicURI_contains: String
+  profilePicURI_not_contains: String
+  profilePicURI_starts_with: String
+  profilePicURI_not_starts_with: String
+  profilePicURI_ends_with: String
+  profilePicURI_not_ends_with: String
+  communicationLocale: String
+  communicationLocale_not: String
+  communicationLocale_in: [String!]
+  communicationLocale_not_in: [String!]
+  communicationLocale_lt: String
+  communicationLocale_lte: String
+  communicationLocale_gt: String
+  communicationLocale_gte: String
+  communicationLocale_contains: String
+  communicationLocale_not_contains: String
+  communicationLocale_starts_with: String
+  communicationLocale_not_starts_with: String
+  communicationLocale_ends_with: String
+  communicationLocale_not_ends_with: String
+  phone: String
+  phone_not: String
+  phone_in: [String!]
+  phone_not_in: [String!]
+  phone_lt: String
+  phone_lte: String
+  phone_gt: String
+  phone_gte: String
+  phone_contains: String
+  phone_not_contains: String
+  phone_starts_with: String
+  phone_not_starts_with: String
+  phone_ends_with: String
+  phone_not_ends_with: String
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  email: String
+  email_not: String
+  email_in: [String!]
+  email_not_in: [String!]
+  email_lt: String
+  email_lte: String
+  email_gt: String
+  email_gte: String
+  email_contains: String
+  email_not_contains: String
+  email_starts_with: String
+  email_not_starts_with: String
+  email_ends_with: String
+  email_not_ends_with: String
+  type: String
+  type_not: String
+  type_in: [String!]
+  type_not_in: [String!]
+  type_lt: String
+  type_lte: String
+  type_gt: String
+  type_gte: String
+  type_contains: String
+  type_not_contains: String
+  type_starts_with: String
+  type_not_starts_with: String
+  type_ends_with: String
+  type_not_ends_with: String
+  status: String
+  status_not: String
+  status_in: [String!]
+  status_not_in: [String!]
+  status_lt: String
+  status_lte: String
+  status_gt: String
+  status_gte: String
+  status_contains: String
+  status_not_contains: String
+  status_starts_with: String
+  status_not_starts_with: String
+  status_ends_with: String
+  status_not_ends_with: String
+  drivingCompany: PDrivingCompanyWhereInput
+  location: LocationWhereInput
+  loginMethod: LoginMethod
+  loginMethod_not: LoginMethod
+  loginMethod_in: [LoginMethod!]
+  loginMethod_not_in: [LoginMethod!]
+  AND: [PDriverWhereInput!]
+  OR: [PDriverWhereInput!]
+  NOT: [PDriverWhereInput!]
+}
+
+input PDrivingCompanyWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  volcanoId: String
+  volcanoId_not: String
+  volcanoId_in: [String!]
+  volcanoId_not_in: [String!]
+  volcanoId_lt: String
+  volcanoId_lte: String
+  volcanoId_gt: String
+  volcanoId_gte: String
+  volcanoId_contains: String
+  volcanoId_not_contains: String
+  volcanoId_starts_with: String
+  volcanoId_not_starts_with: String
+  volcanoId_ends_with: String
+  volcanoId_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  phone: String
+  phone_not: String
+  phone_in: [String!]
+  phone_not_in: [String!]
+  phone_lt: String
+  phone_lte: String
+  phone_gt: String
+  phone_gte: String
+  phone_contains: String
+  phone_not_contains: String
+  phone_starts_with: String
+  phone_not_starts_with: String
+  phone_ends_with: String
+  phone_not_ends_with: String
+  email: String
+  email_not: String
+  email_in: [String!]
+  email_not_in: [String!]
+  email_lt: String
+  email_lte: String
+  email_gt: String
+  email_gte: String
+  email_contains: String
+  email_not_contains: String
+  email_starts_with: String
+  email_not_starts_with: String
+  email_ends_with: String
+  email_not_ends_with: String
+  drivers_every: PDriverWhereInput
+  drivers_some: PDriverWhereInput
+  drivers_none: PDriverWhereInput
+  AND: [PDrivingCompanyWhereInput!]
+  OR: [PDrivingCompanyWhereInput!]
+  NOT: [PDrivingCompanyWhereInput!]
+}
+
+input LocationWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  driver: PDriverWhereInput
+  latitude: Float
+  latitude_not: Float
+  latitude_in: [Float!]
+  latitude_not_in: [Float!]
+  latitude_lt: Float
+  latitude_lte: Float
+  latitude_gt: Float
+  latitude_gte: Float
+  longitude: Float
+  longitude_not: Float
+  longitude_in: [Float!]
+  longitude_not_in: [Float!]
+  longitude_lt: Float
+  longitude_lte: Float
+  longitude_gt: Float
+  longitude_gte: Float
+  AND: [LocationWhereInput!]
+  OR: [LocationWhereInput!]
+  NOT: [LocationWhereInput!]
+}
+
+enum PUserOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  firebaseId_ASC
+  firebaseId_DESC
+  disabled_ASC
+  disabled_DESC
+  name_ASC
+  name_DESC
+  phone_ASC
+  phone_DESC
+  volcanoClientId_ASC
+  volcanoClientId_DESC
+  isClient_ASC
+  isClient_DESC
+  isAdmin_ASC
+  isAdmin_DESC
+  clientRole_ASC
+  clientRole_DESC
+}
+
+enum PPassengerOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  email_ASC
+  email_DESC
+  phone_ASC
+  phone_DESC
+  name_ASC
+  name_DESC
+}
+
+type PPassenger {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  belongsToUser: PUser
+  services(where: PServiceWhereInput, orderBy: PServiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PService!]
+  email: String!
+  phone: String
+  name: String
+}
+
+enum PServiceOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  volcanoServiceId_ASC
+  volcanoServiceId_DESC
+  canceled_ASC
+  canceled_DESC
+  departureAddress_ASC
+  departureAddress_DESC
+  departureLat_ASC
+  departureLat_DESC
+  departureLon_ASC
+  departureLon_DESC
+  arrivalAddress_ASC
+  arrivalAddress_DESC
+  arrivalLat_ASC
+  arrivalLat_DESC
+  arrivalLon_ASC
+  arrivalLon_DESC
+}
+
+type PService {
+  id: ID!
+  owner: PUser
+  client: PUser
+  itinerary: PItinerary
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  volcanoServiceId: String
+  driver: PDriver
+  secondaryDriver: PDriver
+  passengers(where: PPassengerWhereInput, orderBy: PPassengerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PPassenger!]
+  canceled: Boolean
+  departureAddress: String
+  departureLat: Float
+  departureLon: Float
+  arrivalAddress: String
+  arrivalLat: Float
+  arrivalLon: Float
+  type: PServiceType!
+}
+
+type PItinerary {
+  id: ID!
+  realized: Boolean!
+  service: PService
+  createdBy: PUser!
+  budget: PBudget!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  departureDate: DateTime!
+  arrivalDate: DateTime!
+  departureTime: DateTime!
+  arrivalTime: DateTime!
+  presentationTime: DateTime!
+  serviceType: PServiceType!
+  reference: String
+  serviceDescription: String
+  itineraryDescription: String
+  departureType: String
+  departureCity: String
+  departureAddress: String
+  departureLat: Float
+  departureLon: Float
+  arrivalCity: String
+  arrivalType: String
+  arrivalAddress: String
+  arrivalLat: Float
+  arrivalLon: Float
+  numVehicles: Int
+  vehicleModel: PVehicleModel
+  vehicleBrand: PVehicleBrand
+  vehicleType: PVehicleType!
+  numPassengers: Int!
+  groupName: String
+  flightNumber: String
+  notes: String
+  hours: Float!
+  dinner: Boolean!
+  amounts(where: PAmountWhereInput, orderBy: PAmountOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PAmount!]
+  driverFeatures(where: PItineraryDriverFeatureWhereInput, orderBy: PItineraryDriverFeatureOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PItineraryDriverFeature!]
+  vehicleFeatures(where: PItineraryVehicleFeatureWhereInput, orderBy: PItineraryVehicleFeatureOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PItineraryVehicleFeature!]
+}
+
+type PBudget {
+  id: ID!
+  readableId: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  creationDate: DateTime!
+  validityPeriodStart: DateTime!
+  validityPeriodEnd: DateTime!
+  creator: PUser!
+  client: PUser!
+  status: String!
+  company: String!
+  contact: PContact
+  reference: String
+  metThrough: String
+  requestSource: String
+  templateHeading: String
+  templateBody: String
+  itineraries(where: PItineraryWhereInput, orderBy: PItineraryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PItinerary!]
+}
+
+type PContact {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  belongsToUser: PUser
+  email: String
+  phone: String
+  name: String!
+  budgets(where: PBudgetWhereInput, orderBy: PBudgetOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PBudget!]
+}
+
+enum PBudgetOrderByInput {
+  id_ASC
+  id_DESC
+  readableId_ASC
+  readableId_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  creationDate_ASC
+  creationDate_DESC
+  validityPeriodStart_ASC
+  validityPeriodStart_DESC
+  validityPeriodEnd_ASC
+  validityPeriodEnd_DESC
+  status_ASC
+  status_DESC
+  company_ASC
+  company_DESC
+  reference_ASC
+  reference_DESC
+  metThrough_ASC
+  metThrough_DESC
+  requestSource_ASC
+  requestSource_DESC
+  templateHeading_ASC
+  templateHeading_DESC
+  templateBody_ASC
+  templateBody_DESC
+}
+
+enum PItineraryOrderByInput {
+  id_ASC
+  id_DESC
+  realized_ASC
+  realized_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  departureDate_ASC
+  departureDate_DESC
+  arrivalDate_ASC
+  arrivalDate_DESC
+  departureTime_ASC
+  departureTime_DESC
+  arrivalTime_ASC
+  arrivalTime_DESC
+  presentationTime_ASC
+  presentationTime_DESC
+  reference_ASC
+  reference_DESC
+  serviceDescription_ASC
+  serviceDescription_DESC
+  itineraryDescription_ASC
+  itineraryDescription_DESC
+  departureType_ASC
+  departureType_DESC
+  departureCity_ASC
+  departureCity_DESC
+  departureAddress_ASC
+  departureAddress_DESC
+  departureLat_ASC
+  departureLat_DESC
+  departureLon_ASC
+  departureLon_DESC
+  arrivalCity_ASC
+  arrivalCity_DESC
+  arrivalType_ASC
+  arrivalType_DESC
+  arrivalAddress_ASC
+  arrivalAddress_DESC
+  arrivalLat_ASC
+  arrivalLat_DESC
+  arrivalLon_ASC
+  arrivalLon_DESC
+  numVehicles_ASC
+  numVehicles_DESC
+  numPassengers_ASC
+  numPassengers_DESC
+  groupName_ASC
+  groupName_DESC
+  flightNumber_ASC
+  flightNumber_DESC
+  notes_ASC
+  notes_DESC
+  hours_ASC
+  hours_DESC
+  dinner_ASC
+  dinner_DESC
+}
+
+type PServiceType {
+  id: ID!
+  name: String!
+  description: String
+  volcanoCode: String!
+  subtypes(where: PServiceSubtypeWhereInput, orderBy: PServiceSubtypeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PServiceSubtype!]
+}
+
+enum PServiceSubtypeOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  code_ASC
+  code_DESC
+  description_ASC
+  description_DESC
+  dinner_ASC
+  dinner_DESC
+  hours_ASC
+  hours_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type PServiceSubtype {
+  id: ID!
+  parentType: PServiceType!
+  name: String!
+  code: String
+  description: String
+  dinner: Boolean!
+  hours: Float!
+  priceConditions(where: PRateConditionWhereInput, orderBy: PRateConditionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PRateCondition!]
+  fulfillingCondition: PRateCondition!
+}
+
+enum PRateConditionOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  description_ASC
+  description_DESC
+  executionOrderIndex_ASC
+  executionOrderIndex_DESC
+  visibleForClient_ASC
+  visibleForClient_DESC
+  switchSubject_ASC
+  switchSubject_DESC
+  numPassengers_ASC
+  numPassengers_DESC
+  serviceType_ASC
+  serviceType_DESC
+  basePrice_ASC
+  basePrice_DESC
+  conditionType_ASC
+  conditionType_DESC
+  conditionActivation_ASC
+  conditionActivation_DESC
+  threshold_ASC
+  threshold_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type PRateCondition {
+  id: ID!
+  name: String!
+  description: String
+  executionOrderIndex: Int
+  visibleForClient: Boolean
+  rate: PRate
+  client: PUser
+  switchSubject: ConditionSwitchSubject
+  vehicleType: PVehicleType
+  vehicleBrand: PVehicleBrand
+  vehicleModel: PVehicleModel
+  numPassengers: Int
+  serviceType: ConditionAllowedServiceType
+  basePrice: Float
+  conditionType: ConditionType!
+  conditionActivation: ConditionActivationType
+  threshold: Float
+  switchValues(where: PRateConditionWhereInput, orderBy: PRateConditionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PRateCondition!]
+}
+
+type PRate {
+  id: ID!
+  client: PUser
+  isGlobal: Boolean!
+  serviceTypes(where: PServiceTypeWhereInput, orderBy: PServiceTypeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PServiceType!]
+  vehicleVariables(where: VehiclePricingWhereInput, orderBy: VehiclePricingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [VehiclePricing!]
+}
+
+enum PServiceTypeOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  description_ASC
+  description_DESC
+  volcanoCode_ASC
+  volcanoCode_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+enum VehiclePricingOrderByInput {
+  id_ASC
+  id_DESC
+  kmPrice_ASC
+  kmPrice_DESC
+  tollPrice_ASC
+  tollPrice_DESC
+  airportPrice_ASC
+  airportPrice_DESC
+  parkingMontserrat_ASC
+  parkingMontserrat_DESC
+  extraHourPrice_ASC
+  extraHourPrice_DESC
+  pax_ASC
+  pax_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type VehiclePricing {
+  id: ID!
+  client: PUser
+  rate: PRate
+  vehicleBrand: PVehicleBrand
+  vehicleModel: PVehicleModel
+  vehicleType: PVehicleType
+  kmPrice: Float!
+  tollPrice: Float!
+  airportPrice: Float!
+  parkingMontserrat: Float!
+  extraHourPrice: Float!
+  serviceType: PServiceType
+  serviceSubtype: PServiceSubtype
+  pax: Int
+}
+
+type PVehicleBrand {
+  id: ID!
+  name: String!
+  models(where: PVehicleModelWhereInput, orderBy: PVehicleModelOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PVehicleModel!]
+  pricing(where: VehiclePricingWhereInput, orderBy: VehiclePricingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [VehiclePricing!]
+}
+
+enum PVehicleModelOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type PVehicleModel {
+  id: ID!
+  brand: PVehicleBrand
+  name: String!
+  pricing(where: VehiclePricingWhereInput, orderBy: VehiclePricingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [VehiclePricing!]
+}
+
+type PVehicleType {
+  id: ID!
+  name: String!
+  category: VehicleTypeCategory!
+  pricing(where: VehiclePricingWhereInput, orderBy: VehiclePricingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [VehiclePricing!]
+}
+
+enum PAmountOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  amount_ASC
+  amount_DESC
+  vat_ASC
+  vat_DESC
+  concept_ASC
+  concept_DESC
+}
+
+type PAmount {
+  id: ID!
+  itinerary: PItinerary!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  amount: Float!
+  vat: Float!
+  concept: String
+}
+
+enum PItineraryDriverFeatureOrderByInput {
+  id_ASC
+  id_DESC
+  description_ASC
+  description_DESC
+  required_ASC
+  required_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type PItineraryDriverFeature {
+  id: ID!
+  createdBy: PUser!
+  description: String!
+  required: Boolean!
+  itineraries(where: PItineraryWhereInput, orderBy: PItineraryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PItinerary!]
+}
+
+enum PItineraryVehicleFeatureOrderByInput {
+  id_ASC
+  id_DESC
+  description_ASC
+  description_DESC
+  required_ASC
+  required_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type PItineraryVehicleFeature {
+  id: ID!
+  createdBy: PUser!
+  description: String!
+  required: Boolean!
+  itineraries(where: PItineraryWhereInput, orderBy: PItineraryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PItinerary!]
+}
+
+type PDriver {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  servicesMain(where: PServiceWhereInput, orderBy: PServiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PService!]
+  servicesSecondary(where: PServiceWhereInput, orderBy: PServiceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PService!]
+  firebaseId: String
+  notificationsToken: String
+  volcanoDriverId: String
+  profilePicURI: String
+  communicationLocale: String
+  phone: String
+  name: String
+  email: String
+  type: String
+  status: String
+  drivingCompany: PDrivingCompany
+  location: Location
+  loginMethod: LoginMethod
+}
+
+type PDrivingCompany {
+  id: ID!
+  volcanoId: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String
+  phone: String
+  email: String
+  drivers(where: PDriverWhereInput, orderBy: PDriverOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PDriver!]
+}
+
+enum PDriverOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  firebaseId_ASC
+  firebaseId_DESC
+  notificationsToken_ASC
+  notificationsToken_DESC
+  volcanoDriverId_ASC
+  volcanoDriverId_DESC
+  profilePicURI_ASC
+  profilePicURI_DESC
+  communicationLocale_ASC
+  communicationLocale_DESC
+  phone_ASC
+  phone_DESC
+  name_ASC
+  name_DESC
+  email_ASC
+  email_DESC
+  type_ASC
+  type_DESC
+  status_ASC
+  status_DESC
+  loginMethod_ASC
+  loginMethod_DESC
+}
+
+enum PContactOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  email_ASC
+  email_DESC
+  phone_ASC
+  phone_DESC
+  name_ASC
+  name_DESC
+}
+
+type VehicleType {
+  id: ID!
+  name: String!
+  category: String!
+}
+
+type VehicleBrandModels {
+  id: ID!
+  brand: String!
+  models: [VehicleModel!]!
+}
+
+type VehicleModel {
+  id: ID!
+  name: String!
+}
+
+type Rate {
+  id: ID!
+  isGlobal: Boolean!
+  serviceTypes: [RateServiceType!]!
+  vehiclePriceVariables: [VehiclePriceVariable!]!
+}
+
+type RateServiceType {
+  id: ID!
+  name: String!
+  description: String
+  subtypes: [ServiceSubtype!]!
+}
+
+type ServiceSubtype {
+  id: ID!
+  name: String!
+  description: String
+  fulfillingCondition: FulfillingCondition
+  priceConditions: PriceCondition
+}
+
+type FulfillingCondition {
+  id: ID!
+  name: String!
+  description: String
+  threshold: Float
+  conditionType: String!
+  conditionActivation: String
+}
+
+type PriceCondition {
+  vehicle: [VehiclePriceCondition!]!
+}
+
+type VehiclePriceCondition {
+  id: ID!
+  name: String!
+  description: String
+  basePrice: Float!
+  numPassengers: Int
+  vehicleTypeId: String
+  vehicleModelId: String
+  vehicleBrandId: String
+}
+
+type VehiclePriceVariable {
+  id: ID!
+  vehicleModelId: String
+  vehicleBrandId: String
+  vehicleTypeId: String
+  extraPricePerKm: Float!
+  tollPricePerKm: Float!
+  airportPrice: Float!
+  parkingMontserrat: Float!
+  paxNumber: Int!
+  extraHourPrice: Float!
+}
+
+input DepartureOrArrivalInput {
+  latitude: Float!
+  longitude: Float!
+  isAirport: Boolean
+  city: String
+}
+
+type CandidateAmount {
+  consult: Boolean!
+  amount: Float!
+  concept: String
+}
+
+type Mutation {
+  confirmItinerary(
+    """The itinerary ID to confirm"""
+    id: String!
+  ): Itinerary!
+  createBudget(validityPeriodStart: String!, validityPeriodEnd: String!, creationDate: String!, client: String!, status: String!, company: String!, contact: ContactInput, reference: String, metThrough: String, requestSource: String, templateHeading: String, templateBody: String, itineraries: [ItineraryInput!]): Budget!
+  updateBudget(id: ID!, creationDate: String!, validityPeriodStart: String!, validityPeriodEnd: String!, client: String!, status: String!, company: String!, contact: ContactInput, reference: String, metThrough: String, requestSource: String, templateHeading: String, templateBody: String, itineraries: [ItineraryInput!]): Budget!
+  createService(
+    departureDate: String!
+    departureTime: String!
+    presentationTime: String!
+    arrivalDate: String!
+    arrivalTime: String!
+    type: String!
+    clientId: String
+    mainDriverId: String
+    secondaryDriverId: String
+    vehicleId: String
+
+    """Array of IDs of the passengers to add to the service"""
+    passengers: [String!]
+    numOfPassengers: Int! = 0
+    description: String!
+    notes: String
+    flightNumber: String
+    reference: String
+    departureAddress: String
+    departureLat: Float
+    departureLon: Float
+    arrivalAddress: String
+    arrivalLat: Float
+    arrivalLon: Float
+    groupName: String
+    groupOwner: String
+  ): Service
+  editService(
+    id: String!
+    volcanoServiceId: String!
+    departureDate: String
+    departureTime: String
+    presentationTime: String
+    arrivalDate: String
+    arrivalTime: String
+    mainDriverId: String
+    secondaryDriverId: String
+    vehicleId: String
+
+    """Array of IDs of the passengers to add to the service"""
+    passengers: [String!]
+    numOfPassengers: Int
+    description: String
+    notes: String
+    departureAddress: String
+    departureLat: Float
+    departureLon: Float
+    arrivalAddress: String
+    arrivalLat: Float
+    arrivalLon: Float
+  ): Service!
+  cancelService(id: ID!, reason: String): ActionResult!
+  createClientEmployee(email: String!, password: String!, name: String!, phone: String): ClientEmployee!
+  updateClientEmployee(id: ID!, data: UpdateClientEmployeeInput!): ClientEmployee!
+  deleteClientEmployee(id: ID!): DeleteResult!
+  createClient(email: String!, password: String!, id: ID): PUser!
+  updateClient(
+    """The client ID. Note: not the Volcano Client ID"""
+    id: String
+    volcanoClientId: String
+    email: String
+    password: String
+    loginEnabled: Boolean
+  ): Client!
+  deleteClient(id: ID): DeleteResult!
+  sendPasswordResetEmail(id: ID!): ActionResult!
+  createAdmin(name: String!, email: String!, password: String!): Admin!
+  giveDriverAccessToApp(id: ID!, email: String!, password: String!): Driver!
+  createDriver(name: String, email: String, password: String, notificationsToken: String, volcanoDriverId: String, phone: String, profilePicURI: String, type: String, status: String = "active", drivingCompanyId: String, loginMethod: LoginMethod): Driver
+  updateDriver(id: ID, name: String, loginMethod: LoginMethod, disableLogin: Boolean, email: String, phone: String, type: String, status: String, drivingCompanyId: String, notificationsToken: String, volcanoDriverId: String, profilePicURI: String, communicationLocale: String, latitude: Float, longitude: Float): Driver!
+  deleteDriver(id: ID): DeleteResult!
+  sendNotificationToServiceDriver(
+    """The ID representing the service"""
+    serviceId: String!
+    notificationTitle: String!
+    notificationBody: String!
+
+    """JSON stringified data to send as notification data"""
+    notificationData: String
+
+    """JSON stringified options to send as notification options"""
+    notificationOptions: String
+  ): NotificationSendStatus!
+  connectMainDriverToService(serviceId: String!, driverId: String!): Service!
+  createPassenger(email: String!, phone: String, name: String): Passenger
+  updatePassenger(id: String!, email: String, phone: String): Passenger!
+  removePassenger(email: String!): Passenger!
+  createVehicleModel(id: ID!, name: String!): VehicleModel!
+  updateVehicleModel(id: ID!, name: String!): VehicleModel!
+  deleteVehicleModel(id: ID!): DeleteResult!
+  createVehicleBrand(name: String!): VehicleBrandModels!
+  updateVehicleBrand(id: ID!, name: String): VehicleBrandModels!
+  deleteVehicleBrand(id: String!): DeleteResult!
+  deleteVehiclePriceVariable(id: ID!): DeleteResult!
+  createVehiclePriceVariable(rateId: ID!, clientId: String, vehicleBrandId: String, vehicleModelId: String, vehicleTypeId: String, extraKmPrice: Float, extraHourPrice: Float, extraTollPrice: Float, airportPrice: Float, parkingMontserratPrice: Float, numPassengers: Int): VehiclePriceVariable!
+  updateVehiclePriceVariable(id: ID!, vehicleBrandId: String, vehicleModelId: String, vehicleTypeId: String, extraKmPrice: Float, extraTollPrice: Float, airportPrice: Float, extraHourPrice: Float, parkingMontserratPrice: Float, numPassengers: Int): VehiclePriceVariable!
+  updateServiceSubtype(id: ID!, clientId: String, name: String, description: String, distanceInMeters: Float): ServiceSubtype!
+  updateVehiclePriceCondition(id: ID!, name: String, description: String, vehicleModelId: String, vehicleBrandId: String, vehicleTypeId: String, price: Float, numPassengers: Int): VehiclePriceCondition!
+  createVehiclePriceCondition(clientId: String, serviceSubtypeId: ID!, name: String!, description: String, vehicleModelId: String, vehicleBrandId: String, vehicleTypeId: String, price: Float!, numPassengers: Int): VehiclePriceCondition!
+  deleteVehiclePriceCondition(id: ID!): DeleteResult!
+  createClientRate(id: ID!): Rate!
+}
+
+input ContactInput {
+  id: ID
+  name: String
+  phone: String
+  email: String
+}
+
+input ItineraryInput {
+  id: ID
+  hours: Int
+  departureArrivalDate: [String!]!
+  departureTime: String!
+  arrivalTime: String!
+  serviceTypeId: String!
+  presentationTime: String!
+  dinner: Boolean
+  reference: String
+  itineraryDescription: String
+  departureCity: String
+  departureType: String
+  departureAddress: String
+  departureLat: Float
+  departureLon: Float
+  arrivalCity: String
+  arrivalType: String
+  arrivalAddress: String
+  arrivalLat: Float
+  arrivalLon: Float
+  numVehicles: Int
+  numPassengers: Int
+  vehicleModelId: String
+  vehicleBrandId: String
+  vehicleTypeId: String!
+  groupName: String
+  flightNumber: String
+  notes: String
+  amounts: [AmountInput!]
+  driverFeatures: [ItineraryFeatureInput!]
+  vehicleFeatures: [ItineraryFeatureInput!]
+}
+
+input AmountInput {
+  id: ID
+  concept: String
+  amount: Float!
+  vat: Float!
+}
+
+input ItineraryFeatureInput {
+  id: ID
+  description: String!
+  required: Boolean!
+}
+
+type ActionResult {
+  success: Boolean!
+  reason: String
+}
+
+input UpdateClientEmployeeInput {
+  email: String!
+  name: String!
+  phone: String
+  disableLogin: Boolean
+}
+
+type DeleteResult {
+  deleted: Boolean!
+  reason: String
+}
+
+type Admin {
+  id: ID!
+  firebaseId: String!
+  isAdmin: Boolean!
+}
+
+type NotificationSendStatus {
+  sent: Boolean!
+}
+
+type Subscription {
+  onUpdateMe: PUser!
+  onDriverLocationUpdate(id: ID!): Driver!
+  newBudget: Budget!
+  onUpdateBudget: Budget!
+  onNewService: Service!
+  onUpdateService: Service!
+  onNewClient: Client!
+  onNewPassenger: Passenger!
+  onUpdateClient: Client!
+  onNewDriver: Driver!
+  onAnyDriverLocationUpdate: Driver!
+}
+
+type CalculatedAmountValue {
+  amount: Float!
+}

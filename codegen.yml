@@ -1,0 +1,19 @@
+overwrite: true
+schema: "https://mvips-server-dev.herokuapp.com"
+generates:
+  ./__generated__/graphql/datamodel.gen.ts:
+    documents: ["./graphql/queries/*.ts", "./graphql/mutations/*.ts"]
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "fragment-matcher"
+      - "typescript-react-apollo"
+    config:
+      withComponent: false
+      withHooks: true
+      withHOC: false
+      immutableTypes: true
+
+  ./__generated__/graphql/graphql.schema.json:
+    plugins:
+      - "introspection"
