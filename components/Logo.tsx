@@ -18,9 +18,9 @@ export const Logo = props => {
   return (
     <Text
       {...props}
-      style={{ ...iOSUIKit.largeTitleEmphasized, lineHeight: undefined, color, ...size }}
+      style={{ ...iOSUIKit.largeTitleEmphasizedObject, lineHeight: undefined, color, ...size }}
     >
-      Lynk
+      MVIPS
     </Text>
   );
 };

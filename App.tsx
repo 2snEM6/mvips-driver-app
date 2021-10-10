@@ -2,30 +2,27 @@ import React from 'react';
 import { ApolloProvider, ApolloClient } from '@apollo/client';
 import { AppState, AppStateStatus, StatusBar, StyleSheet, View } from 'react-native';
 import { createNativeStackNavigator } from 'react-native-screens/native-stack';
-import { useGetFrontendVersionQuery } from './__generated__/graphql/datamodel.gen';
-import { getClient, setupClient } from './graphql/client';
 import {
   DefaultTheme,
   NavigationContainer,
   NavigationContainerRef,
 } from '@react-navigation/native';
-//import useLinking from './navigation/useLinking';
+import { useGetFrontendVersionQuery } from './__generated__/graphql/datamodel.gen';
+import { getClient, setupClient } from './graphql/client';
+// import useLinking from './navigation/useLinking';
 import LoginRegisterNavigator from './navigation/LoginRegisterNavigator';
 import AppNavigator from './navigation/AppNavigator';
-//import { SafeAreaProvider } from 'react-native-safe-area-context';
-//import { PortalProvider, WhitePortal } from 'react-native-portal';
-//import { debug } from 'react-native-reanimated';
+// import { SafeAreaProvider } from 'react-native-safe-area-context';
+// import { PortalProvider, WhitePortal } from 'react-native-portal';
+// import { debug } from 'react-native-reanimated';
 
 const FrontendVersion = () => {
   const { data } = useGetFrontendVersionQuery({
-    client: getClient()
+    client: getClient(),
   });
 
-
-  return (
-    <View>{data?.getFrontendVersion.version}</View>
-  )
-}
+  return <View>{data?.getFrontendVersion.version}</View>;
+};
 const Stack = createNativeStackNavigator();
 
 const _loggedIn = async () => {
@@ -52,15 +49,11 @@ const _loggedIn = async () => {
 };
 export default function App() {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
-  const [initialNavigationState, setInitialNavigationState] = React.useState();
-  //const [graphqlClient, setGraphqlClient] = React.useState();
+  // const [graphqlClient, setGraphqlClient] = React.useState();
   const [graphqlClient, setGraphqlClient] = React.useState<ApolloClient<any>>();
-  const navigationContainerRef = React.useRef<NavigationContainerRef<any>>();
-  //const confettiAnimatonRef = React.useRef<LottieAnimation>();
+  // const confettiAnimatonRef = React.useRef<LottieAnimation>();
   /*
-  const { getInitialState } = useLinking(
-    navigationContainerRef as React.RefObject<NavigationContainerRef>,
-  );
+
   */
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [appState, setAppState] = React.useState(AppState.currentState);
@@ -82,8 +75,6 @@ export default function App() {
     loadResourcesAndDataAsync().then();
   }, []);
 
-
-
   if (!isLoadingComplete) {
     return null;
   }
@@ -99,59 +90,52 @@ export default function App() {
   console.log('Before return');
   return (
     <>
-      <StatusBar barStyle="dark-content" />
-        <View style={styles.container}>
-          <ApolloProvider client={graphqlClient as ApolloClient<any>}>
-            <View style={styles.container}>
-              <NavigationContainer
-                theme={MyTheme}
-                ref={navigationContainerRef}
-                initialState={initialNavigationState}
-              >
-                <Stack.Navigator
-                  initialRouteName={loggedIn ? 'Home' : 'LoginRegisterScreen'}
-                  screenOptions={{
-                    headerShown: false,
-                  }}
-                >
-                  <Stack.Screen
-                    name="LoginRegisterScreen"
-                    component={LoginRegisterNavigator}
-                    options={{ gestureEnabled: false }}
+      <ApolloProvider client={graphqlClient as ApolloClient<any>}>
+        <StatusBar barStyle="dark-content" />
+        <NavigationContainer>
+          <Stack.Navigator
+            // initialRouteName={loggedIn ? 'Home' : 'LoginRegisterScreen'}
+            initialRouteName="LoginRegisterScreen"
+            screenOptions={{
+              headerShown: false,
+            }}
+          >
+            <Stack.Screen
+              name="LoginRegisterScreen"
+              component={LoginRegisterNavigator}
+              options={{ gestureEnabled: false }}
+            />
+            {/* <Stack.Screen
+                name="Home"
+                component={AppNavigator}
+                options={{ gestureEnabled: false }}
+              /> */}
+            {/*
+                    <Stack.Screen
+                    name="UpgradeScreen"
+                    component={UpgradeScreen}
+                    options={() => ({
+                      cardOverlayEnabled: true,
+                      gestureEnabled: false,
+                      headerShown: false,
+                      gestureResponseDistance: {
+                        vertical: 1000,
+                      },
+                      ...TransitionPresets.ModalSlideFromBottomIOS,
+                    })}
                   />
-                  <Stack.Screen
-                    name="Home"
-                    component={AppNavigator}
-                    options={{ gestureEnabled: false }}
-                  />
-                  {/*
-                       <Stack.Screen
-                        name="UpgradeScreen"
-                        component={UpgradeScreen}
-                        options={() => ({
-                          cardOverlayEnabled: true,
-                          gestureEnabled: false,
-                          headerShown: false,
-                          gestureResponseDistance: {
-                            vertical: 1000,
-                          },
-                          ...TransitionPresets.ModalSlideFromBottomIOS,
-                        })}
-                      />
-                      */}
-                </Stack.Navigator>
-              </NavigationContainer>
-            </View>
-          </ApolloProvider>
-        </View>
+                  */}
+          </Stack.Navigator>
+        </NavigationContainer>
+      </ApolloProvider>
     </>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'blue',
     alignItems: 'center',
     justifyContent: 'center',
   },

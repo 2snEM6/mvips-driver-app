@@ -1,16 +1,87 @@
 import * as React from 'react';
-//import auth from '@react-native-firebase/auth';
+// import auth from '@react-native-firebase/auth';
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
-import appleAuth, { AppleButton } from '@invertase/react-native-apple-authentication';
 import { iOSUIKit } from 'react-native-typography';
 import Config from '../../constants/Config';
 import { Logo } from '../../components/Logo';
 import * as GraphQLClient from '../../graphql/client';
-//import { MeDocument, MeQuery, MeQueryVariables } from '../../__generated__/graphql/datamodel.gen';
-//import { SocialNetworkIdentifiers } from '../../constants/SocialNetworks';
-//import Loading from '../../components/Loading';
+// import { MeDocument, MeQuery, MeQueryVariables } from '../../__generated__/graphql/datamodel.gen';
+// import { SocialNetworkIdentifiers } from '../../constants/SocialNetworks';
+// import Loading from '../../components/Loading';
 import Colors from '../../constants/Colors';
 
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: 'white',
+    justifyContent: 'space-between',
+  },
+  logoContainer: {
+    width: '100%',
+    height: '50%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loginButtonsContainer: {
+    width: '100%',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+  },
+  loginButtonsGroup: {
+    width: '100%',
+    paddingBottom: 50,
+    paddingTop: 50,
+    alignItems: 'center',
+    flexDirection: 'column',
+  },
+  socialIcon: {
+    marginRight: 10,
+  },
+  loginButton: {
+    width: '75%',
+    height: 60,
+    borderRadius: 8,
+    margin: 5,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    flexDirection: 'row',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.12,
+    shadowRadius: 13.46,
+    elevation: 8,
+  },
+  instagramButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+  },
+  snapchatButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFFC00',
+  },
+  appleButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'black',
+  },
+  phoneButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+  },
+});
 export default class LoginRegisterScreen extends React.Component<{ navigation: any }, any> {
   constructor(props: any) {
     super(props);
@@ -90,56 +161,6 @@ export default class LoginRegisterScreen extends React.Component<{ navigation: a
     //     return navigation.navigate('Home');
     //   }
     // }
-
-    if (provider === 'apple') {
-      const loggedIn = await this.loginWithApple();
-
-      console.log('logged in', loggedIn);
-      if (loggedIn) {
-        const graphqlClient = await GraphQLClient.getClient();
-        try {
-          const loginResponse = await graphqlClient.query<MeQuery, MeQueryVariables>({
-            query: MeDocument,
-            fetchPolicy: 'no-cache',
-          });
-
-          const user = loginResponse.data?.me;
-
-          if (!user) {
-            return navigation.navigate('OnboardingScreen', {
-              ...loggedIn,
-              name: loggedIn.name,
-            });
-          }
-          await graphqlClient.writeQuery({
-            query: MeDocument,
-            data: {
-              me: {
-                ...user,
-              },
-            },
-          });
-
-          return navigation.navigate('Home');
-        } catch (err) {
-          if (err.message === 'auth/not-authenticated') {
-            return navigation.navigate('OnboardingScreen', {
-              ...loggedIn,
-              name: loggedIn.name,
-            });
-          }
-          // TODO: Handle unknown error
-        } finally {
-          this.setState({
-            buttonLoading: false,
-          });
-        }
-      } else {
-        this.setState({
-          buttonLoading: false,
-        });
-      }
-    }
   };
 
   loginWithApple = async (): Promise<{ email: string; name: string } | undefined> => {
@@ -232,33 +253,12 @@ export default class LoginRegisterScreen extends React.Component<{ navigation: a
 
           <View style={styles.loginButtonsContainer}>
             <View style={styles.loginButtonsGroup}>
-              {!this.state.buttonLoading && (
-                <AppleButton
-                  buttonStyle={AppleButton.Style.BLACK}
-                  buttonType={AppleButton.Type.SIGN_IN}
-                  style={{
-                    width: '75%', // You must specify a width
-                    height: 60, // You must specify a height
-                  }}
-                  onPress={() => this.login('apple')}
-                />
-              )}
-              {this.state.buttonLoading && (
-                <View style={{ ...styles.loginButton, ...styles.appleButton }}>
-                  <Loading
-                    type="bright"
-                    style={{
-                      transform: [{ scale: 1.5 }],
-                    }}
-                  />
-                </View>
-              )}
               {Config.ENVIRONMENT !== 'production' && (
                 <TouchableOpacity
                   onPress={() => this.props.navigation.navigate('LoginWithEmail')}
                   style={{ ...styles.loginButton, ...styles.phoneButton, marginTop: 10 }}
                 >
-                  <Text style={{ ...iOSUIKit.bodyEmphasized }}>Login with email</Text>
+                  <Text style={{ ...iOSUIKit.bodyEmphasizedObject }}>Login with email</Text>
                 </TouchableOpacity>
               )}
             </View>
@@ -295,76 +295,3 @@ export default class LoginRegisterScreen extends React.Component<{ navigation: a
     );
   }
 }
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: 'white',
-    justifyContent: 'space-between',
-  },
-  logoContainer: {
-    width: '100%',
-    height: '50%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loginButtonsContainer: {
-    width: '100%',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'column',
-  },
-  loginButtonsGroup: {
-    width: '100%',
-    paddingBottom: 50,
-    paddingTop: 50,
-    alignItems: 'center',
-    flexDirection: 'column',
-  },
-  socialIcon: {
-    marginRight: 10,
-  },
-  loginButton: {
-    width: '75%',
-    height: 60,
-    borderRadius: 8,
-    margin: 5,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    flexDirection: 'row',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.12,
-    shadowRadius: 13.46,
-    elevation: 8,
-  },
-  instagramButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
-  },
-  snapchatButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FFFC00',
-  },
-  appleButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'black',
-  },
-  phoneButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
-  },
-});
