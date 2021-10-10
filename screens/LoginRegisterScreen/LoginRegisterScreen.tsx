@@ -3,13 +3,13 @@ import * as React from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
 import appleAuth, { AppleButton } from '@invertase/react-native-apple-authentication';
 import { iOSUIKit } from 'react-native-typography';
-//import Config from '../../constants/Config';
-//import { Logo } from '../../components/Logo';
+import Config from '../../constants/Config';
+import { Logo } from '../../components/Logo';
 import * as GraphQLClient from '../../graphql/client';
 //import { MeDocument, MeQuery, MeQueryVariables } from '../../__generated__/graphql/datamodel.gen';
 //import { SocialNetworkIdentifiers } from '../../constants/SocialNetworks';
 //import Loading from '../../components/Loading';
-//import Colors from '../../constants/Colors';
+import Colors from '../../constants/Colors';
 
 export default class LoginRegisterScreen extends React.Component<{ navigation: any }, any> {
   constructor(props: any) {
@@ -210,6 +210,7 @@ export default class LoginRegisterScreen extends React.Component<{ navigation: a
   };
 
   render() {
+    console.log('Pre return render LoginRegisterScreen');
     return (
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.container}>

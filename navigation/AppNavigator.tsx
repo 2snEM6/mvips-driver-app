@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import { createNativeStackNavigator } from 'react-native-screens/native-stack';
 import { AppState, AppStateStatus } from 'react-native';
-//import BottomTabNavigator from './BottomTabNavigator';
+import BottomTabNavigator from './BottomTabNavigator';
 
 
 const StackNavigator = createNativeStackNavigator();
@@ -33,10 +33,7 @@ const AppNavigator = () => {
         gestureEnabled: false,
       }}
     >
-      {/*
       <StackNavigator.Screen name="Home" component={BottomTabNavigator} />
-      */}
-
     </StackNavigator.Navigator>
   );
 };

@@ -10,8 +10,8 @@ import {
   NavigationContainerRef,
 } from '@react-navigation/native';
 //import useLinking from './navigation/useLinking';
-//import LoginRegisterNavigator from './navigation/LoginRegisterNavigator';
-//import AppNavigator from './navigation/AppNavigator';
+import LoginRegisterNavigator from './navigation/LoginRegisterNavigator';
+import AppNavigator from './navigation/AppNavigator';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { PortalProvider, WhitePortal } from 'react-native-portal';
 import { debug } from 'react-native-reanimated';
@@ -51,10 +51,11 @@ const _loggedIn = async () => {
   */
 };
 export default function App() {
-  //const [initialNavigationState, setInitialNavigationState] = React.useState();
+  const [isLoadingComplete, setLoadingComplete] = React.useState(false);
+  const [initialNavigationState, setInitialNavigationState] = React.useState();
   //const [graphqlClient, setGraphqlClient] = React.useState();
   const [graphqlClient, setGraphqlClient] = React.useState<ApolloClient<any>>();
-  const navigationContainerRef = React.useRef<NavigationContainerRef>();
+  const navigationContainerRef = React.useRef<NavigationContainerRef<any>>();
   //const confettiAnimatonRef = React.useRef<LottieAnimation>();
   /*
   const { getInitialState } = useLinking(
@@ -64,19 +65,28 @@ export default function App() {
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [appState, setAppState] = React.useState(AppState.currentState);
 
-  async function loadResourcesAndDataAsync() {
-    debug;
-    React.useEffect(() => {
-      const setup = async () => {
+  React.useEffect(() => {
+    async function loadResourcesAndDataAsync() {
+      try {
+        console.log('Setting up GraphQL Client');
         const _graphqlclient = await setupClient();
         // @ts-ignore
         setGraphqlClient(_graphqlclient);
+      } catch (e) {
+        // We might want to provide this error information to an error reporting service
+        console.log(e);
+      } finally {
+        setLoadingComplete(true);
       }
-      setup();
-    }, []);
-  }
+    }
+    loadResourcesAndDataAsync().then();
+  }, []);
 
-  loadResourcesAndDataAsync().then();
+
+
+  if (!isLoadingComplete) {
+    return null;
+  }
 
   const MyTheme = {
     ...DefaultTheme,
@@ -86,36 +96,37 @@ export default function App() {
     },
   };
 
+  console.log('Before return');
   return (
     <>
       <StatusBar barStyle="dark-content" />
 
-       {/* <PortalProvider>
-          <View style={styles.container}>
-            <ApolloProvider client={graphqlClient as ApolloClient<any>}>
-              <View style={styles.container}>
-                <NavigationContainer
-                  theme={MyTheme}
-                  ref={navigationContainerRef}
-                  initialState={initialNavigationState}
+      <PortalProvider>
+        <View style={styles.container}>
+          <ApolloProvider client={graphqlClient as ApolloClient<any>}>
+            <View style={styles.container}>
+              <NavigationContainer
+                theme={MyTheme}
+                ref={navigationContainerRef}
+                initialState={initialNavigationState}
+              >
+                <Stack.Navigator
+                  initialRouteName={loggedIn ? 'Home' : 'LoginRegisterScreen'}
+                  screenOptions={{
+                    headerShown: false,
+                  }}
                 >
-                  <Stack.Navigator
-                    initialRouteName={loggedIn ? 'Home' : 'LoginRegisterScreen'}
-                    screenOptions={{
-                      headerShown: false,
-                    }}
-                  >
-                    <Stack.Screen
-                      name="LoginRegisterScreen"
-                      component={LoginRegisterNavigator}
-                      options={{ gestureEnabled: false }}
-                    />
-                    <Stack.Screen
-                      name="Home"
-                      component={AppNavigator}
-                      options={{ gestureEnabled: false }}
-                    />
-                    {/*
+                  <Stack.Screen
+                    name="LoginRegisterScreen"
+                    component={LoginRegisterNavigator}
+                    options={{ gestureEnabled: false }}
+                  />
+                  <Stack.Screen
+                    name="Home"
+                    component={AppNavigator}
+                    options={{ gestureEnabled: false }}
+                  />
+                  {/*
                        <Stack.Screen
                         name="UpgradeScreen"
                         component={UpgradeScreen}
@@ -129,13 +140,13 @@ export default function App() {
                           ...TransitionPresets.ModalSlideFromBottomIOS,
                         })}
                       />
-                      * /}
-                  </Stack.Navigator>
-                </NavigationContainer>
-              </View>
-            </ApolloProvider>
-          </View>
-        </PortalProvider>*/}
+                      */}
+                </Stack.Navigator>
+              </NavigationContainer>
+            </View>
+          </ApolloProvider>
+        </View>
+      </PortalProvider>
     </>
   )
 }
