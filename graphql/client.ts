@@ -1,7 +1,7 @@
 import { ApolloClient, InMemoryCache, createHttpLink, NormalizedCacheObject } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 // @ts-ignore
-import auth from '@react-native-firebase/auth';
+//import auth from '@react-native-firebase/auth';
 import * as uuid from '../utils/uuid';
 import config from '../config';
 
@@ -31,13 +31,13 @@ const createClient = async (): Promise<ApolloClient<NormalizedCacheObject>> => {
 
   const authLink = setContext(async (_, { headers }) => {
     // get the authentication token from local storage if it exists
-    const token = await auth().currentUser?.getIdToken();
+    //const token = await auth().currentUser?.getIdToken();
     // return the headers to the context so httpLink can read them
     return {
       uri: config.GRAPHQL_ENDPOINT,
       headers: {
         ...headers,
-        Authorization: token ? `Bearer ${token}` : '',
+        //Authorization: token ? `Bearer ${token}` : '',
       },
     };
   });
