@@ -12,9 +12,9 @@ import {
 //import useLinking from './navigation/useLinking';
 import LoginRegisterNavigator from './navigation/LoginRegisterNavigator';
 import AppNavigator from './navigation/AppNavigator';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { PortalProvider, WhitePortal } from 'react-native-portal';
-import { debug } from 'react-native-reanimated';
+//import { SafeAreaProvider } from 'react-native-safe-area-context';
+//import { PortalProvider, WhitePortal } from 'react-native-portal';
+//import { debug } from 'react-native-reanimated';
 
 const FrontendVersion = () => {
   const { data } = useGetFrontendVersionQuery({
@@ -100,8 +100,6 @@ export default function App() {
   return (
     <>
       <StatusBar barStyle="dark-content" />
-
-      <PortalProvider>
         <View style={styles.container}>
           <ApolloProvider client={graphqlClient as ApolloClient<any>}>
             <View style={styles.container}>
@@ -146,7 +144,6 @@ export default function App() {
             </View>
           </ApolloProvider>
         </View>
-      </PortalProvider>
     </>
   )
 }
