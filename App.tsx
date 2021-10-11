@@ -14,7 +14,7 @@ import LoginRegisterNavigator from './navigation/LoginRegisterNavigator';
 import AppNavigator from './navigation/AppNavigator';
 // import { SafeAreaProvider } from 'react-native-safe-area-context';
 // import { PortalProvider, WhitePortal } from 'react-native-portal';
-// import { debug } from 'react-native-reanimated';
+import { debug } from 'react-native-reanimated';
 
 const FrontendVersion = () => {
   const { data } = useGetFrontendVersionQuery({

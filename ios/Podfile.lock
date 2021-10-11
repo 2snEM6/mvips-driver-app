@@ -288,6 +288,35 @@ PODS:
     - React-Core
   - RNGestureHandler (1.10.3):
     - React-Core
+  - RNReanimated (2.2.2):
+    - DoubleConversion
+    - FBLazyVector
+    - FBReactNativeSpec
+    - Folly
+    - glog
+    - RCTRequired
+    - RCTTypeSafety
+    - React
+    - React-callinvoker
+    - React-Core
+    - React-Core/DevSupport
+    - React-Core/RCTWebSocket
+    - React-CoreModules
+    - React-cxxreact
+    - React-jsi
+    - React-jsiexecutor
+    - React-jsinspector
+    - React-RCTActionSheet
+    - React-RCTAnimation
+    - React-RCTBlob
+    - React-RCTImage
+    - React-RCTLinking
+    - React-RCTNetwork
+    - React-RCTSettings
+    - React-RCTText
+    - React-RCTVibration
+    - ReactCommon/turbomodule/core
+    - Yoga
   - RNScreens (3.4.0):
     - React-Core
     - React-RCTImage
@@ -343,6 +372,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - UMAppLoader (from `../node_modules/unimodules-app-loader/ios`)
   - "UMCore (from `../node_modules/@unimodules/core/ios`)"
@@ -433,6 +463,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-device-info"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNReanimated:
+    :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
   UMAppLoader:
@@ -457,7 +489,7 @@ SPEC CHECKSUMS:
   EXImageLoader: d3531a3fe530b22925c19977cb53bb43e3821fe6
   EXKeepAwake: f4105ef469be7b283f66ce2d7234bb71ac80cd26
   ExpoModulesCore: 2734852616127a6c1fc23012197890a6f3763dc7
-  EXSplashScreen: f537a41eed0ad091fa599e1591ad4f94e38c6ca9
+  EXSplashScreen: 847e0d8026731c1090bf269ede3e15ac87d88958
   EXStructuredHeaders: e52b880264d15b8ad07d36670226c29476af6334
   EXUpdates: 013d26649cb6ab4f8d8d80c35d3d4be150b47e7c
   EXUpdatesInterface: b68e78b912a03fff7901a5f46ec200c45e3506a5
@@ -485,8 +517,9 @@ SPEC CHECKSUMS:
   React-RCTText: 5c51df3f08cb9dedc6e790161195d12bac06101c
   React-RCTVibration: ae4f914cfe8de7d4de95ae1ea6cc8f6315d73d9d
   ReactCommon: 73d79c7039f473b76db6ff7c6b159c478acbbb3b
-  RNDeviceInfo: 99b0a4fc191808e58e0a045640706100fc3d771c
+  RNDeviceInfo: 8a06046616c6b5c03787b04f265fa3b52b37c80b
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
+  RNReanimated: 6ec2460b9c6c8f3b1403bd0eaa12d359a98650e3
   RNScreens: 21b73c94c9117e1110a79ee0ee80c93ccefed8ce
   UMAppLoader: 21af63390e55c82e037fb9752d93114a80ecf16e
   UMCore: ce3a4faa010239063b8343895b29a6d97b01069d
@@ -496,4 +529,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 229a18b4c34418e4f527197c73e4aaef89b6953a
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.2
