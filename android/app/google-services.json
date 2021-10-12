@@ -1,0 +1,135 @@
+{
+  "project_info": {
+    "project_number": "662349183941",
+    "firebase_url": "https://mvips-dev.firebaseio.com",
+    "project_id": "mvips-dev",
+    "storage_bucket": "mvips-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:662349183941:android:6fc2b82626a29baa8be9ac",
+        "android_client_info": {
+          "package_name": "com.lyokone.location_example"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "662349183941-cik3r8l0g37gkolj87m6f8envp9rrh03.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lyokone.location_example",
+            "certificate_hash": "b07cce510a124ac80363db10fca46e1b0ab56e93"
+          }
+        },
+        {
+          "client_id": "662349183941-dcs6cnnkirnsgb4aommrdq42hdputgnp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUnWbpzz0sXwnkQpuJQ9gu0eP2OuaioD0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "662349183941-dcs6cnnkirnsgb4aommrdq42hdputgnp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "662349183941-tv4gi98prrqrevrnl84v1dd95mttgsei.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "net.mvips.driver.dev"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:662349183941:android:f5bd4846da4628528be9ac",
+        "android_client_info": {
+          "package_name": "net.mvips.driver.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "662349183941-qbm14fgepk16a4bu493idflcnjh62dvr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "net.mvips.driver.dev",
+            "certificate_hash": "b07cce510a124ac80363db10fca46e1b0ab56e93"
+          }
+        },
+        {
+          "client_id": "662349183941-dcs6cnnkirnsgb4aommrdq42hdputgnp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUnWbpzz0sXwnkQpuJQ9gu0eP2OuaioD0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "662349183941-dcs6cnnkirnsgb4aommrdq42hdputgnp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "662349183941-tv4gi98prrqrevrnl84v1dd95mttgsei.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "net.mvips.driver.dev"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:662349183941:android:09ab60ab78cc007c8be9ac",
+        "android_client_info": {
+          "package_name": "net.mvips.passenger.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "662349183941-dcs6cnnkirnsgb4aommrdq42hdputgnp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUnWbpzz0sXwnkQpuJQ9gu0eP2OuaioD0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "662349183941-dcs6cnnkirnsgb4aommrdq42hdputgnp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "662349183941-tv4gi98prrqrevrnl84v1dd95mttgsei.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "net.mvips.driver.dev"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

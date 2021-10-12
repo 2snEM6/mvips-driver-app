@@ -10,10 +10,10 @@
       "web"
     ],
     "android": {
-      "package": "com.mvips.driver.app"
+      "package": "net.mvips.driver.dev"
     },
     "ios": {
-      "bundleIdentifier": "com.mvips.driver.app"
+      "bundleIdentifier": "net.mvips.driver.dev"
     }
   }
 }

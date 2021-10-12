@@ -25,28 +25,29 @@ const FrontendVersion = () => {
 };
 const Stack = createNativeStackNavigator();
 
-const _loggedIn = async () => {
-  return false;
-  /*
-  try {
-    if (auth().currentUser) {
-      const client = getClient();
-      const me = await client.query<MeQuery, MeQueryVariables>({
-        query: MeDocument,
-      });
+// eslint-disable-next-line no-underscore-dangle
+// const _loggedIn = async () => {
+//   return false;
+//   /*
+//   try {
+//     if (auth().currentUser) {
+//       const client = getClient();
+//       const me = await client.query<MeQuery, MeQueryVariables>({
+//         query: MeDocument,
+//       });
 
-      if (me?.data?.me?.id) {
-        analytics().setAnalyticsCollectionEnabled(true);
-        analytics().setUserId(me.data.me.id);
-        return true;
-      }
-    }
-    return false;
-  } catch (e) {
-    return false;
-  }
-  */
-};
+//       if (me?.data?.me?.id) {
+//         analytics().setAnalyticsCollectionEnabled(true);
+//         analytics().setUserId(me.data.me.id);
+//         return true;
+//       }
+//     }
+//     return false;
+//   } catch (e) {
+//     return false;
+//   }
+//   */
+// };
 export default function App() {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
   // const [graphqlClient, setGraphqlClient] = React.useState();
@@ -55,15 +56,16 @@ export default function App() {
   /*
 
   */
-  const [loggedIn, setLoggedIn] = React.useState(false);
-  const [appState, setAppState] = React.useState(AppState.currentState);
+  
+  // const [loggedIn, setLoggedIn] = React.useState(false);
+  // const [appState, setAppState] = React.useState(AppState.currentState);
 
   React.useEffect(() => {
     async function loadResourcesAndDataAsync() {
       try {
         console.log('Setting up GraphQL Client');
+        // eslint-disable-next-line no-underscore-dangle
         const _graphqlclient = await setupClient();
-        // @ts-ignore
         setGraphqlClient(_graphqlclient);
       } catch (e) {
         // We might want to provide this error information to an error reporting service
@@ -79,13 +81,13 @@ export default function App() {
     return null;
   }
 
-  const MyTheme = {
-    ...DefaultTheme,
-    colors: {
-      ...DefaultTheme.colors,
-      background: '#f6f6f6',
-    },
-  };
+  // const MyTheme = {
+  //   ...DefaultTheme,
+  //   colors: {
+  //     ...DefaultTheme.colors,
+  //     background: '#f6f6f6',
+  //   },
+  // };
 
   console.log('Before return');
   return (
@@ -105,11 +107,11 @@ export default function App() {
               component={LoginRegisterNavigator}
               options={{ gestureEnabled: false }}
             />
-            {/* <Stack.Screen
-                name="Home"
-                component={AppNavigator}
-                options={{ gestureEnabled: false }}
-              /> */}
+            <Stack.Screen
+              name="Home"
+              component={AppNavigator}
+              options={{ gestureEnabled: false }}
+            />
             {/*
                     <Stack.Screen
                     name="UpgradeScreen"
