@@ -52,7 +52,6 @@ const LoginWithEmail = () => {
             size={1.2}
             onPress={async () => {
               setLoading(true);
-
               try {
                 console.log('Autenticando ' + email);
                 const { user: fbUser } = await auth().signInWithEmailAndPassword(

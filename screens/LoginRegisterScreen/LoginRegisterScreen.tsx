@@ -262,6 +262,16 @@ export default class LoginRegisterScreen extends React.Component<{ navigation: a
                 </TouchableOpacity>
               )}
             </View>
+            <View style={styles.loginButtonsGroup}>
+              {Config.ENVIRONMENT !== 'production' && (
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate('LoginWithPhone')}
+                  style={{ ...styles.loginButton, ...styles.phoneButton, marginTop: 10 }}
+                >
+                  <Text style={{ ...iOSUIKit.bodyEmphasizedObject }}>Login with phone number</Text>
+                </TouchableOpacity>
+              )}
+            </View>
             <View style={{ paddingHorizontal: 40 }}>
               <Text
                 style={{
