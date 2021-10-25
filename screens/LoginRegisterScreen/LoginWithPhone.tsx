@@ -94,23 +94,28 @@ const LoginWithPhone = () => {
   const [verificationCode, setVerificationCode] = React.useState();
   const [loading, setLoading] = React.useState<boolean>(false);
 
-  const authListener = auth().onAuthStateChanged(user => {
-    if (user) {
-      // Obviously, you can add more statements here,
-      //       e.g. call an action creator if you use Redux.
+  React.useEffect(() => {
+    const unsubscribe = auth().onAuthStateChanged(user => {
+      if (user) {
+        // Obviously, you can add more statements here,
+        //       e.g. call an action creator if you use Redux.
 
-      // navigate the user away from the login screens:
-      console.debug('Automatically authenticated');
-      console.debug(`User: ${user.uid}`);
-      navigation.navigate('Home');
-    } else {
-      console.debug('No logged in user');
-      // reset state if you need to
-      //navigation.navigate('Login');
-    }
-  });
+        // navigate the user away from the login screens:
+        console.debug('Automatically authenticated');
+        console.debug(`User: ${user.uid}`);
+        navigation.navigate('Home');
+      } else {
+        console.debug('No logged in user');
+        // reset state if you need to
+        //navigation.navigate('Login');
+      }
+    });
 
-  auth().onAuthStateChanged(authListener);
+    return () => {
+      console.log('Removing listener app');
+      unsubscribe();
+    };
+  }, []);
 
   return (
     <SafeAreaView style={styles.safeArea}>
