@@ -12,6 +12,7 @@ import { useDriverQuery, useGetFrontendVersionQuery } from '../__generated__/gra
 const SUCCESS_MESSAGE = 'LOGIN SUCCESSFULL';
 
 const BottomTabNavigator: React.FC = () => {
+  console.log('En BottomTabNavigator');
   const navigation = useNavigation();
   const { data, loading, error } = useDriverQuery({
     client: getClient(),
@@ -29,7 +30,6 @@ const BottomTabNavigator: React.FC = () => {
   console.log('Data: ' + data);
   console.log(loading);
   console.log(error);
-  console.log('333');
   return (
     <SafeAreaView
       style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', paddingHorizontal: 20 }}

@@ -37,7 +37,7 @@ const createClient = async (): Promise<ApolloClient<NormalizedCacheObject>> => {
       uri: config.GRAPHQL_ENDPOINT,
       headers: {
         ...headers,
-        // Authorization: token ? `Bearer ${token}` : '',
+        Authorization: token ? `Bearer ${token}` : '',
       },
     };
   });
