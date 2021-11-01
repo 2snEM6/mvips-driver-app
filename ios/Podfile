@@ -18,4 +18,6 @@ target 'mvipsdriverapp' do
   #     flipper_post_install(installer)
   #   end
   # end
+  pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
+  pod 'Firebase/Auth'
 end

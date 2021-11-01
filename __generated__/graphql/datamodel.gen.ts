@@ -3956,6 +3956,15 @@ export type DummyQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type DummyQuery = { readonly __typename?: 'Query', readonly getFrontendVersion: { readonly __typename?: 'FrontendVersion', readonly version: string } };
 
+export type DriverQueryVariables = Exact<{
+  id?: Maybe<Scalars['ID']>;
+  departureDateMin?: Maybe<Scalars['String']>;
+  departureDateMax?: Maybe<Scalars['String']>;
+}>;
+
+
+export type DriverQuery = { readonly __typename?: 'Query', readonly driver?: Maybe<{ readonly __typename?: 'Driver', readonly id?: Maybe<string>, readonly name?: Maybe<string>, readonly phone?: Maybe<string> }> };
+
 export type GetFrontendVersionQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -4007,6 +4016,49 @@ export function useDummyLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Dumm
 export type DummyQueryHookResult = ReturnType<typeof useDummyQuery>;
 export type DummyLazyQueryHookResult = ReturnType<typeof useDummyLazyQuery>;
 export type DummyQueryResult = Apollo.QueryResult<DummyQuery, DummyQueryVariables>;
+export const DriverDocument = gql`
+    query Driver($id: ID, $departureDateMin: String, $departureDateMax: String) {
+  driver(
+    id: $id
+    departureDateMin: $departureDateMin
+    departureDateMax: $departureDateMax
+  ) {
+    id
+    name
+    phone
+  }
+}
+    `;
+
+/**
+ * __useDriverQuery__
+ *
+ * To run a query within a React component, call `useDriverQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDriverQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDriverQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      departureDateMin: // value for 'departureDateMin'
+ *      departureDateMax: // value for 'departureDateMax'
+ *   },
+ * });
+ */
+export function useDriverQuery(baseOptions?: Apollo.QueryHookOptions<DriverQuery, DriverQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<DriverQuery, DriverQueryVariables>(DriverDocument, options);
+      }
+export function useDriverLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DriverQuery, DriverQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<DriverQuery, DriverQueryVariables>(DriverDocument, options);
+        }
+export type DriverQueryHookResult = ReturnType<typeof useDriverQuery>;
+export type DriverLazyQueryHookResult = ReturnType<typeof useDriverLazyQuery>;
+export type DriverQueryResult = Apollo.QueryResult<DriverQuery, DriverQueryVariables>;
 export const GetFrontendVersionDocument = gql`
     query GetFrontendVersion {
   getFrontendVersion {

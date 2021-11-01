@@ -1,4 +1,4 @@
-package com.mvips.driver.app;
+package net.mvips.driver.dev;
 import android.content.res.Configuration;
 import android.content.Intent;
 

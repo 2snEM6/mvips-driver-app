@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-na
 import { iOSUIKit } from 'react-native-typography';
 import Config from '../../constants/Config';
 import { Logo } from '../../components/Logo';
-import * as GraphQLClient from '../../graphql/client';
+// import * as GraphQLClient from '../../graphql/client';
 // import { MeDocument, MeQuery, MeQueryVariables } from '../../__generated__/graphql/datamodel.gen';
 // import { SocialNetworkIdentifiers } from '../../constants/SocialNetworks';
 // import Loading from '../../components/Loading';
@@ -163,54 +163,54 @@ export default class LoginRegisterScreen extends React.Component<{ navigation: a
     // }
   };
 
-  loginWithApple = async (): Promise<{ email: string; name: string } | undefined> => {
-    // performs login request
-    return undefined;
-    /*
-    try {
-      const appleAuthRequestResponse = await appleAuth.performRequest({
-        requestedOperation: appleAuth.Operation.LOGIN,
-        requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
-      });
+  // loginWithApple = async (): Promise<{ email: string; name: string } | undefined> => {
+  //   // performs login request
+  //   return undefined;
+  //   /*
+  //   try {
+  //     const appleAuthRequestResponse = await appleAuth.performRequest({
+  //       requestedOperation: appleAuth.Operation.LOGIN,
+  //       requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+  //     });
 
-      if (!appleAuthRequestResponse.identityToken) {
-        throw new Error('Apple Sign-In failed - no identify token returned');
-      }
+  //     if (!appleAuthRequestResponse.identityToken) {
+  //       throw new Error('Apple Sign-In failed - no identify token returned');
+  //     }
 
-      const { identityToken, nonce } = appleAuthRequestResponse;
-      const appleCredential = auth.AppleAuthProvider.credential(identityToken, nonce);
+  //     const { identityToken, nonce } = appleAuthRequestResponse;
+  //     const appleCredential = auth.AppleAuthProvider.credential(identityToken, nonce);
 
-      const credential = await auth().signInWithCredential(appleCredential);
+  //     const credential = await auth().signInWithCredential(appleCredential);
 
-      const hasAppleNameInfo = !!(appleAuthRequestResponse.fullName || {}).givenName;
+  //     const hasAppleNameInfo = !!(appleAuthRequestResponse.fullName || {}).givenName;
 
-      if (hasAppleNameInfo) {
-        await auth().currentUser?.updateProfile({
-          displayName: `${appleAuthRequestResponse.fullName?.givenName} ${appleAuthRequestResponse.fullName?.familyName}`,
-        });
-      }
+  //     if (hasAppleNameInfo) {
+  //       await auth().currentUser?.updateProfile({
+  //         displayName: `${appleAuthRequestResponse.fullName?.givenName} ${appleAuthRequestResponse.fullName?.familyName}`,
+  //       });
+  //     }
 
-      if (credential?.user) {
-        const name: string = hasAppleNameInfo
-          ? (`${appleAuthRequestResponse.fullName?.givenName} ${appleAuthRequestResponse.fullName?.familyName}` as string)
-          : (auth().currentUser?.displayName as string);
+  //     if (credential?.user) {
+  //       const name: string = hasAppleNameInfo
+  //         ? (`${appleAuthRequestResponse.fullName?.givenName} ${appleAuthRequestResponse.fullName?.familyName}` as string)
+  //         : (auth().currentUser?.displayName as string);
 
-        const email: string = appleAuthRequestResponse.email
-          ? (appleAuthRequestResponse.email as string)
-          : (auth().currentUser?.email as string);
+  //       const email: string = appleAuthRequestResponse.email
+  //         ? (appleAuthRequestResponse.email as string)
+  //         : (auth().currentUser?.email as string);
 
-        return {
-          email,
-          name,
-        };
-      }
-      return undefined;
-    } catch (err) {
-      console.log('error logging in with apple', err);
-      return undefined;
-    }
-    */
-  };
+  //       return {
+  //         email,
+  //         name,
+  //       };
+  //     }
+  //     return undefined;
+  //   } catch (err) {
+  //     console.log('error logging in with apple', err);
+  //     return undefined;
+  //   }
+  //   */
+  // };
 
   onPressTermsAndConditions = () => {
     /*
@@ -262,10 +262,19 @@ export default class LoginRegisterScreen extends React.Component<{ navigation: a
                 </TouchableOpacity>
               )}
             </View>
+            <View style={styles.loginButtonsGroup}>
+              {Config.ENVIRONMENT !== 'production' && (
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate('LoginWithPhone')}
+                  style={{ ...styles.loginButton, ...styles.phoneButton, marginTop: 10 }}
+                >
+                  <Text style={{ ...iOSUIKit.bodyEmphasizedObject }}>Login with phone number</Text>
+                </TouchableOpacity>
+              )}
+            </View>
             <View style={{ paddingHorizontal: 40 }}>
               <Text
                 style={{
-                  ...iOSUIKit.bodyEmphasizedObject,
                   ...iOSUIKit.bodyEmphasizedObject,
                   fontSize: 12,
                   lineHeight: 0,

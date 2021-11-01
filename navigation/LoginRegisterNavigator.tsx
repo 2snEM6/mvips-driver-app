@@ -1,7 +1,8 @@
 import React from 'react';
 import { createNativeStackNavigator } from 'react-native-screens/native-stack';
 import LoginRegisterScreen from '../screens/LoginRegisterScreen';
-
+import LoginWithEmail from '../screens/LoginRegisterScreen/LoginWithEmail';
+import LoginWithPhone from '../screens/LoginRegisterScreen/LoginWithPhone';
 
 const StackNavigator = createNativeStackNavigator();
 
@@ -17,6 +18,8 @@ const LoginRegisterNavigator = ({ route }) => (
     }}
   >
     <StackNavigator.Screen component={LoginRegisterScreen} name="Login" />
+    <StackNavigator.Screen component={LoginWithEmail} name="LoginWithEmail" />
+    <StackNavigator.Screen component={LoginWithPhone} name="LoginWithPhone" />
   </StackNavigator.Navigator>
 );
 

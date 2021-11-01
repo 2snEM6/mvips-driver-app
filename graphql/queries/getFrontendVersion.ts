@@ -1,9 +1,10 @@
-import gql from "graphql-tag";
+/* eslint-disable import/prefer-default-export */
+import gql from 'graphql-tag';
 
 export const GET_FRONTEND_VERSION = gql`
-query GetFrontendVersion {
+  query GetFrontendVersion {
     getFrontendVersion {
-        version
+      version
     }
-}
+  }
 `;
