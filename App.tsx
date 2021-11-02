@@ -5,7 +5,7 @@ import { ApolloProvider, ApolloClient } from '@apollo/client';
 import { AppState, AppStateStatus, StatusBar, View } from 'react-native';
 import * as FlashMessage from 'react-native-flash-message';
 import { createNativeStackNavigator } from 'react-native-screens/native-stack';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native';
 import { isEqual } from 'lodash';
 import auth from '@react-native-firebase/auth';
 import { enableScreens } from 'react-native-screens';
@@ -33,13 +33,9 @@ enableScreens();
 const Stack = createNativeStackNavigator();
 // eslint-disable-next-line no-unused-vars
 const globalErrorHandler = async (e: any, isFatal?: boolean): Promise<void> => {
-  console.log('Caught unhandled error', e);
-  // await crashlytics().recordError(e);
-  if (isFatal) {
-    // await crashlytics().setAttribute('isFatal', 'true');
-  }
+  console.error('Caught unhandled error', e);
   if (auth().currentUser?.uid) {
-    // await crashlytics().setUserId(auth().currentUser?.uid as string);
+    console.error('User id: ', auth().currentUser?.uid);
   }
   FlashMessage.showMessage({
     message: 'Oops 🙈 , something went wrong',
@@ -64,28 +60,21 @@ const _loggedIn = async () => {
   console.log('En _loggedIn');
   try {
     if (auth().currentUser) {
-      return true;
-      // Get DRIVER <-- uncomment all and make it work
-      // const client = getClient();
-      // const me = await client.query<DriverQuery, DriverQueryVariables>({
-      //   query: DriverDocument,
-      // });
+      const me = useDriverQuery({
+        client: getClient(),
+      });
 
-      // if (me?.data?.driver?.id) {
-      //   // analytics().setAnalyticsCollectionEnabled(true);
-      //   // analytics().setUserId(me.data.me.id);
-      //   return true;
-      // }
+      if (me?.data?.driver?.id) {
+        // analytics().setAnalyticsCollectionEnabled(true);
+        // analytics().setUserId(me.data.me.id);
+        return true;
+      }
     }
     return false;
   } catch (e) {
     return false;
   }
 };
-
-// const getDriver = useDriverQuery({
-//   client: getClient(),
-// });
 
 // const FrontendVersion = () => {
 //   const { data } = useGetFrontendVersionQuery({
@@ -102,7 +91,10 @@ export default function App() {
   // const confettiAnimatonRef = React.useRef<LottieAnimation>();
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [appState, setAppState] = React.useState(AppState.currentState);
-
+  // const navigationContainerRef = React.useRef<NavigationContainerRef>();
+  // const { getInitialState } = useLinking(
+  //   navigationContainerRef as React.RefObject<NavigationContainerRef>,
+  // );
   const stateHandler = async (state: AppStateStatus) => {
     console.debug('En stateHandler');
     console.debug(`state: ${state}`);

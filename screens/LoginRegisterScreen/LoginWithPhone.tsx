@@ -13,6 +13,8 @@ import {
   // FieldDescription,
   FieldsSectionLabel,
 } from '../ProfileScreen/EditProfileScreen';
+import { getClient } from '../../graphql/client';
+import { DriverDocument, DriverQuery, DriverQueryVariables, useDriverQuery } from '../../__generated__/graphql/datamodel.gen';
 
 const styles = StyleSheet.create({
   safeArea: {
@@ -92,17 +94,44 @@ const LoginWithPhone = () => {
   const [phoneNumber, setPhoneNumber] = React.useState();
   const [confirmation, setConfirmation] = React.useState<ConfirmationResult>();
   const [verificationCode, setVerificationCode] = React.useState();
-  const [loading, setLoading] = React.useState<boolean>(false);
+  const [isLoading, setLoading] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    const unsubscribe = auth().onAuthStateChanged(user => {
+    const unsubscribe = auth().onAuthStateChanged(async user => {
       if (user) {
         // Obviously, you can add more statements here,
         //       e.g. call an action creator if you use Redux.
 
         // navigate the user away from the login screens:
-        console.debug('Automatically authenticated');
+        console.debug('Authenticated');
         console.debug(`User: ${user.uid}`);
+        const graphqlClient = await getClient();
+        try {
+          const loginResponse = await graphqlClient.query<DriverQuery, DriverQueryVariables>({
+            query: DriverDocument,
+            fetchPolicy: 'no-cache',
+            variables: {
+              id: auth().currentUser?.uid,
+              departureDateMin: '2000-01-01',
+              departureDateMax: '2022-01-01',
+            },
+          });
+          // const { data, loading, error } = await useDriverQuery({
+          //   client: getClient(),
+          //   variables: {
+          //     id: auth().currentUser?.uid,
+          //     departureDateMin: '2000-01-01',
+          //     departureDateMax: '2022-01-01',
+          //   },
+          // });
+          console.log('Driver name: ', loginResponse.data.driver?.name);
+          // console.debug(loading);
+          // console.debug(error);
+        } catch (err) {
+          console.error(err);
+        } finally {
+          console.debug('En LoginWithPhone finally');
+        }
         navigation.navigate('Home');
       } else {
         console.debug('No logged in user');
@@ -145,7 +174,7 @@ const LoginWithPhone = () => {
             />
             <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 20 }}>
               <MVIPSButton
-                loading={loading}
+                loading={isLoading}
                 disabled={!phoneNumber}
                 text="Login"
                 theme="dark"
@@ -197,7 +226,7 @@ const LoginWithPhone = () => {
             />
             <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 20 }}>
               <MVIPSButton
-                loading={loading}
+                loading={isLoading}
                 disabled={!verificationCode}
                 text="Verify"
                 theme="dark"

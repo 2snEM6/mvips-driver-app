@@ -37,12 +37,12 @@ const BottomTabNavigator: React.FC = () => {
       <Text>{SUCCESS_MESSAGE}</Text>
       <Text>{auth().currentUser?.uid}</Text>
       <Text>{auth().currentUser?.displayName}</Text>
-      <Text>{data?.getFrontendVersion.version}</Text>
+      <Text>{data?.driver?.name}</Text>
       <Button
-        title="Signout"
+        title="Signout Login"
         onPress={() => {
           auth().signOut();
-          navigation.navigate('Login');
+          navigation.navigate('LoginRegisterScreen', {screen: 'Login'});
         }}
       />
     </SafeAreaView>
