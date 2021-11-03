@@ -6,6 +6,7 @@ import { AppState, AppStateStatus, StatusBar, View } from 'react-native';
 import * as FlashMessage from 'react-native-flash-message';
 import { createNativeStackNavigator } from 'react-native-screens/native-stack';
 import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native';
+// import * as Location from 'expo-location';
 import { isEqual } from 'lodash';
 import auth from '@react-native-firebase/auth';
 import { enableScreens } from 'react-native-screens';
@@ -21,7 +22,7 @@ import {
   DriverDocument,
   DriverQuery,
   DriverQueryVariables,
-  Location,
+  // Location,
 } from './__generated__/graphql/datamodel.gen';
 import { getClient, setupClient } from './graphql/client';
 import AppNavigator from './navigation/AppNavigator';
@@ -57,7 +58,7 @@ ErrorUtils.setGlobalHandler(globalErrorHandler);
 
 // eslint-disable-next-line no-unused-vars
 const _loggedIn = async () => {
-  console.log('En _loggedIn');
+  console.debug('En _loggedIn');
   try {
     if (auth().currentUser) {
       const me = useDriverQuery({
@@ -65,6 +66,7 @@ const _loggedIn = async () => {
       });
 
       if (me?.data?.driver?.id) {
+        console.debug("Driver Name: ", me.data.driver.name);
         // analytics().setAnalyticsCollectionEnabled(true);
         // analytics().setUserId(me.data.me.id);
         return true;
@@ -76,19 +78,10 @@ const _loggedIn = async () => {
   }
 };
 
-// const FrontendVersion = () => {
-//   const { data } = useGetFrontendVersionQuery({
-//     client: getClient(),
-//   });
-
-//   return <View>{data?.getFrontendVersion.version}</View>;
-// };
-
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function App() {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
   const [graphqlClient, setGraphqlClient] = React.useState<ApolloClient<any>>();
-  // const confettiAnimatonRef = React.useRef<LottieAnimation>();
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [appState, setAppState] = React.useState(AppState.currentState);
   // const navigationContainerRef = React.useRef<NavigationContainerRef>();
@@ -96,16 +89,16 @@ export default function App() {
   //   navigationContainerRef as React.RefObject<NavigationContainerRef>,
   // );
   const stateHandler = async (state: AppStateStatus) => {
-    console.debug('En stateHandler');
-    console.debug(`state: ${state}`);
-    console.debug(`appState: ${appState}`);
+    console.debug('Starting stateHandler');
+    console.debug(`state: ${state},`, `appState: ${appState}`);
     if (!isEqual(state, appState)) {
-      console.debug('En stateHandler ejecutando');
+      console.debug('Updating appState');
       const __loggedIn = await _loggedIn();
       setAppState(state);
       setLoggedIn(__loggedIn);
       console.debug(`LoggedIn: ${__loggedIn}`);
     }
+    console.debug('Ending stateHandler');
   };
 
   AppState.addEventListener('change', stateHandler);
@@ -186,27 +179,27 @@ export default function App() {
         //     }
         //   });
 
-        // messaging()
-        //   .hasPermission()
-        //   .then(enabled => {
-        //     if (enabled) {
-        //       messaging()
-        //         .getToken()
-        //         .then(token => {
-        //           saveFCMToken(token);
-        //         });
-        //     } else {
-        //       messaging()
-        //         .requestPermission()
-        //         .then(() => {
-        //           messaging()
-        //             .getToken()
-        //             .then(token => {
-        //               saveFCMToken(token);
-        //             });
-        //         });
-        //     }
-        //   });
+        messaging()
+          .hasPermission()
+          .then(enabled => {
+            if (enabled) {
+              messaging()
+                .getToken()
+                .then(token => {
+                  saveFCMToken(token);
+                });
+            } else {
+              messaging()
+                .requestPermission()
+                .then(() => {
+                  messaging()
+                    .getToken()
+                    .then(token => {
+                      saveFCMToken(token);
+                    });
+                });
+            }
+          });
 
         updateLocation();
       }
