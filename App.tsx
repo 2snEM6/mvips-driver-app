@@ -123,6 +123,7 @@ export default function App() {
 
         if (__loggedIn) {
           // Only request permissions if user is logged in
+          console.debug('Request Permissions');
           await requestPermissions();
         }
         setGraphqlClient(_graphqlClient);
@@ -243,21 +244,6 @@ export default function App() {
               component={AppNavigator}
               options={{ gestureEnabled: false }}
             />
-            {/*
-                    <Stack.Screen
-                    name="UpgradeScreen"
-                    component={UpgradeScreen}
-                    options={() => ({
-                      cardOverlayEnabled: true,
-                      gestureEnabled: false,
-                      headerShown: false,
-                      gestureResponseDistance: {
-                        vertical: 1000,
-                      },
-                      ...TransitionPresets.ModalSlideFromBottomIOS,
-                    })}
-                  />
-                  */}
           </Stack.Navigator>
         </NavigationContainer>
       </ApolloProvider>

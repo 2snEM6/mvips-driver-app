@@ -99,10 +99,6 @@ const LoginWithPhone = () => {
   React.useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged(async user => {
       if (user) {
-        // Obviously, you can add more statements here,
-        //       e.g. call an action creator if you use Redux.
-
-        // navigate the user away from the login screens:
         console.debug('Authenticated');
         console.debug(`User: ${user.uid}`);
         const graphqlClient = await getClient();
@@ -116,17 +112,7 @@ const LoginWithPhone = () => {
               departureDateMax: '2022-01-01',
             },
           });
-          // const { data, loading, error } = await useDriverQuery({
-          //   client: getClient(),
-          //   variables: {
-          //     id: auth().currentUser?.uid,
-          //     departureDateMin: '2000-01-01',
-          //     departureDateMax: '2022-01-01',
-          //   },
-          // });
           console.log('Driver name: ', loginResponse.data.driver?.name);
-          // console.debug(loading);
-          // console.debug(error);
         } catch (err) {
           console.error(err);
         } finally {
