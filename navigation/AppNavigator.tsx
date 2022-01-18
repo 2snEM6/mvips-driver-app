@@ -25,7 +25,7 @@ const AppNavigator = () => {
 
   return (
     <StackNavigator.Navigator
-      initialRouteName="Home"
+      initialRouteName="HomeApp"
       headerMode="none"
       mode="modal"
       screenOptions={{
@@ -33,7 +33,7 @@ const AppNavigator = () => {
         gestureEnabled: false,
       }}
     >
-      <StackNavigator.Screen name="Home" component={BottomTabNavigator} />
+      <StackNavigator.Screen name="HomeApp" component={BottomTabNavigator} />
     </StackNavigator.Navigator>
   );
 };
