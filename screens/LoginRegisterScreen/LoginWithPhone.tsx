@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, SafeAreaView, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { View, SafeAreaView, StyleSheet, Text } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { ConfirmationResult } from '@react-native-firebase/auth';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -8,13 +8,14 @@ import { useNavigation } from '@react-navigation/native';
 import { iOSUIKit } from 'react-native-typography';
 import MVIPSButton from '../../components/MVIPSButton';
 // import Colors from '../../constants/Colors';
-import {
-  EditableField,
-  // FieldDescription,
-  FieldsSectionLabel,
-} from '../ProfileScreen/EditProfileScreen';
+import { EditableField, FieldsSectionLabel } from '../ProfileScreen/EditProfileScreen';
 import { getClient } from '../../graphql/client';
-import { DriverDocument, DriverQuery, DriverQueryVariables, useDriverQuery } from '../../__generated__/graphql/datamodel.gen';
+import {
+  DriverDocument,
+  DriverQuery,
+  DriverQueryVariables,
+  // useDriverQuery,
+} from '../../__generated__/graphql/datamodel.gen';
 
 const styles = StyleSheet.create({
   safeArea: {
@@ -89,6 +90,7 @@ const styles = StyleSheet.create({
   },
 });
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const LoginWithPhone = () => {
   const navigation = useNavigation();
   const [phoneNumber, setPhoneNumber] = React.useState();
@@ -99,7 +101,6 @@ const LoginWithPhone = () => {
   React.useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged(async user => {
       if (user) {
-        console.debug('Authenticated');
         console.debug(`User: ${user.uid}`);
         const graphqlClient = await getClient();
         try {
@@ -114,7 +115,7 @@ const LoginWithPhone = () => {
           });
           console.log('Driver name: ', loginResponse.data.driver?.name);
         } catch (err) {
-          console.error(err);
+          console.error(`Error fetching driver info ${err}`);
         } finally {
           console.debug('En LoginWithPhone finally');
         }
@@ -122,7 +123,7 @@ const LoginWithPhone = () => {
       } else {
         console.debug('No logged in user');
         // reset state if you need to
-        //navigation.navigate('Login');
+        // navigation.navigate('Login');
       }
     });
 
@@ -168,7 +169,7 @@ const LoginWithPhone = () => {
                 onPress={async () => {
                   setLoading(true);
                   try {
-                    console.log('Autenticando ' + phoneNumber);
+                    console.log(`Authenticating ${phoneNumber}`);
                     const confirm = await auth().signInWithPhoneNumber(
                       (phoneNumber as unknown) as string,
                     );
@@ -176,7 +177,7 @@ const LoginWithPhone = () => {
                     // console.log(confirmation);
 
                     if (confirm) {
-                      console.log('En setConfirmation');
+                      console.log('About to run setConfirmation');
                       setConfirmation(confirm);
                       // try {
                       //   return navigation.navigate('VerifyCode', { confirmation });
@@ -187,7 +188,7 @@ const LoginWithPhone = () => {
                       // }
                     }
                   } catch (err) {
-                    console.log('Error2: ' + err);
+                    console.log(`Error authenticating ${phoneNumber}: ${err}`);
                   } finally {
                     setLoading(false);
                   }
@@ -219,14 +220,13 @@ const LoginWithPhone = () => {
                 size={1.2}
                 onPress={async () => {
                   setLoading(true);
-                  console.log('Verificando codigo ' + verificationCode);
+                  console.log(`Verifying code ${verificationCode}`);
                   if (confirmation) {
                     try {
                       await confirmation.confirm(verificationCode);
-                      console.log('11111');
                       setConfirmation(null);
                     } catch (err) {
-                      console.log('Error verficando code: ' + err);
+                      console.log(`Error verifying code: ${err}`);
                     } finally {
                       setLoading(false);
                     }

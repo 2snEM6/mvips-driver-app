@@ -11,7 +11,7 @@ import { isEqual } from 'lodash';
 import auth from '@react-native-firebase/auth';
 import { enableScreens } from 'react-native-screens';
 import { iOSUIKit } from 'react-native-typography';
-import messaging from '@react-native-firebase/messaging';
+// import messaging from '@react-native-firebase/messaging';
 
 import Colors from './constants/Colors';
 
@@ -58,7 +58,7 @@ ErrorUtils.setGlobalHandler(globalErrorHandler);
 
 // eslint-disable-next-line no-unused-vars
 const _loggedIn = async () => {
-  console.debug('En _loggedIn');
+  console.debug('_loggedIn: Start');
   try {
     if (auth().currentUser) {
       const me = useDriverQuery({
@@ -66,16 +66,16 @@ const _loggedIn = async () => {
       });
 
       if (me?.data?.driver?.id) {
-        console.debug("Driver Name: ", me.data.driver.name);
-        // analytics().setAnalyticsCollectionEnabled(true);
-        // analytics().setUserId(me.data.me.id);
-        return true;
+        console.debug('_loggedIn: User loggedin\nDriver Name: ', me.data.driver.name);
       }
+      return true;
     }
-    return false;
   } catch (e) {
-    return false;
+    console.error(e);
   }
+  console.debug('_loggedIn: User not loggedin');
+  console.debug('_loggedIn: End');
+  return false;
 };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -89,16 +89,15 @@ export default function App() {
   //   navigationContainerRef as React.RefObject<NavigationContainerRef>,
   // );
   const stateHandler = async (state: AppStateStatus) => {
-    console.debug('Starting stateHandler');
-    console.debug(`state: ${state},`, `appState: ${appState}`);
+    console.debug('stateHandler: Starting');
+    console.debug(`stateHandler: state: ${state},`, `appState: ${appState}`);
     if (!isEqual(state, appState)) {
-      console.debug('Updating appState');
+      console.debug('stateHandler: Updating appState');
       const __loggedIn = await _loggedIn();
       setAppState(state);
       setLoggedIn(__loggedIn);
-      console.debug(`LoggedIn: ${__loggedIn}`);
     }
-    console.debug('Ending stateHandler');
+    console.debug('stateHandler: Ending stateHandler');
   };
 
   AppState.addEventListener('change', stateHandler);
@@ -111,7 +110,6 @@ export default function App() {
       // await messaging().requestPermission();
       // await Location.requestPermissionsAsync();
     }
-
     async function loadResourcesAndDataAsync() {
       try {
         console.log('Setting up GraphQL Client');
@@ -126,17 +124,17 @@ export default function App() {
           console.debug('Request Permissions');
           await requestPermissions();
         }
-        setGraphqlClient(_graphqlClient);
+        // setGraphqlClient(_graphqlClient);
         setLoggedIn(__loggedIn);
       } catch (e) {
         // We might want to provide this error information to an error reporting service
-        console.log(e);
+        console.error(e);
       } finally {
+        console.debug('Set loading complete');
         setLoadingComplete(true);
       }
     }
     loadResourcesAndDataAsync().then();
-
     return () => {
       console.log('Unmounting app');
       AppState.removeEventListener('change', stateHandler);
@@ -146,7 +144,6 @@ export default function App() {
   React.useEffect(() => {
     const handleAppStateChange = async () => {
       console.log('Handling App State Change');
-
       const updateLocation = async () => {
         console.log('Updating location');
         // const location = await Location.getCurrentPositionAsync();
@@ -159,15 +156,15 @@ export default function App() {
         // });
       };
 
-      const saveFCMToken = (token: string) => {
-        console.log('Updating FCM Token', token);
-        // getClient().mutate<UpdateMeMutation, UpdateMeMutationVariables>({
-        //   mutation: UpdateMeDocument,
-        //   variables: {
-        //     notificationsToken: token,
-        //   },
-        // });
-      };
+      // const saveFCMToken = (token: string) => {
+      //   console.log('Updating FCM Token', token);
+      //   // getClient().mutate<UpdateMeMutation, UpdateMeMutationVariables>({
+      //   //   mutation: UpdateMeDocument,
+      //   //   variables: {
+      //   //     notificationsToken: token,
+      //   //   },
+      //   // });
+      // };
 
       const __loggedIn = await _loggedIn();
 
@@ -180,27 +177,27 @@ export default function App() {
         //     }
         //   });
 
-        messaging()
-          .hasPermission()
-          .then(enabled => {
-            if (enabled) {
-              messaging()
-                .getToken()
-                .then(token => {
-                  saveFCMToken(token);
-                });
-            } else {
-              messaging()
-                .requestPermission()
-                .then(() => {
-                  messaging()
-                    .getToken()
-                    .then(token => {
-                      saveFCMToken(token);
-                    });
-                });
-            }
-          });
+        // messaging()
+        //   .hasPermission()
+        //   .then(enabled => {
+        //     if (enabled) {
+        //       messaging()
+        //         .getToken()
+        //         .then(token => {
+        //           saveFCMToken(token);
+        //         });
+        //     } else {
+        //       messaging()
+        //         .requestPermission()
+        //         .then(() => {
+        //           messaging()
+        //             .getToken()
+        //             .then(token => {
+        //               saveFCMToken(token);
+        //             });
+        //         });
+        //     }
+        //   });
 
         updateLocation();
       }
@@ -221,7 +218,7 @@ export default function App() {
   //   },
   // };
 
-  console.log('Before return');
+  console.log('About to render');
   return (
     <>
       <ApolloProvider client={graphqlClient as ApolloClient<unknown>}>
@@ -229,7 +226,6 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator
             initialRouteName={loggedIn ? 'Home' : 'LoginRegisterScreen'}
-            // initialRouteName="LoginRegisterScreen"
             screenOptions={{
               headerShown: false,
             }}
