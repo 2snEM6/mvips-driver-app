@@ -59,7 +59,7 @@ const BottomTabNavigator: React.FC = () => {
         const locationSubscription = RNLocation.subscribeToLocationUpdates(_locations => {
           console.log(`Location: ${JSON.stringify(_locations[0])}`);
           setLocations(_locations[0]);
-          setUpdateDate(_locations[0]?.timestamp);
+          setUpdateDate(new Date(_locations[0]?.timestamp).toISOString());
         });
       }
     });
