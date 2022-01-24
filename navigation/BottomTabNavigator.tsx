@@ -1,18 +1,24 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 // eslint-disable-next-line no-use-before-define
 import * as React from 'react';
-import { Button, SafeAreaView, Text } from 'react-native';
+// import { Button, SafeAreaView, Text } from 'react-native';
 // import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import DeviceInfo from 'react-native-device-info';
 import auth from '@react-native-firebase/auth';
 import { useNavigation } from '@react-navigation/native';
+import DeviceInfo from 'react-native-device-info';
 import RNLocation from 'react-native-location';
+import Feather from 'react-native-vector-icons/Feather';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { getClient } from '../graphql/client';
-import { useDriverQuery, useGetFrontendVersionQuery } from '../__generated__/graphql/datamodel.gen';
-// const BottomTab = createBottomTabNavigator();
-// const INITIAL_ROUTE_NAME = 'Home';
+import { useDriverQuery } from '../__generated__/graphql/datamodel.gen';
+import HomeScreen from '../screens/HomeScreen/HomeScreen';
+import ServicesNavigator from './ServicesNavigator';
 
-const SUCCESS_MESSAGE = 'LOGIN SUCCESSFULL';
+const BottomTab = createBottomTabNavigator();
+const INITIAL_ROUTE_NAME = 'Home';
 
 const BottomTabNavigator: React.FC = () => {
   const [location, setLocation] = React.useState<Location>();
@@ -22,8 +28,9 @@ const BottomTabNavigator: React.FC = () => {
     setLocation(_location);
   };
   const navigation = useNavigation();
-  const { data, loading, error } = useDriverQuery({
+  const { data, loading, error, refetch } = useDriverQuery({
     client: getClient(),
+    skip: !auth().currentUser?.uid,
     variables: {
       id: auth().currentUser?.uid,
       departureDateMin: '2000-01-01',
@@ -65,23 +72,46 @@ const BottomTabNavigator: React.FC = () => {
     });
   }, []);
   return (
-    <SafeAreaView
-      style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', paddingHorizontal: 20 }}
+    <BottomTab.Navigator
+      initialRouteName={INITIAL_ROUTE_NAME}
+      // screenOptions={{ tabBarVisible: navigation.state.index === 0 }}
+      // screenOptions={{ tabBarVisible: route.state?.index === 0 }}
+      tabBarOptions={{
+        showLabel: false,
+        style: { height: DeviceInfo.hasNotch() ? 90 : 70 },
+      }}
     >
-      <Text>{SUCCESS_MESSAGE}</Text>
-      <Text>Auth uid: {auth().currentUser?.uid}</Text>
-      <Text>Auth Display name: {auth().currentUser?.displayName}</Text>
-      <Text>Driver name: {data?.driver?.name}</Text>
-      <Text>Date: {updateDate}</Text>
-      <Text>Location: {JSON.stringify(location)}</Text>
-      <Button
-        title="Signout Login"
-        onPress={() => {
-          auth().signOut();
-          navigation.navigate('LoginRegisterScreen', { screen: 'Login' });
+      <BottomTab.Screen
+        name="Home"
+        children={() => <HomeScreen auth={auth} data={data} updateDate={updateDate} />}
+        options={{
+          title: 'Home',
+          tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcon
+              name="Home"
+              size={40}
+              style={{ marginBottom: DeviceInfo.hasNotch() ? -15 : -3 }}
+              color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
+            />
+          ),
         }}
       />
-    </SafeAreaView>
+      <BottomTab.Screen
+        name="Services"
+        component={ServicesNavigator}
+        options={({ route }) => ({
+          title: 'Services',
+          tabBarIcon: ({ focused }) => (
+            <Feather
+              name="service"
+              size={37}
+              style={{ marginBottom: DeviceInfo.hasNotch() ? -8 : 0 }}
+              color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
+            />
+          ),
+        })}
+      />
+    </BottomTab.Navigator>
   );
 };
 
