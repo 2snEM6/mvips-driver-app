@@ -5,7 +5,7 @@ import * as React from 'react';
 // import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import DeviceInfo from 'react-native-device-info';
 import auth from '@react-native-firebase/auth';
-import { useNavigation } from '@react-navigation/native';
+// import { useNavigation } from '@react-navigation/native';
 import DeviceInfo from 'react-native-device-info';
 import RNLocation from 'react-native-location';
 import Feather from 'react-native-vector-icons/Feather';
@@ -27,8 +27,8 @@ const BottomTabNavigator: React.FC = () => {
   const setLocations = async (_location: Location) => {
     setLocation(_location);
   };
-  const navigation = useNavigation();
-  const { data, loading, error, refetch } = useDriverQuery({
+  // const navigation = useNavigation();
+  const { data, loading, error /* , refetch* */ } = useDriverQuery({
     client: getClient(),
     skip: !auth().currentUser?.uid,
     variables: {
@@ -76,14 +76,16 @@ const BottomTabNavigator: React.FC = () => {
       initialRouteName={INITIAL_ROUTE_NAME}
       // screenOptions={{ tabBarVisible: navigation.state.index === 0 }}
       // screenOptions={{ tabBarVisible: route.state?.index === 0 }}
-      tabBarOptions={{
-        showLabel: false,
-        style: { height: DeviceInfo.hasNotch() ? 90 : 70 },
-      }}
+      // tabBarOptions={{
+      //  showLabel: false,
+      //  style: { height: DeviceInfo.hasNotch() ? 90 : 70 },
+      // }}
     >
       <BottomTab.Screen
         name="Home"
-        children={() => <HomeScreen auth={auth} data={data} updateDate={updateDate} />}
+        children={() => (
+          <HomeScreen auth={auth} data={data} updateDate={updateDate} location={location} />
+        )}
         options={{
           title: 'Home',
           tabBarIcon: ({ focused }) => (
