@@ -60,12 +60,16 @@ ErrorUtils.setGlobalHandler(globalErrorHandler);
 const _loggedIn = async () => {
   console.debug('_loggedIn: Start');
   try {
+    console.debug(1); // TODO: REMOVE
     if (auth().currentUser) {
+      console.debug(2); // TODO: REMOVE
       const me = useDriverQuery({
         client: getClient(),
       });
+      console.debug(3); // TODO: REMOVE
 
       if (me?.data?.driver?.id) {
+        console.debug(4); // TODO: REMOVE
         console.debug('_loggedIn: User loggedin\nDriver Name: ', me.data.driver.name);
       }
       return true;

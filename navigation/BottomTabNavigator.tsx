@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 // eslint-disable-next-line no-use-before-define
 import * as React from 'react';
 import { Button, SafeAreaView, Text } from 'react-native';
@@ -14,11 +15,11 @@ import { useDriverQuery, useGetFrontendVersionQuery } from '../__generated__/gra
 const SUCCESS_MESSAGE = 'LOGIN SUCCESSFULL';
 
 const BottomTabNavigator: React.FC = () => {
-  const [location, setLocation] = React.useState<Location[]>();
-  const [updateDate, setUpdateDate] = React.useState();
+  const [location, setLocation] = React.useState<Location>();
+  const [updateDate, setUpdateDate] = React.useState<number>();
 
-  const setLocations = async (_locations) => {
-    setLocation(_locations);
+  const setLocations = async (_location: Location) => {
+    setLocation(_location);
   };
   const navigation = useNavigation();
   const { data, loading, error } = useDriverQuery({
@@ -37,50 +38,42 @@ const BottomTabNavigator: React.FC = () => {
   console.log(`Data: ${JSON.stringify(data, null, 2)}`);
   console.log(`Loading: ${loading}`);
   console.log(`Error: ${error}`);
-  RNLocation.requestPermission({
-    ios: 'always',
-    android: {
-      detail: 'fine',
-      rationale: {
-        title: 'Necesitamos acceder a su ubicación',
-        message: 'Usamos su ubicación para mostrare dónde está en el mapa.',
-        buttonPositive: 'OK',
-        buttonNegative: 'Cancelar',
+
+  React.useEffect(() => {
+    console.log('Check location permission');
+    RNLocation.requestPermission({
+      // eslint-disable-next-line prettier/prettier
+      ios: 'always',
+      android: {
+        detail: 'fine',
+        rationale: {
+          title: 'Necesitamos acceder a su ubicación',
+          message: 'Usamos su ubicación para mostrare dónde está en el mapa.',
+          buttonPositive: 'OK',
+          buttonNegative: 'Cancelar',
+        },
       },
-    },
-  }).then(granted => {
-    if (granted) {
-      this.locationSubscription = RNLocation.subscribeToLocationUpdates(_locations => {
-        console.log(`Location: ${JSON.stringify(_locations)}`);
-        setLocations(_locations);
-        setUpdateDate(Date.now);
-        /* Example location returned
-          {
-            speed: -1,
-            longitude: -0.1337,
-            latitude: 51.50998,
-            accuracy: 5,
-            heading: -1,
-            altitude: 0,
-            altitudeAccuracy: -1
-            floor: 0
-            timestamp: 1446007304457.029,
-            fromMockProvider: false
-          }
-          */
-      });
-    }
-  });
+    }).then(granted => {
+      if (granted) {
+        console.log('Subscribing to location updates');
+        const locationSubscription = RNLocation.subscribeToLocationUpdates(_locations => {
+          console.log(`Location: ${JSON.stringify(_locations[0])}`);
+          setLocations(_locations[0]);
+          setUpdateDate(_locations[0]?.timestamp);
+        });
+      }
+    });
+  }, []);
   return (
     <SafeAreaView
       style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', paddingHorizontal: 20 }}
     >
       <Text>{SUCCESS_MESSAGE}</Text>
-      <Text>{auth().currentUser?.uid}</Text>
-      <Text>{auth().currentUser?.displayName}</Text>
-      <Text>{data?.driver?.name}</Text>
+      <Text>Auth uid: {auth().currentUser?.uid}</Text>
+      <Text>Auth Display name: {auth().currentUser?.displayName}</Text>
+      <Text>Driver name: {data?.driver?.name}</Text>
       <Text>Date: {updateDate}</Text>
-      <Text>{JSON.stringify(location)}</Text>
+      <Text>Location: {JSON.stringify(location)}</Text>
       <Button
         title="Signout Login"
         onPress={() => {
