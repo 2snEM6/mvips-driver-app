@@ -1,33 +1,38 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 // eslint-disable-next-line no-use-before-define
 import * as React from 'react';
-// import { Button, SafeAreaView, Text } from 'react-native';
+import { Button, SafeAreaView, Text } from 'react-native';
 // import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import DeviceInfo from 'react-native-device-info';
 import auth from '@react-native-firebase/auth';
-// import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import DeviceInfo from 'react-native-device-info';
 import RNLocation from 'react-native-location';
 import Feather from 'react-native-vector-icons/Feather';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { getClient } from '../graphql/client';
-import { useDriverQuery } from '../__generated__/graphql/datamodel.gen';
+import { useDriverQuery, useUpdateLocationMutation } from '../__generated__/graphql/datamodel.gen';
 import HomeScreen from '../screens/HomeScreen/HomeScreen';
 import ServicesNavigator from './ServicesNavigator';
+import { View } from 'react-native-animatable';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Home';
 
 const BottomTabNavigator: React.FC = () => {
   const [location, setLocation] = React.useState<Location>();
+  const [updateLocation] = useUpdateLocationMutation({
+    client: getClient(),
+  });
   const [updateDate, setUpdateDate] = React.useState<number>();
 
   const setLocations = async (_location: Location) => {
     setLocation(_location);
   };
-  // const navigation = useNavigation();
+  const navigation = useNavigation();
   const { data, loading, error /* , refetch* */ } = useDriverQuery({
     client: getClient(),
     skip: !auth().currentUser?.uid,
@@ -67,11 +72,32 @@ const BottomTabNavigator: React.FC = () => {
           console.log(`Location: ${JSON.stringify(_locations[0])}`);
           setLocations(_locations[0]);
           setUpdateDate(new Date(_locations[0]?.timestamp).toISOString());
+          updateLocation({
+            variables: {
+              latitude: _locations[0]?.latitude,
+              longitude: _locations[0]?.longitude,
+            },
+          });
         });
       }
     });
   }, []);
   return (
+    // <View>
+    //   <Text>HOLA</Text>
+    //   <Text>Auth uid: {auth().uid}</Text>
+    //   <Text>Auth Display name: {auth().currentUser?.displayName}</Text>
+    //   <Text>Driver name: {data?.driver?.name}</Text>
+    //   <Text>Date: {updateDate}</Text>
+    //   <Text>Location: {JSON.stringify(location)}</Text>
+    //   <Button
+    //     title="Signout Login"
+    //     onPress={() => {
+    //       auth().signOut();
+    //       navigation.navigate('LoginRegisterScreen', { screen: 'Login' });
+    //     }}
+    //   />
+    // </View>
     <BottomTab.Navigator
       initialRouteName={INITIAL_ROUTE_NAME}
       // screenOptions={{ tabBarVisible: navigation.state.index === 0 }}
@@ -88,14 +114,14 @@ const BottomTabNavigator: React.FC = () => {
         )}
         options={{
           title: 'Home',
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcon
-              name="Home"
-              size={40}
-              style={{ marginBottom: DeviceInfo.hasNotch() ? -15 : -3 }}
-              color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
-            />
-          ),
+          // tabBarIcon: ({ focused }) => (
+            // <MaterialCommunityIcon
+            //   name="link"
+            //   size={40}
+            //   style={{ marginBottom: DeviceInfo.hasNotch() ? -15 : -3 }}
+            //   color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
+            // />
+          // ),
         }}
       />
       <BottomTab.Screen
@@ -103,14 +129,14 @@ const BottomTabNavigator: React.FC = () => {
         component={ServicesNavigator}
         options={({ route }) => ({
           title: 'Services',
-          tabBarIcon: ({ focused }) => (
-            <Feather
-              name="service"
-              size={37}
-              style={{ marginBottom: DeviceInfo.hasNotch() ? -8 : 0 }}
-              color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
-            />
-          ),
+          // tabBarIcon: ({ focused }) => (
+          // <Feather
+          //   name="cards"
+          //   size={37}
+          //   style={{ marginBottom: DeviceInfo.hasNotch() ? -8 : 0 }}
+          //   color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
+          // />
+          // ),
         })}
       />
     </BottomTab.Navigator>

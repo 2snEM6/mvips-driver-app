@@ -240,10 +240,8 @@ export type DepartureOrArrival = {
 };
 
 export type DepartureOrArrivalInput = {
-  readonly city?: Maybe<Scalars['String']>;
+  readonly googleMapsPlaceID: Scalars['String'];
   readonly isAirport?: Maybe<Scalars['Boolean']>;
-  readonly latitude: Scalars['Float'];
-  readonly longitude: Scalars['Float'];
 };
 
 export type Driver = {
@@ -303,14 +301,14 @@ export type Itinerary = {
   readonly amounts: ReadonlyArray<Amount>;
   readonly arrivalAddress?: Maybe<Scalars['String']>;
   readonly arrivalCity?: Maybe<Scalars['String']>;
-  readonly arrivalDate: Scalars['String'];
+  readonly arrivalGoogleMapsPlaceID?: Maybe<Scalars['String']>;
   readonly arrivalLat: Scalars['Float'];
   readonly arrivalLon: Scalars['Float'];
   readonly arrivalTime: Scalars['String'];
   readonly arrivalType?: Maybe<Scalars['String']>;
   readonly departureAddress?: Maybe<Scalars['String']>;
   readonly departureCity?: Maybe<Scalars['String']>;
-  readonly departureDate: Scalars['String'];
+  readonly departureGoogleMapsPlaceID?: Maybe<Scalars['String']>;
   readonly departureLat: Scalars['Float'];
   readonly departureLon: Scalars['Float'];
   readonly departureTime: Scalars['String'];
@@ -319,17 +317,23 @@ export type Itinerary = {
   readonly driverFeatures: ReadonlyArray<ItineraryFeature>;
   readonly flightNumber?: Maybe<Scalars['String']>;
   readonly groupName?: Maybe<Scalars['String']>;
-  readonly hours?: Maybe<Scalars['Int']>;
   readonly id: Scalars['ID'];
   readonly itineraryDescription: Scalars['String'];
   readonly notes?: Maybe<Scalars['String']>;
   readonly numPassengers?: Maybe<Scalars['Int']>;
   readonly numVehicles?: Maybe<Scalars['Int']>;
   readonly presentationTime: Scalars['String'];
+  readonly provisionAddress?: Maybe<Scalars['String']>;
+  readonly provisionCity?: Maybe<Scalars['String']>;
+  readonly provisionGoogleMapsPlaceID?: Maybe<Scalars['String']>;
+  readonly provisionLat?: Maybe<Scalars['Float']>;
+  readonly provisionLon?: Maybe<Scalars['Float']>;
+  readonly provisionType?: Maybe<Scalars['String']>;
   readonly realized: Scalars['Boolean'];
   readonly reference?: Maybe<Scalars['String']>;
   readonly serviceTypeId: Scalars['String'];
   readonly vehicleBrandId?: Maybe<Scalars['String']>;
+  readonly vehicleCapacity?: Maybe<Scalars['Int']>;
   readonly vehicleFeatures: ReadonlyArray<ItineraryFeature>;
   readonly vehicleModelId?: Maybe<Scalars['String']>;
   readonly vehicleTypeId?: Maybe<Scalars['String']>;
@@ -352,13 +356,14 @@ export type ItineraryInput = {
   readonly amounts?: Maybe<ReadonlyArray<AmountInput>>;
   readonly arrivalAddress?: Maybe<Scalars['String']>;
   readonly arrivalCity?: Maybe<Scalars['String']>;
+  readonly arrivalGoogleMapsPlaceID?: Maybe<Scalars['String']>;
   readonly arrivalLat?: Maybe<Scalars['Float']>;
   readonly arrivalLon?: Maybe<Scalars['Float']>;
   readonly arrivalTime: Scalars['String'];
   readonly arrivalType?: Maybe<Scalars['String']>;
   readonly departureAddress?: Maybe<Scalars['String']>;
-  readonly departureArrivalDate: ReadonlyArray<Scalars['String']>;
   readonly departureCity?: Maybe<Scalars['String']>;
+  readonly departureGoogleMapsPlaceID?: Maybe<Scalars['String']>;
   readonly departureLat?: Maybe<Scalars['Float']>;
   readonly departureLon?: Maybe<Scalars['Float']>;
   readonly departureTime: Scalars['String'];
@@ -367,16 +372,22 @@ export type ItineraryInput = {
   readonly driverFeatures?: Maybe<ReadonlyArray<ItineraryFeatureInput>>;
   readonly flightNumber?: Maybe<Scalars['String']>;
   readonly groupName?: Maybe<Scalars['String']>;
-  readonly hours?: Maybe<Scalars['Int']>;
   readonly id?: Maybe<Scalars['ID']>;
   readonly itineraryDescription?: Maybe<Scalars['String']>;
   readonly notes?: Maybe<Scalars['String']>;
   readonly numPassengers?: Maybe<Scalars['Int']>;
   readonly numVehicles?: Maybe<Scalars['Int']>;
   readonly presentationTime: Scalars['String'];
+  readonly provisionAddress?: Maybe<Scalars['String']>;
+  readonly provisionCity?: Maybe<Scalars['String']>;
+  readonly provisionGoogleMapsPlaceID?: Maybe<Scalars['String']>;
+  readonly provisionLat?: Maybe<Scalars['Float']>;
+  readonly provisionLon?: Maybe<Scalars['Float']>;
+  readonly provisionType?: Maybe<Scalars['String']>;
   readonly reference?: Maybe<Scalars['String']>;
   readonly serviceTypeId: Scalars['String'];
   readonly vehicleBrandId?: Maybe<Scalars['String']>;
+  readonly vehicleCapacity?: Maybe<Scalars['Int']>;
   readonly vehicleFeatures?: Maybe<ReadonlyArray<ItineraryFeatureInput>>;
   readonly vehicleModelId?: Maybe<Scalars['String']>;
   readonly vehicleTypeId: Scalars['String'];
@@ -603,6 +614,7 @@ export type MutationCreateVehicleModelArgs = {
 export type MutationCreateVehiclePriceConditionArgs = {
   clientId?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
+  extraHourPrice?: Maybe<Scalars['Float']>;
   name: Scalars['String'];
   numPassengers?: Maybe<Scalars['Int']>;
   price: Scalars['Float'];
@@ -795,6 +807,7 @@ export type MutationUpdateVehicleModelArgs = {
 
 export type MutationUpdateVehiclePriceConditionArgs = {
   description?: Maybe<Scalars['String']>;
+  extraHourPrice?: Maybe<Scalars['Float']>;
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
   numPassengers?: Maybe<Scalars['Int']>;
@@ -1664,7 +1677,7 @@ export type PItinerary = {
   readonly amounts?: Maybe<ReadonlyArray<PAmount>>;
   readonly arrivalAddress?: Maybe<Scalars['String']>;
   readonly arrivalCity?: Maybe<Scalars['String']>;
-  readonly arrivalDate: Scalars['DateTime'];
+  readonly arrivalGoogleMapsPlaceID?: Maybe<Scalars['String']>;
   readonly arrivalLat?: Maybe<Scalars['Float']>;
   readonly arrivalLon?: Maybe<Scalars['Float']>;
   readonly arrivalTime: Scalars['DateTime'];
@@ -1674,7 +1687,7 @@ export type PItinerary = {
   readonly createdBy: PUser;
   readonly departureAddress?: Maybe<Scalars['String']>;
   readonly departureCity?: Maybe<Scalars['String']>;
-  readonly departureDate: Scalars['DateTime'];
+  readonly departureGoogleMapsPlaceID?: Maybe<Scalars['String']>;
   readonly departureLat?: Maybe<Scalars['Float']>;
   readonly departureLon?: Maybe<Scalars['Float']>;
   readonly departureTime: Scalars['DateTime'];
@@ -1683,13 +1696,19 @@ export type PItinerary = {
   readonly driverFeatures?: Maybe<ReadonlyArray<PItineraryDriverFeature>>;
   readonly flightNumber?: Maybe<Scalars['String']>;
   readonly groupName?: Maybe<Scalars['String']>;
-  readonly hours: Scalars['Float'];
   readonly id: Scalars['ID'];
   readonly itineraryDescription?: Maybe<Scalars['String']>;
   readonly notes?: Maybe<Scalars['String']>;
   readonly numPassengers: Scalars['Int'];
   readonly numVehicles?: Maybe<Scalars['Int']>;
   readonly presentationTime: Scalars['DateTime'];
+  readonly provisionAddress?: Maybe<Scalars['String']>;
+  readonly provisionCity?: Maybe<Scalars['String']>;
+  readonly provisionGoogleMapsPlaceID?: Maybe<Scalars['String']>;
+  readonly provisionLat?: Maybe<Scalars['Float']>;
+  readonly provisionLon?: Maybe<Scalars['Float']>;
+  readonly provisionTime?: Maybe<Scalars['DateTime']>;
+  readonly provisionType?: Maybe<Scalars['String']>;
   readonly realized: Scalars['Boolean'];
   readonly reference?: Maybe<Scalars['String']>;
   readonly service?: Maybe<PService>;
@@ -1697,6 +1716,7 @@ export type PItinerary = {
   readonly serviceType: PServiceType;
   readonly updatedAt: Scalars['DateTime'];
   readonly vehicleBrand?: Maybe<PVehicleBrand>;
+  readonly vehicleCapacity?: Maybe<Scalars['Int']>;
   readonly vehicleFeatures?: Maybe<ReadonlyArray<PItineraryVehicleFeature>>;
   readonly vehicleModel?: Maybe<PVehicleModel>;
   readonly vehicleType: PVehicleType;
@@ -1813,8 +1833,8 @@ export enum PItineraryOrderByInput {
   ArrivalAddressDesc = 'arrivalAddress_DESC',
   ArrivalCityAsc = 'arrivalCity_ASC',
   ArrivalCityDesc = 'arrivalCity_DESC',
-  ArrivalDateAsc = 'arrivalDate_ASC',
-  ArrivalDateDesc = 'arrivalDate_DESC',
+  ArrivalGoogleMapsPlaceIdAsc = 'arrivalGoogleMapsPlaceID_ASC',
+  ArrivalGoogleMapsPlaceIdDesc = 'arrivalGoogleMapsPlaceID_DESC',
   ArrivalLatAsc = 'arrivalLat_ASC',
   ArrivalLatDesc = 'arrivalLat_DESC',
   ArrivalLonAsc = 'arrivalLon_ASC',
@@ -1829,8 +1849,8 @@ export enum PItineraryOrderByInput {
   DepartureAddressDesc = 'departureAddress_DESC',
   DepartureCityAsc = 'departureCity_ASC',
   DepartureCityDesc = 'departureCity_DESC',
-  DepartureDateAsc = 'departureDate_ASC',
-  DepartureDateDesc = 'departureDate_DESC',
+  DepartureGoogleMapsPlaceIdAsc = 'departureGoogleMapsPlaceID_ASC',
+  DepartureGoogleMapsPlaceIdDesc = 'departureGoogleMapsPlaceID_DESC',
   DepartureLatAsc = 'departureLat_ASC',
   DepartureLatDesc = 'departureLat_DESC',
   DepartureLonAsc = 'departureLon_ASC',
@@ -1845,8 +1865,6 @@ export enum PItineraryOrderByInput {
   FlightNumberDesc = 'flightNumber_DESC',
   GroupNameAsc = 'groupName_ASC',
   GroupNameDesc = 'groupName_DESC',
-  HoursAsc = 'hours_ASC',
-  HoursDesc = 'hours_DESC',
   IdAsc = 'id_ASC',
   IdDesc = 'id_DESC',
   ItineraryDescriptionAsc = 'itineraryDescription_ASC',
@@ -1859,6 +1877,20 @@ export enum PItineraryOrderByInput {
   NumVehiclesDesc = 'numVehicles_DESC',
   PresentationTimeAsc = 'presentationTime_ASC',
   PresentationTimeDesc = 'presentationTime_DESC',
+  ProvisionAddressAsc = 'provisionAddress_ASC',
+  ProvisionAddressDesc = 'provisionAddress_DESC',
+  ProvisionCityAsc = 'provisionCity_ASC',
+  ProvisionCityDesc = 'provisionCity_DESC',
+  ProvisionGoogleMapsPlaceIdAsc = 'provisionGoogleMapsPlaceID_ASC',
+  ProvisionGoogleMapsPlaceIdDesc = 'provisionGoogleMapsPlaceID_DESC',
+  ProvisionLatAsc = 'provisionLat_ASC',
+  ProvisionLatDesc = 'provisionLat_DESC',
+  ProvisionLonAsc = 'provisionLon_ASC',
+  ProvisionLonDesc = 'provisionLon_DESC',
+  ProvisionTimeAsc = 'provisionTime_ASC',
+  ProvisionTimeDesc = 'provisionTime_DESC',
+  ProvisionTypeAsc = 'provisionType_ASC',
+  ProvisionTypeDesc = 'provisionType_DESC',
   RealizedAsc = 'realized_ASC',
   RealizedDesc = 'realized_DESC',
   ReferenceAsc = 'reference_ASC',
@@ -1866,7 +1898,9 @@ export enum PItineraryOrderByInput {
   ServiceDescriptionAsc = 'serviceDescription_ASC',
   ServiceDescriptionDesc = 'serviceDescription_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
-  UpdatedAtDesc = 'updatedAt_DESC'
+  UpdatedAtDesc = 'updatedAt_DESC',
+  VehicleCapacityAsc = 'vehicleCapacity_ASC',
+  VehicleCapacityDesc = 'vehicleCapacity_DESC'
 }
 
 export type PItineraryVehicleFeature = {
@@ -1977,14 +2011,20 @@ export type PItineraryWhereInput = {
   readonly arrivalCity_not_in?: Maybe<ReadonlyArray<Scalars['String']>>;
   readonly arrivalCity_not_starts_with?: Maybe<Scalars['String']>;
   readonly arrivalCity_starts_with?: Maybe<Scalars['String']>;
-  readonly arrivalDate?: Maybe<Scalars['DateTime']>;
-  readonly arrivalDate_gt?: Maybe<Scalars['DateTime']>;
-  readonly arrivalDate_gte?: Maybe<Scalars['DateTime']>;
-  readonly arrivalDate_in?: Maybe<ReadonlyArray<Scalars['DateTime']>>;
-  readonly arrivalDate_lt?: Maybe<Scalars['DateTime']>;
-  readonly arrivalDate_lte?: Maybe<Scalars['DateTime']>;
-  readonly arrivalDate_not?: Maybe<Scalars['DateTime']>;
-  readonly arrivalDate_not_in?: Maybe<ReadonlyArray<Scalars['DateTime']>>;
+  readonly arrivalGoogleMapsPlaceID?: Maybe<Scalars['String']>;
+  readonly arrivalGoogleMapsPlaceID_contains?: Maybe<Scalars['String']>;
+  readonly arrivalGoogleMapsPlaceID_ends_with?: Maybe<Scalars['String']>;
+  readonly arrivalGoogleMapsPlaceID_gt?: Maybe<Scalars['String']>;
+  readonly arrivalGoogleMapsPlaceID_gte?: Maybe<Scalars['String']>;
+  readonly arrivalGoogleMapsPlaceID_in?: Maybe<ReadonlyArray<Scalars['String']>>;
+  readonly arrivalGoogleMapsPlaceID_lt?: Maybe<Scalars['String']>;
+  readonly arrivalGoogleMapsPlaceID_lte?: Maybe<Scalars['String']>;
+  readonly arrivalGoogleMapsPlaceID_not?: Maybe<Scalars['String']>;
+  readonly arrivalGoogleMapsPlaceID_not_contains?: Maybe<Scalars['String']>;
+  readonly arrivalGoogleMapsPlaceID_not_ends_with?: Maybe<Scalars['String']>;
+  readonly arrivalGoogleMapsPlaceID_not_in?: Maybe<ReadonlyArray<Scalars['String']>>;
+  readonly arrivalGoogleMapsPlaceID_not_starts_with?: Maybe<Scalars['String']>;
+  readonly arrivalGoogleMapsPlaceID_starts_with?: Maybe<Scalars['String']>;
   readonly arrivalLat?: Maybe<Scalars['Float']>;
   readonly arrivalLat_gt?: Maybe<Scalars['Float']>;
   readonly arrivalLat_gte?: Maybe<Scalars['Float']>;
@@ -2061,14 +2101,20 @@ export type PItineraryWhereInput = {
   readonly departureCity_not_in?: Maybe<ReadonlyArray<Scalars['String']>>;
   readonly departureCity_not_starts_with?: Maybe<Scalars['String']>;
   readonly departureCity_starts_with?: Maybe<Scalars['String']>;
-  readonly departureDate?: Maybe<Scalars['DateTime']>;
-  readonly departureDate_gt?: Maybe<Scalars['DateTime']>;
-  readonly departureDate_gte?: Maybe<Scalars['DateTime']>;
-  readonly departureDate_in?: Maybe<ReadonlyArray<Scalars['DateTime']>>;
-  readonly departureDate_lt?: Maybe<Scalars['DateTime']>;
-  readonly departureDate_lte?: Maybe<Scalars['DateTime']>;
-  readonly departureDate_not?: Maybe<Scalars['DateTime']>;
-  readonly departureDate_not_in?: Maybe<ReadonlyArray<Scalars['DateTime']>>;
+  readonly departureGoogleMapsPlaceID?: Maybe<Scalars['String']>;
+  readonly departureGoogleMapsPlaceID_contains?: Maybe<Scalars['String']>;
+  readonly departureGoogleMapsPlaceID_ends_with?: Maybe<Scalars['String']>;
+  readonly departureGoogleMapsPlaceID_gt?: Maybe<Scalars['String']>;
+  readonly departureGoogleMapsPlaceID_gte?: Maybe<Scalars['String']>;
+  readonly departureGoogleMapsPlaceID_in?: Maybe<ReadonlyArray<Scalars['String']>>;
+  readonly departureGoogleMapsPlaceID_lt?: Maybe<Scalars['String']>;
+  readonly departureGoogleMapsPlaceID_lte?: Maybe<Scalars['String']>;
+  readonly departureGoogleMapsPlaceID_not?: Maybe<Scalars['String']>;
+  readonly departureGoogleMapsPlaceID_not_contains?: Maybe<Scalars['String']>;
+  readonly departureGoogleMapsPlaceID_not_ends_with?: Maybe<Scalars['String']>;
+  readonly departureGoogleMapsPlaceID_not_in?: Maybe<ReadonlyArray<Scalars['String']>>;
+  readonly departureGoogleMapsPlaceID_not_starts_with?: Maybe<Scalars['String']>;
+  readonly departureGoogleMapsPlaceID_starts_with?: Maybe<Scalars['String']>;
   readonly departureLat?: Maybe<Scalars['Float']>;
   readonly departureLat_gt?: Maybe<Scalars['Float']>;
   readonly departureLat_gte?: Maybe<Scalars['Float']>;
@@ -2140,14 +2186,6 @@ export type PItineraryWhereInput = {
   readonly groupName_not_in?: Maybe<ReadonlyArray<Scalars['String']>>;
   readonly groupName_not_starts_with?: Maybe<Scalars['String']>;
   readonly groupName_starts_with?: Maybe<Scalars['String']>;
-  readonly hours?: Maybe<Scalars['Float']>;
-  readonly hours_gt?: Maybe<Scalars['Float']>;
-  readonly hours_gte?: Maybe<Scalars['Float']>;
-  readonly hours_in?: Maybe<ReadonlyArray<Scalars['Float']>>;
-  readonly hours_lt?: Maybe<Scalars['Float']>;
-  readonly hours_lte?: Maybe<Scalars['Float']>;
-  readonly hours_not?: Maybe<Scalars['Float']>;
-  readonly hours_not_in?: Maybe<ReadonlyArray<Scalars['Float']>>;
   readonly id?: Maybe<Scalars['ID']>;
   readonly id_contains?: Maybe<Scalars['ID']>;
   readonly id_ends_with?: Maybe<Scalars['ID']>;
@@ -2214,6 +2252,86 @@ export type PItineraryWhereInput = {
   readonly presentationTime_lte?: Maybe<Scalars['DateTime']>;
   readonly presentationTime_not?: Maybe<Scalars['DateTime']>;
   readonly presentationTime_not_in?: Maybe<ReadonlyArray<Scalars['DateTime']>>;
+  readonly provisionAddress?: Maybe<Scalars['String']>;
+  readonly provisionAddress_contains?: Maybe<Scalars['String']>;
+  readonly provisionAddress_ends_with?: Maybe<Scalars['String']>;
+  readonly provisionAddress_gt?: Maybe<Scalars['String']>;
+  readonly provisionAddress_gte?: Maybe<Scalars['String']>;
+  readonly provisionAddress_in?: Maybe<ReadonlyArray<Scalars['String']>>;
+  readonly provisionAddress_lt?: Maybe<Scalars['String']>;
+  readonly provisionAddress_lte?: Maybe<Scalars['String']>;
+  readonly provisionAddress_not?: Maybe<Scalars['String']>;
+  readonly provisionAddress_not_contains?: Maybe<Scalars['String']>;
+  readonly provisionAddress_not_ends_with?: Maybe<Scalars['String']>;
+  readonly provisionAddress_not_in?: Maybe<ReadonlyArray<Scalars['String']>>;
+  readonly provisionAddress_not_starts_with?: Maybe<Scalars['String']>;
+  readonly provisionAddress_starts_with?: Maybe<Scalars['String']>;
+  readonly provisionCity?: Maybe<Scalars['String']>;
+  readonly provisionCity_contains?: Maybe<Scalars['String']>;
+  readonly provisionCity_ends_with?: Maybe<Scalars['String']>;
+  readonly provisionCity_gt?: Maybe<Scalars['String']>;
+  readonly provisionCity_gte?: Maybe<Scalars['String']>;
+  readonly provisionCity_in?: Maybe<ReadonlyArray<Scalars['String']>>;
+  readonly provisionCity_lt?: Maybe<Scalars['String']>;
+  readonly provisionCity_lte?: Maybe<Scalars['String']>;
+  readonly provisionCity_not?: Maybe<Scalars['String']>;
+  readonly provisionCity_not_contains?: Maybe<Scalars['String']>;
+  readonly provisionCity_not_ends_with?: Maybe<Scalars['String']>;
+  readonly provisionCity_not_in?: Maybe<ReadonlyArray<Scalars['String']>>;
+  readonly provisionCity_not_starts_with?: Maybe<Scalars['String']>;
+  readonly provisionCity_starts_with?: Maybe<Scalars['String']>;
+  readonly provisionGoogleMapsPlaceID?: Maybe<Scalars['String']>;
+  readonly provisionGoogleMapsPlaceID_contains?: Maybe<Scalars['String']>;
+  readonly provisionGoogleMapsPlaceID_ends_with?: Maybe<Scalars['String']>;
+  readonly provisionGoogleMapsPlaceID_gt?: Maybe<Scalars['String']>;
+  readonly provisionGoogleMapsPlaceID_gte?: Maybe<Scalars['String']>;
+  readonly provisionGoogleMapsPlaceID_in?: Maybe<ReadonlyArray<Scalars['String']>>;
+  readonly provisionGoogleMapsPlaceID_lt?: Maybe<Scalars['String']>;
+  readonly provisionGoogleMapsPlaceID_lte?: Maybe<Scalars['String']>;
+  readonly provisionGoogleMapsPlaceID_not?: Maybe<Scalars['String']>;
+  readonly provisionGoogleMapsPlaceID_not_contains?: Maybe<Scalars['String']>;
+  readonly provisionGoogleMapsPlaceID_not_ends_with?: Maybe<Scalars['String']>;
+  readonly provisionGoogleMapsPlaceID_not_in?: Maybe<ReadonlyArray<Scalars['String']>>;
+  readonly provisionGoogleMapsPlaceID_not_starts_with?: Maybe<Scalars['String']>;
+  readonly provisionGoogleMapsPlaceID_starts_with?: Maybe<Scalars['String']>;
+  readonly provisionLat?: Maybe<Scalars['Float']>;
+  readonly provisionLat_gt?: Maybe<Scalars['Float']>;
+  readonly provisionLat_gte?: Maybe<Scalars['Float']>;
+  readonly provisionLat_in?: Maybe<ReadonlyArray<Scalars['Float']>>;
+  readonly provisionLat_lt?: Maybe<Scalars['Float']>;
+  readonly provisionLat_lte?: Maybe<Scalars['Float']>;
+  readonly provisionLat_not?: Maybe<Scalars['Float']>;
+  readonly provisionLat_not_in?: Maybe<ReadonlyArray<Scalars['Float']>>;
+  readonly provisionLon?: Maybe<Scalars['Float']>;
+  readonly provisionLon_gt?: Maybe<Scalars['Float']>;
+  readonly provisionLon_gte?: Maybe<Scalars['Float']>;
+  readonly provisionLon_in?: Maybe<ReadonlyArray<Scalars['Float']>>;
+  readonly provisionLon_lt?: Maybe<Scalars['Float']>;
+  readonly provisionLon_lte?: Maybe<Scalars['Float']>;
+  readonly provisionLon_not?: Maybe<Scalars['Float']>;
+  readonly provisionLon_not_in?: Maybe<ReadonlyArray<Scalars['Float']>>;
+  readonly provisionTime?: Maybe<Scalars['DateTime']>;
+  readonly provisionTime_gt?: Maybe<Scalars['DateTime']>;
+  readonly provisionTime_gte?: Maybe<Scalars['DateTime']>;
+  readonly provisionTime_in?: Maybe<ReadonlyArray<Scalars['DateTime']>>;
+  readonly provisionTime_lt?: Maybe<Scalars['DateTime']>;
+  readonly provisionTime_lte?: Maybe<Scalars['DateTime']>;
+  readonly provisionTime_not?: Maybe<Scalars['DateTime']>;
+  readonly provisionTime_not_in?: Maybe<ReadonlyArray<Scalars['DateTime']>>;
+  readonly provisionType?: Maybe<Scalars['String']>;
+  readonly provisionType_contains?: Maybe<Scalars['String']>;
+  readonly provisionType_ends_with?: Maybe<Scalars['String']>;
+  readonly provisionType_gt?: Maybe<Scalars['String']>;
+  readonly provisionType_gte?: Maybe<Scalars['String']>;
+  readonly provisionType_in?: Maybe<ReadonlyArray<Scalars['String']>>;
+  readonly provisionType_lt?: Maybe<Scalars['String']>;
+  readonly provisionType_lte?: Maybe<Scalars['String']>;
+  readonly provisionType_not?: Maybe<Scalars['String']>;
+  readonly provisionType_not_contains?: Maybe<Scalars['String']>;
+  readonly provisionType_not_ends_with?: Maybe<Scalars['String']>;
+  readonly provisionType_not_in?: Maybe<ReadonlyArray<Scalars['String']>>;
+  readonly provisionType_not_starts_with?: Maybe<Scalars['String']>;
+  readonly provisionType_starts_with?: Maybe<Scalars['String']>;
   readonly realized?: Maybe<Scalars['Boolean']>;
   readonly realized_not?: Maybe<Scalars['Boolean']>;
   readonly reference?: Maybe<Scalars['String']>;
@@ -2255,6 +2373,14 @@ export type PItineraryWhereInput = {
   readonly updatedAt_not?: Maybe<Scalars['DateTime']>;
   readonly updatedAt_not_in?: Maybe<ReadonlyArray<Scalars['DateTime']>>;
   readonly vehicleBrand?: Maybe<PVehicleBrandWhereInput>;
+  readonly vehicleCapacity?: Maybe<Scalars['Int']>;
+  readonly vehicleCapacity_gt?: Maybe<Scalars['Int']>;
+  readonly vehicleCapacity_gte?: Maybe<Scalars['Int']>;
+  readonly vehicleCapacity_in?: Maybe<ReadonlyArray<Scalars['Int']>>;
+  readonly vehicleCapacity_lt?: Maybe<Scalars['Int']>;
+  readonly vehicleCapacity_lte?: Maybe<Scalars['Int']>;
+  readonly vehicleCapacity_not?: Maybe<Scalars['Int']>;
+  readonly vehicleCapacity_not_in?: Maybe<ReadonlyArray<Scalars['Int']>>;
   readonly vehicleFeatures_every?: Maybe<PItineraryVehicleFeatureWhereInput>;
   readonly vehicleFeatures_none?: Maybe<PItineraryVehicleFeatureWhereInput>;
   readonly vehicleFeatures_some?: Maybe<PItineraryVehicleFeatureWhereInput>;
@@ -2388,6 +2514,7 @@ export type PRate = {
   readonly id: Scalars['ID'];
   readonly isGlobal: Scalars['Boolean'];
   readonly serviceTypes?: Maybe<ReadonlyArray<PServiceType>>;
+  readonly vehicleCategories?: Maybe<ReadonlyArray<PVehicleCategory>>;
   readonly vehicleVariables?: Maybe<ReadonlyArray<VehiclePricing>>;
 };
 
@@ -2400,6 +2527,17 @@ export type PRateServiceTypesArgs = {
   orderBy?: Maybe<PServiceTypeOrderByInput>;
   skip?: Maybe<Scalars['Int']>;
   where?: Maybe<PServiceTypeWhereInput>;
+};
+
+
+export type PRateVehicleCategoriesArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<PVehicleCategoryOrderByInput>;
+  skip?: Maybe<Scalars['Int']>;
+  where?: Maybe<PVehicleCategoryWhereInput>;
 };
 
 
@@ -2421,6 +2559,7 @@ export type PRateCondition = {
   readonly conditionType: ConditionType;
   readonly description?: Maybe<Scalars['String']>;
   readonly executionOrderIndex?: Maybe<Scalars['Int']>;
+  readonly extraHourPrice?: Maybe<Scalars['Float']>;
   readonly id: Scalars['ID'];
   readonly name: Scalars['String'];
   readonly numPassengers?: Maybe<Scalars['Int']>;
@@ -2459,6 +2598,8 @@ export enum PRateConditionOrderByInput {
   DescriptionDesc = 'description_DESC',
   ExecutionOrderIndexAsc = 'executionOrderIndex_ASC',
   ExecutionOrderIndexDesc = 'executionOrderIndex_DESC',
+  ExtraHourPriceAsc = 'extraHourPrice_ASC',
+  ExtraHourPriceDesc = 'extraHourPrice_DESC',
   IdAsc = 'id_ASC',
   IdDesc = 'id_DESC',
   NameAsc = 'name_ASC',
@@ -2520,6 +2661,14 @@ export type PRateConditionWhereInput = {
   readonly executionOrderIndex_lte?: Maybe<Scalars['Int']>;
   readonly executionOrderIndex_not?: Maybe<Scalars['Int']>;
   readonly executionOrderIndex_not_in?: Maybe<ReadonlyArray<Scalars['Int']>>;
+  readonly extraHourPrice?: Maybe<Scalars['Float']>;
+  readonly extraHourPrice_gt?: Maybe<Scalars['Float']>;
+  readonly extraHourPrice_gte?: Maybe<Scalars['Float']>;
+  readonly extraHourPrice_in?: Maybe<ReadonlyArray<Scalars['Float']>>;
+  readonly extraHourPrice_lt?: Maybe<Scalars['Float']>;
+  readonly extraHourPrice_lte?: Maybe<Scalars['Float']>;
+  readonly extraHourPrice_not?: Maybe<Scalars['Float']>;
+  readonly extraHourPrice_not_in?: Maybe<ReadonlyArray<Scalars['Float']>>;
   readonly id?: Maybe<Scalars['ID']>;
   readonly id_contains?: Maybe<Scalars['ID']>;
   readonly id_ends_with?: Maybe<Scalars['ID']>;
@@ -2607,6 +2756,9 @@ export type PRateWhereInput = {
   readonly serviceTypes_every?: Maybe<PServiceTypeWhereInput>;
   readonly serviceTypes_none?: Maybe<PServiceTypeWhereInput>;
   readonly serviceTypes_some?: Maybe<PServiceTypeWhereInput>;
+  readonly vehicleCategories_every?: Maybe<PVehicleCategoryWhereInput>;
+  readonly vehicleCategories_none?: Maybe<PVehicleCategoryWhereInput>;
+  readonly vehicleCategories_some?: Maybe<PVehicleCategoryWhereInput>;
   readonly vehicleVariables_every?: Maybe<VehiclePricingWhereInput>;
   readonly vehicleVariables_none?: Maybe<VehiclePricingWhereInput>;
   readonly vehicleVariables_some?: Maybe<VehiclePricingWhereInput>;
@@ -3375,6 +3527,156 @@ export type PVehicleBrandWhereInput = {
   readonly pricing_some?: Maybe<VehiclePricingWhereInput>;
 };
 
+export type PVehicleCategory = {
+  readonly __typename?: 'PVehicleCategory';
+  readonly createdAt: Scalars['DateTime'];
+  readonly description?: Maybe<Scalars['String']>;
+  readonly id: Scalars['ID'];
+  readonly name: Scalars['String'];
+  readonly rate: PRate;
+  readonly updatedAt: Scalars['DateTime'];
+  readonly vehicleBrandId?: Maybe<Scalars['String']>;
+  readonly vehicleCapacity?: Maybe<Scalars['Int']>;
+  readonly vehicleModelId?: Maybe<Scalars['String']>;
+  readonly vehicleTypeId: Scalars['String'];
+};
+
+export enum PVehicleCategoryOrderByInput {
+  CreatedAtAsc = 'createdAt_ASC',
+  CreatedAtDesc = 'createdAt_DESC',
+  DescriptionAsc = 'description_ASC',
+  DescriptionDesc = 'description_DESC',
+  IdAsc = 'id_ASC',
+  IdDesc = 'id_DESC',
+  NameAsc = 'name_ASC',
+  NameDesc = 'name_DESC',
+  UpdatedAtAsc = 'updatedAt_ASC',
+  UpdatedAtDesc = 'updatedAt_DESC',
+  VehicleBrandIdAsc = 'vehicleBrandId_ASC',
+  VehicleBrandIdDesc = 'vehicleBrandId_DESC',
+  VehicleCapacityAsc = 'vehicleCapacity_ASC',
+  VehicleCapacityDesc = 'vehicleCapacity_DESC',
+  VehicleModelIdAsc = 'vehicleModelId_ASC',
+  VehicleModelIdDesc = 'vehicleModelId_DESC',
+  VehicleTypeIdAsc = 'vehicleTypeId_ASC',
+  VehicleTypeIdDesc = 'vehicleTypeId_DESC'
+}
+
+export type PVehicleCategoryWhereInput = {
+  readonly AND?: Maybe<ReadonlyArray<PVehicleCategoryWhereInput>>;
+  readonly NOT?: Maybe<ReadonlyArray<PVehicleCategoryWhereInput>>;
+  readonly OR?: Maybe<ReadonlyArray<PVehicleCategoryWhereInput>>;
+  readonly createdAt?: Maybe<Scalars['DateTime']>;
+  readonly createdAt_gt?: Maybe<Scalars['DateTime']>;
+  readonly createdAt_gte?: Maybe<Scalars['DateTime']>;
+  readonly createdAt_in?: Maybe<ReadonlyArray<Scalars['DateTime']>>;
+  readonly createdAt_lt?: Maybe<Scalars['DateTime']>;
+  readonly createdAt_lte?: Maybe<Scalars['DateTime']>;
+  readonly createdAt_not?: Maybe<Scalars['DateTime']>;
+  readonly createdAt_not_in?: Maybe<ReadonlyArray<Scalars['DateTime']>>;
+  readonly description?: Maybe<Scalars['String']>;
+  readonly description_contains?: Maybe<Scalars['String']>;
+  readonly description_ends_with?: Maybe<Scalars['String']>;
+  readonly description_gt?: Maybe<Scalars['String']>;
+  readonly description_gte?: Maybe<Scalars['String']>;
+  readonly description_in?: Maybe<ReadonlyArray<Scalars['String']>>;
+  readonly description_lt?: Maybe<Scalars['String']>;
+  readonly description_lte?: Maybe<Scalars['String']>;
+  readonly description_not?: Maybe<Scalars['String']>;
+  readonly description_not_contains?: Maybe<Scalars['String']>;
+  readonly description_not_ends_with?: Maybe<Scalars['String']>;
+  readonly description_not_in?: Maybe<ReadonlyArray<Scalars['String']>>;
+  readonly description_not_starts_with?: Maybe<Scalars['String']>;
+  readonly description_starts_with?: Maybe<Scalars['String']>;
+  readonly id?: Maybe<Scalars['ID']>;
+  readonly id_contains?: Maybe<Scalars['ID']>;
+  readonly id_ends_with?: Maybe<Scalars['ID']>;
+  readonly id_gt?: Maybe<Scalars['ID']>;
+  readonly id_gte?: Maybe<Scalars['ID']>;
+  readonly id_in?: Maybe<ReadonlyArray<Scalars['ID']>>;
+  readonly id_lt?: Maybe<Scalars['ID']>;
+  readonly id_lte?: Maybe<Scalars['ID']>;
+  readonly id_not?: Maybe<Scalars['ID']>;
+  readonly id_not_contains?: Maybe<Scalars['ID']>;
+  readonly id_not_ends_with?: Maybe<Scalars['ID']>;
+  readonly id_not_in?: Maybe<ReadonlyArray<Scalars['ID']>>;
+  readonly id_not_starts_with?: Maybe<Scalars['ID']>;
+  readonly id_starts_with?: Maybe<Scalars['ID']>;
+  readonly name?: Maybe<Scalars['String']>;
+  readonly name_contains?: Maybe<Scalars['String']>;
+  readonly name_ends_with?: Maybe<Scalars['String']>;
+  readonly name_gt?: Maybe<Scalars['String']>;
+  readonly name_gte?: Maybe<Scalars['String']>;
+  readonly name_in?: Maybe<ReadonlyArray<Scalars['String']>>;
+  readonly name_lt?: Maybe<Scalars['String']>;
+  readonly name_lte?: Maybe<Scalars['String']>;
+  readonly name_not?: Maybe<Scalars['String']>;
+  readonly name_not_contains?: Maybe<Scalars['String']>;
+  readonly name_not_ends_with?: Maybe<Scalars['String']>;
+  readonly name_not_in?: Maybe<ReadonlyArray<Scalars['String']>>;
+  readonly name_not_starts_with?: Maybe<Scalars['String']>;
+  readonly name_starts_with?: Maybe<Scalars['String']>;
+  readonly rate?: Maybe<PRateWhereInput>;
+  readonly updatedAt?: Maybe<Scalars['DateTime']>;
+  readonly updatedAt_gt?: Maybe<Scalars['DateTime']>;
+  readonly updatedAt_gte?: Maybe<Scalars['DateTime']>;
+  readonly updatedAt_in?: Maybe<ReadonlyArray<Scalars['DateTime']>>;
+  readonly updatedAt_lt?: Maybe<Scalars['DateTime']>;
+  readonly updatedAt_lte?: Maybe<Scalars['DateTime']>;
+  readonly updatedAt_not?: Maybe<Scalars['DateTime']>;
+  readonly updatedAt_not_in?: Maybe<ReadonlyArray<Scalars['DateTime']>>;
+  readonly vehicleBrandId?: Maybe<Scalars['String']>;
+  readonly vehicleBrandId_contains?: Maybe<Scalars['String']>;
+  readonly vehicleBrandId_ends_with?: Maybe<Scalars['String']>;
+  readonly vehicleBrandId_gt?: Maybe<Scalars['String']>;
+  readonly vehicleBrandId_gte?: Maybe<Scalars['String']>;
+  readonly vehicleBrandId_in?: Maybe<ReadonlyArray<Scalars['String']>>;
+  readonly vehicleBrandId_lt?: Maybe<Scalars['String']>;
+  readonly vehicleBrandId_lte?: Maybe<Scalars['String']>;
+  readonly vehicleBrandId_not?: Maybe<Scalars['String']>;
+  readonly vehicleBrandId_not_contains?: Maybe<Scalars['String']>;
+  readonly vehicleBrandId_not_ends_with?: Maybe<Scalars['String']>;
+  readonly vehicleBrandId_not_in?: Maybe<ReadonlyArray<Scalars['String']>>;
+  readonly vehicleBrandId_not_starts_with?: Maybe<Scalars['String']>;
+  readonly vehicleBrandId_starts_with?: Maybe<Scalars['String']>;
+  readonly vehicleCapacity?: Maybe<Scalars['Int']>;
+  readonly vehicleCapacity_gt?: Maybe<Scalars['Int']>;
+  readonly vehicleCapacity_gte?: Maybe<Scalars['Int']>;
+  readonly vehicleCapacity_in?: Maybe<ReadonlyArray<Scalars['Int']>>;
+  readonly vehicleCapacity_lt?: Maybe<Scalars['Int']>;
+  readonly vehicleCapacity_lte?: Maybe<Scalars['Int']>;
+  readonly vehicleCapacity_not?: Maybe<Scalars['Int']>;
+  readonly vehicleCapacity_not_in?: Maybe<ReadonlyArray<Scalars['Int']>>;
+  readonly vehicleModelId?: Maybe<Scalars['String']>;
+  readonly vehicleModelId_contains?: Maybe<Scalars['String']>;
+  readonly vehicleModelId_ends_with?: Maybe<Scalars['String']>;
+  readonly vehicleModelId_gt?: Maybe<Scalars['String']>;
+  readonly vehicleModelId_gte?: Maybe<Scalars['String']>;
+  readonly vehicleModelId_in?: Maybe<ReadonlyArray<Scalars['String']>>;
+  readonly vehicleModelId_lt?: Maybe<Scalars['String']>;
+  readonly vehicleModelId_lte?: Maybe<Scalars['String']>;
+  readonly vehicleModelId_not?: Maybe<Scalars['String']>;
+  readonly vehicleModelId_not_contains?: Maybe<Scalars['String']>;
+  readonly vehicleModelId_not_ends_with?: Maybe<Scalars['String']>;
+  readonly vehicleModelId_not_in?: Maybe<ReadonlyArray<Scalars['String']>>;
+  readonly vehicleModelId_not_starts_with?: Maybe<Scalars['String']>;
+  readonly vehicleModelId_starts_with?: Maybe<Scalars['String']>;
+  readonly vehicleTypeId?: Maybe<Scalars['String']>;
+  readonly vehicleTypeId_contains?: Maybe<Scalars['String']>;
+  readonly vehicleTypeId_ends_with?: Maybe<Scalars['String']>;
+  readonly vehicleTypeId_gt?: Maybe<Scalars['String']>;
+  readonly vehicleTypeId_gte?: Maybe<Scalars['String']>;
+  readonly vehicleTypeId_in?: Maybe<ReadonlyArray<Scalars['String']>>;
+  readonly vehicleTypeId_lt?: Maybe<Scalars['String']>;
+  readonly vehicleTypeId_lte?: Maybe<Scalars['String']>;
+  readonly vehicleTypeId_not?: Maybe<Scalars['String']>;
+  readonly vehicleTypeId_not_contains?: Maybe<Scalars['String']>;
+  readonly vehicleTypeId_not_ends_with?: Maybe<Scalars['String']>;
+  readonly vehicleTypeId_not_in?: Maybe<ReadonlyArray<Scalars['String']>>;
+  readonly vehicleTypeId_not_starts_with?: Maybe<Scalars['String']>;
+  readonly vehicleTypeId_starts_with?: Maybe<Scalars['String']>;
+};
+
 export type PVehicleModel = {
   readonly __typename?: 'PVehicleModel';
   readonly brand?: Maybe<PVehicleBrand>;
@@ -3573,10 +3875,12 @@ export type QueryClientEmployeeArgs = {
 
 export type QueryComputeItineraryPriceArgs = {
   arrival?: Maybe<DepartureOrArrivalInput>;
+  capacity?: Maybe<Scalars['Int']>;
   clientId: Scalars['String'];
   departure?: Maybe<DepartureOrArrivalInput>;
+  dinner?: Maybe<Scalars['Boolean']>;
   hours?: Maybe<Scalars['Int']>;
-  numPassengers?: Maybe<Scalars['Int']>;
+  provision?: Maybe<DepartureOrArrivalInput>;
   serviceTypeId: Scalars['String'];
   vehicleBrandId?: Maybe<Scalars['String']>;
   vehicleModelId?: Maybe<Scalars['String']>;
@@ -3608,6 +3912,7 @@ export type QueryGetServiceSubtypesArgs = {
 
 export type QueryGlobalRateArgs = {
   clientId?: Maybe<Scalars['ID']>;
+  fetchGlobalIfNotPresent?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -3673,6 +3978,7 @@ export type Rate = {
   readonly id: Scalars['ID'];
   readonly isGlobal: Scalars['Boolean'];
   readonly serviceTypes: ReadonlyArray<RateServiceType>;
+  readonly vehicleCategories: ReadonlyArray<VehicleCategory>;
   readonly vehiclePriceVariables: ReadonlyArray<VehiclePriceVariable>;
 };
 
@@ -3715,7 +4021,9 @@ export type Service = {
 export type ServiceSubtype = {
   readonly __typename?: 'ServiceSubtype';
   readonly description?: Maybe<Scalars['String']>;
+  readonly dinner: Scalars['Boolean'];
   readonly fulfillingCondition?: Maybe<FulfillingCondition>;
+  readonly hours: Scalars['Int'];
   readonly id: Scalars['ID'];
   readonly name: Scalars['String'];
   readonly priceConditions?: Maybe<PriceCondition>;
@@ -3790,6 +4098,17 @@ export type VehicleBrandModels = {
   readonly models: ReadonlyArray<VehicleModel>;
 };
 
+export type VehicleCategory = {
+  readonly __typename?: 'VehicleCategory';
+  readonly description?: Maybe<Scalars['String']>;
+  readonly id: Scalars['ID'];
+  readonly name: Scalars['String'];
+  readonly vehicleBrand?: Maybe<VehicleBrandModels>;
+  readonly vehicleCapacity?: Maybe<Scalars['Int']>;
+  readonly vehicleModel?: Maybe<VehicleModel>;
+  readonly vehicleType?: Maybe<VehicleType>;
+};
+
 export type VehicleModel = {
   readonly __typename?: 'VehicleModel';
   readonly id: Scalars['ID'];
@@ -3800,6 +4119,7 @@ export type VehiclePriceCondition = {
   readonly __typename?: 'VehiclePriceCondition';
   readonly basePrice: Scalars['Float'];
   readonly description?: Maybe<Scalars['String']>;
+  readonly extraHourPrice?: Maybe<Scalars['Float']>;
   readonly id: Scalars['ID'];
   readonly name: Scalars['String'];
   readonly numPassengers?: Maybe<Scalars['Int']>;
@@ -3956,6 +4276,14 @@ export type DummyQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type DummyQuery = { readonly __typename?: 'Query', readonly getFrontendVersion: { readonly __typename?: 'FrontendVersion', readonly version: string } };
 
+export type UpdateLocationMutationVariables = Exact<{
+  latitude?: Maybe<Scalars['Float']>;
+  longitude?: Maybe<Scalars['Float']>;
+}>;
+
+
+export type UpdateLocationMutation = { readonly __typename?: 'Mutation', readonly updateDriver: { readonly __typename?: 'Driver', readonly location?: Maybe<{ readonly __typename?: 'Location', readonly latitude?: Maybe<string>, readonly longitude?: Maybe<string> }> } };
+
 export type DriverQueryVariables = Exact<{
   id?: Maybe<Scalars['ID']>;
   departureDateMin?: Maybe<Scalars['String']>;
@@ -4016,6 +4344,43 @@ export function useDummyLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Dumm
 export type DummyQueryHookResult = ReturnType<typeof useDummyQuery>;
 export type DummyLazyQueryHookResult = ReturnType<typeof useDummyLazyQuery>;
 export type DummyQueryResult = Apollo.QueryResult<DummyQuery, DummyQueryVariables>;
+export const UpdateLocationDocument = gql`
+    mutation UpdateLocation($latitude: Float, $longitude: Float) {
+  updateDriver(latitude: $latitude, longitude: $longitude) {
+    location {
+      latitude
+      longitude
+    }
+  }
+}
+    `;
+export type UpdateLocationMutationFn = Apollo.MutationFunction<UpdateLocationMutation, UpdateLocationMutationVariables>;
+
+/**
+ * __useUpdateLocationMutation__
+ *
+ * To run a mutation, you first call `useUpdateLocationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateLocationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateLocationMutation, { data, loading, error }] = useUpdateLocationMutation({
+ *   variables: {
+ *      latitude: // value for 'latitude'
+ *      longitude: // value for 'longitude'
+ *   },
+ * });
+ */
+export function useUpdateLocationMutation(baseOptions?: Apollo.MutationHookOptions<UpdateLocationMutation, UpdateLocationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateLocationMutation, UpdateLocationMutationVariables>(UpdateLocationDocument, options);
+      }
+export type UpdateLocationMutationHookResult = ReturnType<typeof useUpdateLocationMutation>;
+export type UpdateLocationMutationResult = Apollo.MutationResult<UpdateLocationMutation>;
+export type UpdateLocationMutationOptions = Apollo.BaseMutationOptions<UpdateLocationMutation, UpdateLocationMutationVariables>;
 export const DriverDocument = gql`
     query Driver($id: ID, $departureDateMin: String, $departureDateMax: String) {
   driver(

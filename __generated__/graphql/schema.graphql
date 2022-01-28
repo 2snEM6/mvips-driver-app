@@ -52,9 +52,9 @@ type Query {
   vehicleBrandModels: [VehicleBrandModels!]!
   vehicleBrand(id: ID!): VehicleBrandModels!
   vehicleModel(id: ID!): VehicleModel!
-  globalRate(clientId: ID): Rate
+  globalRate(clientId: ID, fetchGlobalIfNotPresent: Boolean = false): Rate
   getServiceSubtypes(id: ID!): [ServiceSubtype!]!
-  computeItineraryPrice(departure: DepartureOrArrivalInput, arrival: DepartureOrArrivalInput, serviceTypeId: String!, clientId: String!, vehicleTypeId: String!, vehicleModelId: String, vehicleBrandId: String, hours: Int, numPassengers: Int): CandidateAmount!
+  computeItineraryPrice(departure: DepartureOrArrivalInput, arrival: DepartureOrArrivalInput, provision: DepartureOrArrivalInput, serviceTypeId: String!, clientId: String!, vehicleTypeId: String!, vehicleModelId: String, vehicleBrandId: String, hours: Int, dinner: Boolean, capacity: Int): CandidateAmount!
 }
 
 type FrontendVersion {
@@ -295,20 +295,25 @@ type Itinerary {
   id: ID!
   realized: Boolean!
   amounts: [Amount!]!
-  hours: Int
-  departureDate: String!
   departureTime: String!
-  arrivalDate: String!
   arrivalTime: String!
   presentationTime: String!
   serviceTypeId: String!
   dinner: Boolean!
   reference: String
+  departureGoogleMapsPlaceID: String
   departureType: String
   departureCity: String
   departureAddress: String
   departureLat: Float!
   departureLon: Float!
+  provisionGoogleMapsPlaceID: String
+  provisionType: String
+  provisionCity: String
+  provisionAddress: String
+  provisionLat: Float
+  provisionLon: Float
+  arrivalGoogleMapsPlaceID: String
   arrivalType: String
   arrivalCity: String
   arrivalAddress: String
@@ -318,6 +323,7 @@ type Itinerary {
   vehicleModelId: String
   vehicleBrandId: String
   vehicleTypeId: String
+  vehicleCapacity: Int
   numPassengers: Int
   itineraryDescription: String!
   groupName: String
@@ -755,38 +761,6 @@ input PItineraryWhereInput {
   updatedAt_lte: DateTime
   updatedAt_gt: DateTime
   updatedAt_gte: DateTime
-  departureDate: DateTime
-  departureDate_not: DateTime
-  departureDate_in: [DateTime!]
-  departureDate_not_in: [DateTime!]
-  departureDate_lt: DateTime
-  departureDate_lte: DateTime
-  departureDate_gt: DateTime
-  departureDate_gte: DateTime
-  arrivalDate: DateTime
-  arrivalDate_not: DateTime
-  arrivalDate_in: [DateTime!]
-  arrivalDate_not_in: [DateTime!]
-  arrivalDate_lt: DateTime
-  arrivalDate_lte: DateTime
-  arrivalDate_gt: DateTime
-  arrivalDate_gte: DateTime
-  departureTime: DateTime
-  departureTime_not: DateTime
-  departureTime_in: [DateTime!]
-  departureTime_not_in: [DateTime!]
-  departureTime_lt: DateTime
-  departureTime_lte: DateTime
-  departureTime_gt: DateTime
-  departureTime_gte: DateTime
-  arrivalTime: DateTime
-  arrivalTime_not: DateTime
-  arrivalTime_in: [DateTime!]
-  arrivalTime_not_in: [DateTime!]
-  arrivalTime_lt: DateTime
-  arrivalTime_lte: DateTime
-  arrivalTime_gt: DateTime
-  arrivalTime_gte: DateTime
   presentationTime: DateTime
   presentationTime_not: DateTime
   presentationTime_in: [DateTime!]
@@ -838,6 +812,94 @@ input PItineraryWhereInput {
   itineraryDescription_not_starts_with: String
   itineraryDescription_ends_with: String
   itineraryDescription_not_ends_with: String
+  provisionTime: DateTime
+  provisionTime_not: DateTime
+  provisionTime_in: [DateTime!]
+  provisionTime_not_in: [DateTime!]
+  provisionTime_lt: DateTime
+  provisionTime_lte: DateTime
+  provisionTime_gt: DateTime
+  provisionTime_gte: DateTime
+  provisionType: String
+  provisionType_not: String
+  provisionType_in: [String!]
+  provisionType_not_in: [String!]
+  provisionType_lt: String
+  provisionType_lte: String
+  provisionType_gt: String
+  provisionType_gte: String
+  provisionType_contains: String
+  provisionType_not_contains: String
+  provisionType_starts_with: String
+  provisionType_not_starts_with: String
+  provisionType_ends_with: String
+  provisionType_not_ends_with: String
+  provisionGoogleMapsPlaceID: String
+  provisionGoogleMapsPlaceID_not: String
+  provisionGoogleMapsPlaceID_in: [String!]
+  provisionGoogleMapsPlaceID_not_in: [String!]
+  provisionGoogleMapsPlaceID_lt: String
+  provisionGoogleMapsPlaceID_lte: String
+  provisionGoogleMapsPlaceID_gt: String
+  provisionGoogleMapsPlaceID_gte: String
+  provisionGoogleMapsPlaceID_contains: String
+  provisionGoogleMapsPlaceID_not_contains: String
+  provisionGoogleMapsPlaceID_starts_with: String
+  provisionGoogleMapsPlaceID_not_starts_with: String
+  provisionGoogleMapsPlaceID_ends_with: String
+  provisionGoogleMapsPlaceID_not_ends_with: String
+  provisionCity: String
+  provisionCity_not: String
+  provisionCity_in: [String!]
+  provisionCity_not_in: [String!]
+  provisionCity_lt: String
+  provisionCity_lte: String
+  provisionCity_gt: String
+  provisionCity_gte: String
+  provisionCity_contains: String
+  provisionCity_not_contains: String
+  provisionCity_starts_with: String
+  provisionCity_not_starts_with: String
+  provisionCity_ends_with: String
+  provisionCity_not_ends_with: String
+  provisionAddress: String
+  provisionAddress_not: String
+  provisionAddress_in: [String!]
+  provisionAddress_not_in: [String!]
+  provisionAddress_lt: String
+  provisionAddress_lte: String
+  provisionAddress_gt: String
+  provisionAddress_gte: String
+  provisionAddress_contains: String
+  provisionAddress_not_contains: String
+  provisionAddress_starts_with: String
+  provisionAddress_not_starts_with: String
+  provisionAddress_ends_with: String
+  provisionAddress_not_ends_with: String
+  provisionLat: Float
+  provisionLat_not: Float
+  provisionLat_in: [Float!]
+  provisionLat_not_in: [Float!]
+  provisionLat_lt: Float
+  provisionLat_lte: Float
+  provisionLat_gt: Float
+  provisionLat_gte: Float
+  provisionLon: Float
+  provisionLon_not: Float
+  provisionLon_in: [Float!]
+  provisionLon_not_in: [Float!]
+  provisionLon_lt: Float
+  provisionLon_lte: Float
+  provisionLon_gt: Float
+  provisionLon_gte: Float
+  departureTime: DateTime
+  departureTime_not: DateTime
+  departureTime_in: [DateTime!]
+  departureTime_not_in: [DateTime!]
+  departureTime_lt: DateTime
+  departureTime_lte: DateTime
+  departureTime_gt: DateTime
+  departureTime_gte: DateTime
   departureType: String
   departureType_not: String
   departureType_in: [String!]
@@ -852,6 +914,20 @@ input PItineraryWhereInput {
   departureType_not_starts_with: String
   departureType_ends_with: String
   departureType_not_ends_with: String
+  departureGoogleMapsPlaceID: String
+  departureGoogleMapsPlaceID_not: String
+  departureGoogleMapsPlaceID_in: [String!]
+  departureGoogleMapsPlaceID_not_in: [String!]
+  departureGoogleMapsPlaceID_lt: String
+  departureGoogleMapsPlaceID_lte: String
+  departureGoogleMapsPlaceID_gt: String
+  departureGoogleMapsPlaceID_gte: String
+  departureGoogleMapsPlaceID_contains: String
+  departureGoogleMapsPlaceID_not_contains: String
+  departureGoogleMapsPlaceID_starts_with: String
+  departureGoogleMapsPlaceID_not_starts_with: String
+  departureGoogleMapsPlaceID_ends_with: String
+  departureGoogleMapsPlaceID_not_ends_with: String
   departureCity: String
   departureCity_not: String
   departureCity_in: [String!]
@@ -896,6 +972,14 @@ input PItineraryWhereInput {
   departureLon_lte: Float
   departureLon_gt: Float
   departureLon_gte: Float
+  arrivalTime: DateTime
+  arrivalTime_not: DateTime
+  arrivalTime_in: [DateTime!]
+  arrivalTime_not_in: [DateTime!]
+  arrivalTime_lt: DateTime
+  arrivalTime_lte: DateTime
+  arrivalTime_gt: DateTime
+  arrivalTime_gte: DateTime
   arrivalCity: String
   arrivalCity_not: String
   arrivalCity_in: [String!]
@@ -910,6 +994,20 @@ input PItineraryWhereInput {
   arrivalCity_not_starts_with: String
   arrivalCity_ends_with: String
   arrivalCity_not_ends_with: String
+  arrivalGoogleMapsPlaceID: String
+  arrivalGoogleMapsPlaceID_not: String
+  arrivalGoogleMapsPlaceID_in: [String!]
+  arrivalGoogleMapsPlaceID_not_in: [String!]
+  arrivalGoogleMapsPlaceID_lt: String
+  arrivalGoogleMapsPlaceID_lte: String
+  arrivalGoogleMapsPlaceID_gt: String
+  arrivalGoogleMapsPlaceID_gte: String
+  arrivalGoogleMapsPlaceID_contains: String
+  arrivalGoogleMapsPlaceID_not_contains: String
+  arrivalGoogleMapsPlaceID_starts_with: String
+  arrivalGoogleMapsPlaceID_not_starts_with: String
+  arrivalGoogleMapsPlaceID_ends_with: String
+  arrivalGoogleMapsPlaceID_not_ends_with: String
   arrivalType: String
   arrivalType_not: String
   arrivalType_in: [String!]
@@ -965,6 +1063,14 @@ input PItineraryWhereInput {
   vehicleModel: PVehicleModelWhereInput
   vehicleBrand: PVehicleBrandWhereInput
   vehicleType: PVehicleTypeWhereInput
+  vehicleCapacity: Int
+  vehicleCapacity_not: Int
+  vehicleCapacity_in: [Int!]
+  vehicleCapacity_not_in: [Int!]
+  vehicleCapacity_lt: Int
+  vehicleCapacity_lte: Int
+  vehicleCapacity_gt: Int
+  vehicleCapacity_gte: Int
   numPassengers: Int
   numPassengers_not: Int
   numPassengers_in: [Int!]
@@ -1015,14 +1121,6 @@ input PItineraryWhereInput {
   notes_not_starts_with: String
   notes_ends_with: String
   notes_not_ends_with: String
-  hours: Float
-  hours_not: Float
-  hours_in: [Float!]
-  hours_not_in: [Float!]
-  hours_lt: Float
-  hours_lte: Float
-  hours_gt: Float
-  hours_gte: Float
   dinner: Boolean
   dinner_not: Boolean
   amounts_every: PAmountWhereInput
@@ -1523,6 +1621,14 @@ input PRateConditionWhereInput {
   basePrice_lte: Float
   basePrice_gt: Float
   basePrice_gte: Float
+  extraHourPrice: Float
+  extraHourPrice_not: Float
+  extraHourPrice_in: [Float!]
+  extraHourPrice_not_in: [Float!]
+  extraHourPrice_lt: Float
+  extraHourPrice_lte: Float
+  extraHourPrice_gt: Float
+  extraHourPrice_gte: Float
   conditionType: ConditionType
   conditionType_not: ConditionType
   conditionType_in: [ConditionType!]
@@ -1571,6 +1677,9 @@ input PRateWhereInput {
   vehicleVariables_every: VehiclePricingWhereInput
   vehicleVariables_some: VehiclePricingWhereInput
   vehicleVariables_none: VehiclePricingWhereInput
+  vehicleCategories_every: PVehicleCategoryWhereInput
+  vehicleCategories_some: PVehicleCategoryWhereInput
+  vehicleCategories_none: PVehicleCategoryWhereInput
   AND: [PRateWhereInput!]
   OR: [PRateWhereInput!]
   NOT: [PRateWhereInput!]
@@ -1776,6 +1885,121 @@ enum VehicleTypeCategory {
   BUS
   MINIBUS
   OTHER
+}
+
+input PVehicleCategoryWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  rate: PRateWhereInput
+  vehicleModelId: String
+  vehicleModelId_not: String
+  vehicleModelId_in: [String!]
+  vehicleModelId_not_in: [String!]
+  vehicleModelId_lt: String
+  vehicleModelId_lte: String
+  vehicleModelId_gt: String
+  vehicleModelId_gte: String
+  vehicleModelId_contains: String
+  vehicleModelId_not_contains: String
+  vehicleModelId_starts_with: String
+  vehicleModelId_not_starts_with: String
+  vehicleModelId_ends_with: String
+  vehicleModelId_not_ends_with: String
+  vehicleBrandId: String
+  vehicleBrandId_not: String
+  vehicleBrandId_in: [String!]
+  vehicleBrandId_not_in: [String!]
+  vehicleBrandId_lt: String
+  vehicleBrandId_lte: String
+  vehicleBrandId_gt: String
+  vehicleBrandId_gte: String
+  vehicleBrandId_contains: String
+  vehicleBrandId_not_contains: String
+  vehicleBrandId_starts_with: String
+  vehicleBrandId_not_starts_with: String
+  vehicleBrandId_ends_with: String
+  vehicleBrandId_not_ends_with: String
+  vehicleTypeId: String
+  vehicleTypeId_not: String
+  vehicleTypeId_in: [String!]
+  vehicleTypeId_not_in: [String!]
+  vehicleTypeId_lt: String
+  vehicleTypeId_lte: String
+  vehicleTypeId_gt: String
+  vehicleTypeId_gte: String
+  vehicleTypeId_contains: String
+  vehicleTypeId_not_contains: String
+  vehicleTypeId_starts_with: String
+  vehicleTypeId_not_starts_with: String
+  vehicleTypeId_ends_with: String
+  vehicleTypeId_not_ends_with: String
+  vehicleCapacity: Int
+  vehicleCapacity_not: Int
+  vehicleCapacity_in: [Int!]
+  vehicleCapacity_not_in: [Int!]
+  vehicleCapacity_lt: Int
+  vehicleCapacity_lte: Int
+  vehicleCapacity_gt: Int
+  vehicleCapacity_gte: Int
+  AND: [PVehicleCategoryWhereInput!]
+  OR: [PVehicleCategoryWhereInput!]
+  NOT: [PVehicleCategoryWhereInput!]
 }
 
 enum ConditionSwitchSubject {
@@ -2377,21 +2601,28 @@ type PItinerary {
   budget: PBudget!
   createdAt: DateTime!
   updatedAt: DateTime!
-  departureDate: DateTime!
-  arrivalDate: DateTime!
-  departureTime: DateTime!
-  arrivalTime: DateTime!
   presentationTime: DateTime!
   serviceType: PServiceType!
   reference: String
   serviceDescription: String
   itineraryDescription: String
+  provisionTime: DateTime
+  provisionType: String
+  provisionGoogleMapsPlaceID: String
+  provisionCity: String
+  provisionAddress: String
+  provisionLat: Float
+  provisionLon: Float
+  departureTime: DateTime!
   departureType: String
+  departureGoogleMapsPlaceID: String
   departureCity: String
   departureAddress: String
   departureLat: Float
   departureLon: Float
+  arrivalTime: DateTime!
   arrivalCity: String
+  arrivalGoogleMapsPlaceID: String
   arrivalType: String
   arrivalAddress: String
   arrivalLat: Float
@@ -2400,11 +2631,11 @@ type PItinerary {
   vehicleModel: PVehicleModel
   vehicleBrand: PVehicleBrand
   vehicleType: PVehicleType!
+  vehicleCapacity: Int
   numPassengers: Int!
   groupName: String
   flightNumber: String
   notes: String
-  hours: Float!
   dinner: Boolean!
   amounts(where: PAmountWhereInput, orderBy: PAmountOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PAmount!]
   driverFeatures(where: PItineraryDriverFeatureWhereInput, orderBy: PItineraryDriverFeatureOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PItineraryDriverFeature!]
@@ -2483,14 +2714,6 @@ enum PItineraryOrderByInput {
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
-  departureDate_ASC
-  departureDate_DESC
-  arrivalDate_ASC
-  arrivalDate_DESC
-  departureTime_ASC
-  departureTime_DESC
-  arrivalTime_ASC
-  arrivalTime_DESC
   presentationTime_ASC
   presentationTime_DESC
   reference_ASC
@@ -2499,8 +2722,26 @@ enum PItineraryOrderByInput {
   serviceDescription_DESC
   itineraryDescription_ASC
   itineraryDescription_DESC
+  provisionTime_ASC
+  provisionTime_DESC
+  provisionType_ASC
+  provisionType_DESC
+  provisionGoogleMapsPlaceID_ASC
+  provisionGoogleMapsPlaceID_DESC
+  provisionCity_ASC
+  provisionCity_DESC
+  provisionAddress_ASC
+  provisionAddress_DESC
+  provisionLat_ASC
+  provisionLat_DESC
+  provisionLon_ASC
+  provisionLon_DESC
+  departureTime_ASC
+  departureTime_DESC
   departureType_ASC
   departureType_DESC
+  departureGoogleMapsPlaceID_ASC
+  departureGoogleMapsPlaceID_DESC
   departureCity_ASC
   departureCity_DESC
   departureAddress_ASC
@@ -2509,8 +2750,12 @@ enum PItineraryOrderByInput {
   departureLat_DESC
   departureLon_ASC
   departureLon_DESC
+  arrivalTime_ASC
+  arrivalTime_DESC
   arrivalCity_ASC
   arrivalCity_DESC
+  arrivalGoogleMapsPlaceID_ASC
+  arrivalGoogleMapsPlaceID_DESC
   arrivalType_ASC
   arrivalType_DESC
   arrivalAddress_ASC
@@ -2521,6 +2766,8 @@ enum PItineraryOrderByInput {
   arrivalLon_DESC
   numVehicles_ASC
   numVehicles_DESC
+  vehicleCapacity_ASC
+  vehicleCapacity_DESC
   numPassengers_ASC
   numPassengers_DESC
   groupName_ASC
@@ -2529,8 +2776,6 @@ enum PItineraryOrderByInput {
   flightNumber_DESC
   notes_ASC
   notes_DESC
-  hours_ASC
-  hours_DESC
   dinner_ASC
   dinner_DESC
 }
@@ -2593,6 +2838,8 @@ enum PRateConditionOrderByInput {
   serviceType_DESC
   basePrice_ASC
   basePrice_DESC
+  extraHourPrice_ASC
+  extraHourPrice_DESC
   conditionType_ASC
   conditionType_DESC
   conditionActivation_ASC
@@ -2620,6 +2867,7 @@ type PRateCondition {
   numPassengers: Int
   serviceType: ConditionAllowedServiceType
   basePrice: Float
+  extraHourPrice: Float
   conditionType: ConditionType!
   conditionActivation: ConditionActivationType
   threshold: Float
@@ -2632,6 +2880,7 @@ type PRate {
   isGlobal: Boolean!
   serviceTypes(where: PServiceTypeWhereInput, orderBy: PServiceTypeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PServiceType!]
   vehicleVariables(where: VehiclePricingWhereInput, orderBy: VehiclePricingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [VehiclePricing!]
+  vehicleCategories(where: PVehicleCategoryWhereInput, orderBy: PVehicleCategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PVehicleCategory!]
 }
 
 enum PServiceTypeOrderByInput {
@@ -2717,6 +2966,40 @@ type PVehicleType {
   name: String!
   category: VehicleTypeCategory!
   pricing(where: VehiclePricingWhereInput, orderBy: VehiclePricingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [VehiclePricing!]
+}
+
+enum PVehicleCategoryOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  name_ASC
+  name_DESC
+  description_ASC
+  description_DESC
+  vehicleModelId_ASC
+  vehicleModelId_DESC
+  vehicleBrandId_ASC
+  vehicleBrandId_DESC
+  vehicleTypeId_ASC
+  vehicleTypeId_DESC
+  vehicleCapacity_ASC
+  vehicleCapacity_DESC
+}
+
+type PVehicleCategory {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  description: String
+  rate: PRate!
+  vehicleModelId: String
+  vehicleBrandId: String
+  vehicleTypeId: String!
+  vehicleCapacity: Int
 }
 
 enum PAmountOrderByInput {
@@ -2886,6 +3169,7 @@ type Rate {
   isGlobal: Boolean!
   serviceTypes: [RateServiceType!]!
   vehiclePriceVariables: [VehiclePriceVariable!]!
+  vehicleCategories: [VehicleCategory!]!
 }
 
 type RateServiceType {
@@ -2899,6 +3183,8 @@ type ServiceSubtype {
   id: ID!
   name: String!
   description: String
+  dinner: Boolean!
+  hours: Int!
   fulfillingCondition: FulfillingCondition
   priceConditions: PriceCondition
 }
@@ -2921,6 +3207,7 @@ type VehiclePriceCondition {
   name: String!
   description: String
   basePrice: Float!
+  extraHourPrice: Float
   numPassengers: Int
   vehicleTypeId: String
   vehicleModelId: String
@@ -2940,11 +3227,19 @@ type VehiclePriceVariable {
   extraHourPrice: Float!
 }
 
+type VehicleCategory {
+  id: ID!
+  vehicleModel: VehicleModel
+  vehicleBrand: VehicleBrandModels
+  vehicleType: VehicleType
+  vehicleCapacity: Int
+  name: String!
+  description: String
+}
+
 input DepartureOrArrivalInput {
-  latitude: Float!
-  longitude: Float!
+  googleMapsPlaceID: String!
   isAirport: Boolean
-  city: String
 }
 
 type CandidateAmount {
@@ -3058,8 +3353,8 @@ type Mutation {
   createVehiclePriceVariable(rateId: ID!, clientId: String, vehicleBrandId: String, vehicleModelId: String, vehicleTypeId: String, extraKmPrice: Float, extraHourPrice: Float, extraTollPrice: Float, airportPrice: Float, parkingMontserratPrice: Float, numPassengers: Int): VehiclePriceVariable!
   updateVehiclePriceVariable(id: ID!, vehicleBrandId: String, vehicleModelId: String, vehicleTypeId: String, extraKmPrice: Float, extraTollPrice: Float, airportPrice: Float, extraHourPrice: Float, parkingMontserratPrice: Float, numPassengers: Int): VehiclePriceVariable!
   updateServiceSubtype(id: ID!, clientId: String, name: String, description: String, distanceInMeters: Float): ServiceSubtype!
-  updateVehiclePriceCondition(id: ID!, name: String, description: String, vehicleModelId: String, vehicleBrandId: String, vehicleTypeId: String, price: Float, numPassengers: Int): VehiclePriceCondition!
-  createVehiclePriceCondition(clientId: String, serviceSubtypeId: ID!, name: String!, description: String, vehicleModelId: String, vehicleBrandId: String, vehicleTypeId: String, price: Float!, numPassengers: Int): VehiclePriceCondition!
+  updateVehiclePriceCondition(id: ID!, name: String, description: String, vehicleModelId: String, vehicleBrandId: String, vehicleTypeId: String, price: Float, numPassengers: Int, extraHourPrice: Float): VehiclePriceCondition!
+  createVehiclePriceCondition(clientId: String, serviceSubtypeId: ID!, name: String!, description: String, vehicleModelId: String, vehicleBrandId: String, vehicleTypeId: String, price: Float!, numPassengers: Int, extraHourPrice: Float): VehiclePriceCondition!
   deleteVehiclePriceCondition(id: ID!): DeleteResult!
   createClientRate(id: ID!): Rate!
 }
@@ -3073,8 +3368,6 @@ input ContactInput {
 
 input ItineraryInput {
   id: ID
-  hours: Int
-  departureArrivalDate: [String!]!
   departureTime: String!
   arrivalTime: String!
   serviceTypeId: String!
@@ -3083,11 +3376,19 @@ input ItineraryInput {
   reference: String
   itineraryDescription: String
   departureCity: String
+  departureGoogleMapsPlaceID: String
   departureType: String
   departureAddress: String
   departureLat: Float
   departureLon: Float
+  provisionCity: String
+  provisionGoogleMapsPlaceID: String
+  provisionType: String
+  provisionAddress: String
+  provisionLat: Float
+  provisionLon: Float
   arrivalCity: String
+  arrivalGoogleMapsPlaceID: String
   arrivalType: String
   arrivalAddress: String
   arrivalLat: Float
@@ -3097,6 +3398,7 @@ input ItineraryInput {
   vehicleModelId: String
   vehicleBrandId: String
   vehicleTypeId: String!
+  vehicleCapacity: Int
   groupName: String
   flightNumber: String
   notes: String

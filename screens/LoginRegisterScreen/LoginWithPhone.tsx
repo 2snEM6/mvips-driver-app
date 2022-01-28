@@ -99,7 +99,8 @@ const LoginWithPhone = () => {
   const [isLoading, setLoading] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    const unsubscribe = auth().onAuthStateChanged(async user => {
+    // const unsubscribe = auth().un
+    auth().onAuthStateChanged(async user => {
       if (user) {
         console.debug(`User: ${user.uid}`);
         const graphqlClient = await getClient();
@@ -129,7 +130,7 @@ const LoginWithPhone = () => {
 
     return () => {
       console.log('Removing listener app');
-      unsubscribe();
+      //unsubscribe();
     };
   }, []);
 
