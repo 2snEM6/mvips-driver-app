@@ -7,6 +7,10 @@ export const DRIVER = gql`
       id
       name
       phone
+      services {
+        id
+        volcanoServiceId
+      }
     }
   }
 `;

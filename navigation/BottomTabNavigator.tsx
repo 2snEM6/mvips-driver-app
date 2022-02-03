@@ -10,6 +10,7 @@ import DeviceInfo from 'react-native-device-info';
 import RNLocation from 'react-native-location';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
@@ -83,21 +84,6 @@ const BottomTabNavigator: React.FC = () => {
     });
   }, []);
   return (
-    // <View>
-    //   <Text>HOLA</Text>
-    //   <Text>Auth uid: {auth().uid}</Text>
-    //   <Text>Auth Display name: {auth().currentUser?.displayName}</Text>
-    //   <Text>Driver name: {data?.driver?.name}</Text>
-    //   <Text>Date: {updateDate}</Text>
-    //   <Text>Location: {JSON.stringify(location)}</Text>
-    //   <Button
-    //     title="Signout Login"
-    //     onPress={() => {
-    //       auth().signOut();
-    //       navigation.navigate('LoginRegisterScreen', { screen: 'Login' });
-    //     }}
-    //   />
-    // </View>
     <BottomTab.Navigator
       initialRouteName={INITIAL_ROUTE_NAME}
       // screenOptions={{ tabBarVisible: navigation.state.index === 0 }}
@@ -114,14 +100,14 @@ const BottomTabNavigator: React.FC = () => {
         )}
         options={{
           title: 'Home',
-          // tabBarIcon: ({ focused }) => (
-            // <MaterialCommunityIcon
-            //   name="link"
-            //   size={40}
-            //   style={{ marginBottom: DeviceInfo.hasNotch() ? -15 : -3 }}
-            //   color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
-            // />
-          // ),
+          tabBarIcon: ({ focused }) => (
+            <Icon
+              name="mobile"
+              size={40}
+              style={{ marginBottom: DeviceInfo.hasNotch() ? -8 : 0 }}
+              color={focused ? '#000' : '#BBB'}
+            />
+          ),
         }}
       />
       <BottomTab.Screen
@@ -129,14 +115,14 @@ const BottomTabNavigator: React.FC = () => {
         component={ServicesNavigator}
         options={({ route }) => ({
           title: 'Services',
-          // tabBarIcon: ({ focused }) => (
-          // <Feather
-          //   name="cards"
-          //   size={37}
-          //   style={{ marginBottom: DeviceInfo.hasNotch() ? -8 : 0 }}
-          //   color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
-          // />
-          // ),
+          tabBarIcon: ({ focused }) => (
+            <Icon
+              name="list-alt"
+              size={27}
+              style={{ marginBottom: DeviceInfo.hasNotch() ? -8 : 0 }}
+              color={focused ? '#000' : '#BBB'}
+            />
+          ),
         })}
       />
     </BottomTab.Navigator>

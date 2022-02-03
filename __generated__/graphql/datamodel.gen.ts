@@ -4291,12 +4291,20 @@ export type DriverQueryVariables = Exact<{
 }>;
 
 
-export type DriverQuery = { readonly __typename?: 'Query', readonly driver?: Maybe<{ readonly __typename?: 'Driver', readonly id?: Maybe<string>, readonly name?: Maybe<string>, readonly phone?: Maybe<string> }> };
+export type DriverQuery = { readonly __typename?: 'Query', readonly driver?: Maybe<{ readonly __typename?: 'Driver', readonly id?: Maybe<string>, readonly name?: Maybe<string>, readonly phone?: Maybe<string>, readonly services: ReadonlyArray<{ readonly __typename?: 'Service', readonly id: string, readonly volcanoServiceId?: Maybe<string> }> }> };
 
 export type GetFrontendVersionQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetFrontendVersionQuery = { readonly __typename?: 'Query', readonly getFrontendVersion: { readonly __typename?: 'FrontendVersion', readonly version: string } };
+
+export type ServicesQueryVariables = Exact<{
+  departureDateMin?: Maybe<Scalars['String']>;
+  departureDateMax?: Maybe<Scalars['String']>;
+}>;
+
+
+export type ServicesQuery = { readonly __typename?: 'Query', readonly services?: Maybe<ReadonlyArray<{ readonly __typename?: 'Service', readonly id: string, readonly description?: Maybe<string>, readonly volcanoServiceId?: Maybe<string> }>> };
 
 
       export interface PossibleTypesResultData {
@@ -4391,6 +4399,10 @@ export const DriverDocument = gql`
     id
     name
     phone
+    services {
+      id
+      volcanoServiceId
+    }
   }
 }
     `;
@@ -4458,3 +4470,44 @@ export function useGetFrontendVersionLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type GetFrontendVersionQueryHookResult = ReturnType<typeof useGetFrontendVersionQuery>;
 export type GetFrontendVersionLazyQueryHookResult = ReturnType<typeof useGetFrontendVersionLazyQuery>;
 export type GetFrontendVersionQueryResult = Apollo.QueryResult<GetFrontendVersionQuery, GetFrontendVersionQueryVariables>;
+export const ServicesDocument = gql`
+    query Services($departureDateMin: String, $departureDateMax: String) {
+  services(
+    departureDateMin: $departureDateMin
+    departureDateMax: $departureDateMax
+  ) {
+    id
+    description
+    volcanoServiceId
+  }
+}
+    `;
+
+/**
+ * __useServicesQuery__
+ *
+ * To run a query within a React component, call `useServicesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useServicesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useServicesQuery({
+ *   variables: {
+ *      departureDateMin: // value for 'departureDateMin'
+ *      departureDateMax: // value for 'departureDateMax'
+ *   },
+ * });
+ */
+export function useServicesQuery(baseOptions?: Apollo.QueryHookOptions<ServicesQuery, ServicesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ServicesQuery, ServicesQueryVariables>(ServicesDocument, options);
+      }
+export function useServicesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ServicesQuery, ServicesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ServicesQuery, ServicesQueryVariables>(ServicesDocument, options);
+        }
+export type ServicesQueryHookResult = ReturnType<typeof useServicesQuery>;
+export type ServicesLazyQueryHookResult = ReturnType<typeof useServicesLazyQuery>;
+export type ServicesQueryResult = Apollo.QueryResult<ServicesQuery, ServicesQueryVariables>;

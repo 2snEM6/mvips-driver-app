@@ -1,12 +1,11 @@
 import React from 'react';
 import { createNativeStackNavigator } from 'react-native-screens/native-stack';
-import LoginRegisterScreen from '../screens/LoginRegisterScreen';
-import LoginWithEmail from '../screens/LoginRegisterScreen/LoginWithEmail';
-import LoginWithPhone from '../screens/LoginRegisterScreen/LoginWithPhone';
+import ServicesScreen from '../screens/ServicesScreen/ServicesScreen';
+import ServiceDetailScreen from '../screens/ServicesScreen/ServiceDetailScreen';
 
 const StackNavigator = createNativeStackNavigator();
 
-const INITIAL_ROUTE_NAME = 'Login';
+const INITIAL_ROUTE_NAME = 'ServicesList';
 
 const ServicesNavigator = ({ route }) => (
   <StackNavigator.Navigator
@@ -17,9 +16,8 @@ const ServicesNavigator = ({ route }) => (
       gestureEnabled: false,
     }}
   >
-    <StackNavigator.Screen component={LoginRegisterScreen} name="Login" />
-    <StackNavigator.Screen component={LoginWithEmail} name="LoginWithEmail" />
-    <StackNavigator.Screen component={LoginWithPhone} name="LoginWithPhone" />
+    <StackNavigator.Screen component={ServicesScreen} name="ServicesList" />
+    <StackNavigator.Screen component={ServiceDetailScreen} name="ServiceDetail" />
   </StackNavigator.Navigator>
 );
 
