@@ -19,5 +19,4 @@ target 'mvipsdriverapp' do
   #   end
   # end
   pod 'Firebase/Auth'
-  pod 'react-native-location', :path => '../node_modules/react-native-location/react-native-location.podspec'
 end
