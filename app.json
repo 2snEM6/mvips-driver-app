@@ -3,17 +3,6 @@
     "name": "mvips-driver-app",
     "slug": "mvips-driver-app",
     "version": "1.0.0",
-    "sdkVersion": "42.0.0",
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
-    "android": {
-      "package": "net.mvips.driver.dev"
-    },
-    "ios": {
-      "bundleIdentifier": "net.mvips.driver.dev"
-    }
+    "sdkVersion": "42.0.0"
   }
 }
