@@ -1,24 +1,46 @@
+/* eslint-disable react/jsx-one-expression-per-line */
+// eslint-disable-next-line no-use-before-define
 import * as React from 'react';
 import { Button, SafeAreaView, Text } from 'react-native';
 // import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import DeviceInfo from 'react-native-device-info';
 import auth from '@react-native-firebase/auth';
-import { getClient } from '../graphql/client';
 import { useNavigation } from '@react-navigation/native';
-import { useDriverQuery, useGetFrontendVersionQuery } from '../__generated__/graphql/datamodel.gen';
-// const BottomTab = createBottomTabNavigator();
-// const INITIAL_ROUTE_NAME = 'Home';
+import DeviceInfo from 'react-native-device-info';
+import RNLocation from 'react-native-location';
+import Feather from 'react-native-vector-icons/Feather';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { getClient } from '../graphql/client';
+import { useDriverQuery, useUpdateLocationMutation } from '../__generated__/graphql/datamodel.gen';
+import HomeScreen from '../screens/HomeScreen/HomeScreen';
+import ServicesNavigator from './ServicesNavigator';
+import { View } from 'react-native-animatable';
 
-const SUCCESS_MESSAGE = 'LOGIN SUCCESSFULL';
+const BottomTab = createBottomTabNavigator();
+const INITIAL_ROUTE_NAME = 'Home';
 
 const BottomTabNavigator: React.FC = () => {
-  const navigation = useNavigation();
-  const { data, loading, error } = useDriverQuery({
+  const [location, setLocation] = React.useState<Location>();
+  const [updateLocation] = useUpdateLocationMutation({
     client: getClient(),
+  });
+  const [updateDate, setUpdateDate] = React.useState<number>();
+
+  const setLocations = async (_location: Location) => {
+    setLocation(_location);
+  };
+  const navigation = useNavigation();
+  const { data, loading, error /* , refetch* */ } = useDriverQuery({
+    client: getClient(),
+    skip: !auth().currentUser?.uid,
     variables: {
       id: auth().currentUser?.uid,
       departureDateMin: '2000-01-01',
-      departureDateMax: '2022-01-01',
+      departureDateMax: '2025-01-01',
     },
   });
 
@@ -26,26 +48,84 @@ const BottomTabNavigator: React.FC = () => {
   //   client: getClient(),
   // });
 
-  console.log('Data: ' + data);
-  console.log(loading);
-  console.log(error);
-  console.log('333');
+  console.log(`Data: ${JSON.stringify(data, null, 2)}`);
+  console.log(`Loading: ${loading}`);
+  console.log(`Error: ${error}`);
+
+  React.useEffect(() => {
+    console.log('Check location permission');
+    RNLocation.requestPermission({
+      // eslint-disable-next-line prettier/prettier
+      ios: 'always',
+      android: {
+        detail: 'fine',
+        rationale: {
+          title: 'Necesitamos acceder a su ubicación',
+          message: 'Usamos su ubicación para mostrare dónde está en el mapa.',
+          buttonPositive: 'OK',
+          buttonNegative: 'Cancelar',
+        },
+      },
+    }).then(granted => {
+      if (granted) {
+        console.log('Subscribing to location updates');
+        const locationSubscription = RNLocation.subscribeToLocationUpdates(_locations => {
+          console.log(`Location: ${JSON.stringify(_locations[0])}`);
+          setLocations(_locations[0]);
+          setUpdateDate(new Date(_locations[0]?.timestamp).toISOString());
+          updateLocation({
+            variables: {
+              latitude: _locations[0]?.latitude,
+              longitude: _locations[0]?.longitude,
+            },
+          });
+        });
+      }
+    });
+  }, []);
   return (
-    <SafeAreaView
-      style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', paddingHorizontal: 20 }}
+    <BottomTab.Navigator
+      initialRouteName={INITIAL_ROUTE_NAME}
+      // screenOptions={{ tabBarVisible: navigation.state.index === 0 }}
+      // screenOptions={{ tabBarVisible: route.state?.index === 0 }}
+      // tabBarOptions={{
+      //  showLabel: false,
+      //  style: { height: DeviceInfo.hasNotch() ? 90 : 70 },
+      // }}
     >
-      <Text>{SUCCESS_MESSAGE}</Text>
-      <Text>{auth().currentUser?.uid}</Text>
-      <Text>{auth().currentUser?.displayName}</Text>
-      <Text>{data?.driver?.name}</Text>
-      <Button
-        title="Signout Login"
-        onPress={() => {
-          auth().signOut();
-          navigation.navigate('LoginRegisterScreen', {screen: 'Login'});
+      <BottomTab.Screen
+        name="Home"
+        children={() => (
+          <HomeScreen auth={auth} data={data} updateDate={updateDate} location={location} />
+        )}
+        options={{
+          title: 'Home',
+          tabBarIcon: ({ focused }) => (
+            <Icon
+              name="mobile"
+              size={40}
+              style={{ marginBottom: DeviceInfo.hasNotch() ? -8 : 0 }}
+              color={focused ? '#000' : '#BBB'}
+            />
+          ),
         }}
       />
-    </SafeAreaView>
+      <BottomTab.Screen
+        name="Services"
+        component={ServicesNavigator}
+        options={({ route }) => ({
+          title: 'Services',
+          tabBarIcon: ({ focused }) => (
+            <Icon
+              name="list-alt"
+              size={27}
+              style={{ marginBottom: DeviceInfo.hasNotch() ? -8 : 0 }}
+              color={focused ? '#000' : '#BBB'}
+            />
+          ),
+        })}
+      />
+    </BottomTab.Navigator>
   );
 };
 

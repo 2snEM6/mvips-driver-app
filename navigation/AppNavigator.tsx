@@ -34,7 +34,6 @@ const AppNavigator = () => {
       }}
     >
       <StackNavigator.Screen name="HomeApp" component={BottomTabNavigator} />
-      <StackNavigator.Screen name="Test" component={BottomTabNavigator} />
     </StackNavigator.Navigator>
   );
 };

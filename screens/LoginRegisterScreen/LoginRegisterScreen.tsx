@@ -98,69 +98,6 @@ export default class LoginRegisterScreen extends React.Component<{ navigation: a
     }, 1000);
 
     const { navigation } = this.props;
-
-    // if (provider === 'instagram') {
-    //   const loggedIn = await this.loginWithInstagram();
-    //   console.log('instagram login', loggedIn);
-    //   if (loggedIn) {
-    //     const graphqlClient = await GraphQLClient.getClient();
-
-    //     try {
-    //       const loginResponse = await graphqlClient.query<MeQuery, MeQueryVariables>({
-    //         query: MeDocument,
-    //       });
-
-    //       const user = loginResponse.data?.me;
-
-    //       await graphqlClient.writeQuery({
-    //         query: MeDocument,
-    //         data: {
-    //           me: {
-    //             ...user,
-    //           },
-    //         },
-    //       });
-
-    //       return navigation.navigate('Home');
-    //     } catch (error) {
-    //       if (error.message === 'auth/not-authenticated') {
-    //         return navigation.navigate('OnboardingScreen', {
-    //           ...loggedIn,
-    //           provider: SocialNetworkIdentifiers.instagram,
-    //         });
-    //       }
-    //     }
-    //   }
-    // }
-
-    // if (provider === 'snapchat') {
-    //   const loggedIn = await this.loginWithSnapchat();
-    //   if (loggedIn) {
-    //     const graphqlClient = await GraphQLClient.getClient();
-    //     const loginResponse = await graphqlClient.query<MeQuery, MeQueryVariables>({
-    //       query: MeDocument,
-    //     });
-
-    //     const user = loginResponse.data?.me;
-
-    //     if (!user) {
-    //       return navigation.navigate('OnboadingScreen', {
-    //         ...loggedIn,
-    //         provider: SocialNetworkIdentifiers.snapchat,
-    //       });
-    //     }
-    //     await graphqlClient.writeQuery({
-    //       query: MeDocument,
-    //       data: {
-    //         me: {
-    //           ...user,
-    //         },
-    //       },
-    //     });
-
-    //     return navigation.navigate('Home');
-    //   }
-    // }
   };
 
   // loginWithApple = async (): Promise<{ email: string; name: string } | undefined> => {
@@ -231,7 +168,7 @@ export default class LoginRegisterScreen extends React.Component<{ navigation: a
   };
 
   render() {
-    console.log('Pre return render LoginRegisterScreen');
+    console.debug('Pre return render LoginRegisterScreen');
     return (
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.container}>

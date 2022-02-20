@@ -6,11 +6,12 @@ import { AppState, AppStateStatus, StatusBar, View } from 'react-native';
 import * as FlashMessage from 'react-native-flash-message';
 import { createNativeStackNavigator } from 'react-native-screens/native-stack';
 import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native';
+// import * as Location from 'expo-location';
 import { isEqual } from 'lodash';
 import auth from '@react-native-firebase/auth';
 import { enableScreens } from 'react-native-screens';
 import { iOSUIKit } from 'react-native-typography';
-import messaging from '@react-native-firebase/messaging';
+// import messaging from '@react-native-firebase/messaging';
 
 import Colors from './constants/Colors';
 
@@ -21,7 +22,7 @@ import {
   DriverDocument,
   DriverQuery,
   DriverQueryVariables,
-  Location,
+  // Location,
 } from './__generated__/graphql/datamodel.gen';
 import { getClient, setupClient } from './graphql/client';
 import AppNavigator from './navigation/AppNavigator';
@@ -57,38 +58,36 @@ ErrorUtils.setGlobalHandler(globalErrorHandler);
 
 // eslint-disable-next-line no-unused-vars
 const _loggedIn = async () => {
-  console.log('En _loggedIn');
+  console.debug('_loggedIn: Start');
   try {
+    console.debug(1); // TODO: REMOVE
     if (auth().currentUser) {
-      const me = useDriverQuery({
-        client: getClient(),
-      });
+      console.debug(2); // TODO: REMOVE
+      // TODO: REMOVE
+      // const me = useDriverQuery({
+      //   client: getClient(),
+      // });
+      // console.debug(3); // TODO: REMOVE
 
-      if (me?.data?.driver?.id) {
-        // analytics().setAnalyticsCollectionEnabled(true);
-        // analytics().setUserId(me.data.me.id);
-        return true;
-      }
+      // if (me?.data?.driver?.id) {
+      //   console.debug(4); // TODO: REMOVE
+      //   console.debug('_loggedIn: User loggedin\nDriver Name: ', me.data.driver.name);
+      // }
+      console.debug('_loggedIn: User loggedin');
+      return true;
     }
-    return false;
   } catch (e) {
-    return false;
+    console.error(e);
   }
+  console.debug('_loggedIn: User not loggedin');
+  console.debug('_loggedIn: End');
+  return false;
 };
-
-// const FrontendVersion = () => {
-//   const { data } = useGetFrontendVersionQuery({
-//     client: getClient(),
-//   });
-
-//   return <View>{data?.getFrontendVersion.version}</View>;
-// };
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function App() {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
   const [graphqlClient, setGraphqlClient] = React.useState<ApolloClient<any>>();
-  // const confettiAnimatonRef = React.useRef<LottieAnimation>();
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [appState, setAppState] = React.useState(AppState.currentState);
   // const navigationContainerRef = React.useRef<NavigationContainerRef>();
@@ -96,16 +95,15 @@ export default function App() {
   //   navigationContainerRef as React.RefObject<NavigationContainerRef>,
   // );
   const stateHandler = async (state: AppStateStatus) => {
-    console.debug('En stateHandler');
-    console.debug(`state: ${state}`);
-    console.debug(`appState: ${appState}`);
+    console.debug('stateHandler: Starting');
+    console.debug(`stateHandler: state: ${state},`, `appState: ${appState}`);
     if (!isEqual(state, appState)) {
-      console.debug('En stateHandler ejecutando');
+      console.debug('stateHandler: Updating appState');
       const __loggedIn = await _loggedIn();
       setAppState(state);
       setLoggedIn(__loggedIn);
-      console.debug(`LoggedIn: ${__loggedIn}`);
     }
+    console.debug('stateHandler: Ending stateHandler');
   };
 
   AppState.addEventListener('change', stateHandler);
@@ -118,7 +116,6 @@ export default function App() {
       // await messaging().requestPermission();
       // await Location.requestPermissionsAsync();
     }
-
     async function loadResourcesAndDataAsync() {
       try {
         console.log('Setting up GraphQL Client');
@@ -130,19 +127,20 @@ export default function App() {
 
         if (__loggedIn) {
           // Only request permissions if user is logged in
+          console.debug('Request Permissions');
           await requestPermissions();
         }
-        setGraphqlClient(_graphqlClient);
+        // setGraphqlClient(_graphqlClient);
         setLoggedIn(__loggedIn);
       } catch (e) {
         // We might want to provide this error information to an error reporting service
-        console.log(e);
+        console.error(e);
       } finally {
+        console.debug('Set loading complete');
         setLoadingComplete(true);
       }
     }
     loadResourcesAndDataAsync().then();
-
     return () => {
       console.log('Unmounting app');
       AppState.removeEventListener('change', stateHandler);
@@ -152,7 +150,6 @@ export default function App() {
   React.useEffect(() => {
     const handleAppStateChange = async () => {
       console.log('Handling App State Change');
-
       const updateLocation = async () => {
         console.log('Updating location');
         // const location = await Location.getCurrentPositionAsync();
@@ -165,15 +162,15 @@ export default function App() {
         // });
       };
 
-      const saveFCMToken = (token: string) => {
-        console.log('Updating FCM Token', token);
-        // getClient().mutate<UpdateMeMutation, UpdateMeMutationVariables>({
-        //   mutation: UpdateMeDocument,
-        //   variables: {
-        //     notificationsToken: token,
-        //   },
-        // });
-      };
+      // const saveFCMToken = (token: string) => {
+      //   console.log('Updating FCM Token', token);
+      //   // getClient().mutate<UpdateMeMutation, UpdateMeMutationVariables>({
+      //   //   mutation: UpdateMeDocument,
+      //   //   variables: {
+      //   //     notificationsToken: token,
+      //   //   },
+      //   // });
+      // };
 
       const __loggedIn = await _loggedIn();
 
@@ -227,7 +224,7 @@ export default function App() {
   //   },
   // };
 
-  console.log('Before return');
+  console.log('About to render');
   return (
     <>
       <ApolloProvider client={graphqlClient as ApolloClient<unknown>}>
@@ -235,7 +232,6 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator
             initialRouteName={loggedIn ? 'Home' : 'LoginRegisterScreen'}
-            // initialRouteName="LoginRegisterScreen"
             screenOptions={{
               headerShown: false,
             }}
@@ -250,21 +246,6 @@ export default function App() {
               component={AppNavigator}
               options={{ gestureEnabled: false }}
             />
-            {/*
-                    <Stack.Screen
-                    name="UpgradeScreen"
-                    component={UpgradeScreen}
-                    options={() => ({
-                      cardOverlayEnabled: true,
-                      gestureEnabled: false,
-                      headerShown: false,
-                      gestureResponseDistance: {
-                        vertical: 1000,
-                      },
-                      ...TransitionPresets.ModalSlideFromBottomIOS,
-                    })}
-                  />
-                  */}
           </Stack.Navigator>
         </NavigationContainer>
       </ApolloProvider>
