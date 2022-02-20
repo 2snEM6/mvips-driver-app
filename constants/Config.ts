@@ -1,4 +1,4 @@
-import { ENVIRONMENT, TERMS_AND_CONDITIONS_URL, PRIVACY_POLICY_URL } from '@env';
+import { ENVIRONMENT, TERMS_AND_CONDITIONS_URL, PRIVACY_POLICY_URL, GRAPHQL_ENDPOINT } from '@env';
 
 const common = {
   APP: {
@@ -18,11 +18,11 @@ const common = {
 const environments = {
   production: {
     ENVIRONMENT: 'production',
-    GRAPHQL_ENDPOINT: 'TBD',
+    GRAPHQL_ENDPOINT,
   },
   development: {
-    GRAPHQL_ENDPOINT: 'http://bumblebee.local:4001',
     ENVIRONMENT: 'development',
+    GRAPHQL_ENDPOINT,
   },
 };
 
