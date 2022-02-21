@@ -2,7 +2,13 @@
   "expo": {
     "name": "mvips-driver-app",
     "slug": "mvips-driver-app",
-    "version": "1.0.0",
-    "sdkVersion": "42.0.0"
+    "version": "1.0.2",
+    "sdkVersion": "42.0.0",
+    "android": {
+      "versionCode": 1
+    },
+    "ios": {
+      "buildNumber": "1"
+    }
   }
 }
