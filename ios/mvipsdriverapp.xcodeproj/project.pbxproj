@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0D0DBF5E27C2FF6E00C327A9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0D0DBF5D27C2FF6E00C327A9 /* GoogleService-Info.plist */; };
+		0DDEC0D827C42F060097A3C2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0DDEC0D727C42F060097A3C2 /* GoogleService-Info.plist */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -21,7 +22,7 @@
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		0D0DBF5D27C2FF6E00C327A9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		0D6B089B2715ABC70028F0D3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		0DDEC0D727C42F060097A3C2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = app.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = mvipsdriverapp/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = mvipsdriverapp/AppDelegate.m; sourceTree = "<group>"; };
@@ -64,7 +65,7 @@
 		0D0DBF5427C2F22600C327A9 /* Debug */ = {
 			isa = PBXGroup;
 			children = (
-				0D6B089B2715ABC70028F0D3 /* GoogleService-Info.plist */,
+				0DDEC0D727C42F060097A3C2 /* GoogleService-Info.plist */,
 			);
 			path = Debug;
 			sourceTree = "<group>";
@@ -229,6 +230,7 @@
 				0D0DBF5E27C2FF6E00C327A9 /* GoogleService-Info.plist in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
+				0DDEC0D827C42F060097A3C2 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -423,7 +425,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = net.mvips.driver.dev;
+				PRODUCT_BUNDLE_IDENTIFIER = net.mvips.driver;
 				PRODUCT_NAME = app;
 				SWIFT_OBJC_BRIDGING_HEADER = "mvipsdriverapp/mvipsdriverapp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -452,7 +454,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = net.mvips.driver.dev;
+				PRODUCT_BUNDLE_IDENTIFIER = net.mvips.driver;
 				PRODUCT_NAME = app;
 				SWIFT_OBJC_BRIDGING_HEADER = "mvipsdriverapp/mvipsdriverapp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

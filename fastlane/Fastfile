@@ -1,0 +1,52 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+before_all do
+  ensure_git_branch
+  ensure_git_status_clean
+  git_pull
+end
+
+platform :ios do
+
+  # iOS Lanes
+  desc 'Fetch certificates and provisioning profiles'
+  lane :certificates do
+    match(app_identifier: 'net.mvips.driver', type: 'development', readonly: false, git_url: 'git@github.com:2snEM6/mvips-driver-app-ios-certificates.git')
+    match(app_identifier: 'net.mvips.driver', type: 'appstore', readonly: false, git_url: 'git@github.com:2snEM6/mvips-driver-app-ios-certificates.git')
+  end
+
+  desc 'Build the iOS application.'
+  private_lane :build do
+    Dir.chdir("../") do
+      sh("npm", "ci", "--also=dev")
+    end
+    Dir.chdir("../ios") do
+      sh("pod", "install")
+    end
+    
+    certificates
+
+    gym(scheme: 'Release', workspace: './ios/mvipsdriverapp.xcworkspace', configuration: 'Release')
+  end
+
+  desc 'Ship to Testflight.'
+  lane :beta do
+    build
+    pilot(username: "jpieres@gmail.com")
+  end
+end

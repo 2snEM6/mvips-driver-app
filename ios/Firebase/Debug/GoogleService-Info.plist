@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>662349183941-tv4gi98prrqrevrnl84v1dd95mttgsei.apps.googleusercontent.com</string>
+	<string>662349183941-ike34j28i9eihom91so527lolj997crc.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.662349183941-tv4gi98prrqrevrnl84v1dd95mttgsei</string>
+	<string>com.googleusercontent.apps.662349183941-ike34j28i9eihom91so527lolj997crc</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>662349183941-cik3r8l0g37gkolj87m6f8envp9rrh03.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>net.mvips.driver.dev</string>
+	<string>net.mvips.driver</string>
 	<key>PROJECT_ID</key>
 	<string>mvips-dev</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,7 +31,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:662349183941:ios:226756bafb3db82e8be9ac</string>
+	<string>1:662349183941:ios:239c70c8934b2b6d8be9ac</string>
 	<key>DATABASE_URL</key>
 	<string>https://mvips-dev.firebaseio.com</string>
 </dict>

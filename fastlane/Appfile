@@ -1,0 +1,8 @@
+app_identifier("net.mvips.driver") # The bundle identifier of your app
+apple_id("jpieres@gmail.com") # Your Apple email address
+
+itc_team_id("123666931") # App Store Connect Team ID 123666931
+team_id("HDTXU3D253") # Developer Portal Team ID
+
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile
