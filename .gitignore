@@ -119,4 +119,7 @@ buck-out/
 .expo/
 web-build/
 
+# Fastlane
+fastlane/report.xml
+
 # @end expo-cli
