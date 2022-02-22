@@ -118,8 +118,8 @@ buck-out/
 # Expo
 .expo/
 web-build/
+# @end expo-cli
 
 # Fastlane
 fastlane/report.xml
-
-# @end expo-cli
+app.app.dSYM.zip
