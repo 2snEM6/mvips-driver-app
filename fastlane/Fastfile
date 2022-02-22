@@ -33,7 +33,7 @@ platform :ios do
   desc 'Build the iOS application.'
   private_lane :build do
     Dir.chdir("../") do
-      sh("npm", "ci", "--also=dev")
+      sh("npm", "ci", "--also=dev", "--prefer-offline")
     end
     Dir.chdir("../ios") do
       sh("pod", "install")
