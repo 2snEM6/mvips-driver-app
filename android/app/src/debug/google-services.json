@@ -40,10 +40,46 @@
               "client_type": 3
             },
             {
-              "client_id": "662349183941-tv4gi98prrqrevrnl84v1dd95mttgsei.apps.googleusercontent.com",
+              "client_id": "662349183941-ike34j28i9eihom91so527lolj997crc.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "net.mvips.driver.dev"
+                "bundle_id": "net.mvips.driver"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:662349183941:android:19000d0b98ce94ab8be9ac",
+        "android_client_info": {
+          "package_name": "net.mvips.driver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "662349183941-dcs6cnnkirnsgb4aommrdq42hdputgnp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUnWbpzz0sXwnkQpuJQ9gu0eP2OuaioD0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "662349183941-dcs6cnnkirnsgb4aommrdq42hdputgnp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "662349183941-ike34j28i9eihom91so527lolj997crc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "net.mvips.driver"
               }
             }
           ]
@@ -84,10 +120,10 @@
               "client_type": 3
             },
             {
-              "client_id": "662349183941-tv4gi98prrqrevrnl84v1dd95mttgsei.apps.googleusercontent.com",
+              "client_id": "662349183941-ike34j28i9eihom91so527lolj997crc.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "net.mvips.driver.dev"
+                "bundle_id": "net.mvips.driver"
               }
             }
           ]
@@ -120,10 +156,10 @@
               "client_type": 3
             },
             {
-              "client_id": "662349183941-tv4gi98prrqrevrnl84v1dd95mttgsei.apps.googleusercontent.com",
+              "client_id": "662349183941-ike34j28i9eihom91so527lolj997crc.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "net.mvips.driver.dev"
+                "bundle_id": "net.mvips.driver"
               }
             }
           ]

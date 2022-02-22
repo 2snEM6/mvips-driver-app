@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "475078152863",
+    "firebase_url": "https://mvips-prod.firebaseio.com",
+    "project_id": "mvips-prod",
+    "storage_bucket": "mvips-prod.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:475078152863:android:64fb43e78a27f26084c8aa",
+        "android_client_info": {
+          "package_name": "net.mvips.driver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "475078152863-11nnokde7a0n5cll5m4tvpjuiuoee3dm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "net.mvips.driver",
+            "certificate_hash": "b07cce510a124ac80363db10fca46e1b0ab56e93"
+          }
+        },
+        {
+          "client_id": "475078152863-dediombbli62uqoe10gn2c0vrdcelqf4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqF82BjKAl7840e3_pMTHwCqMCUbHZMu4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "475078152863-dediombbli62uqoe10gn2c0vrdcelqf4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "475078152863-vmc2ihv6n3ss0ufcdhduh9nt14h7d1si.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "net.mvips.driver"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
