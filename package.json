@@ -77,7 +77,11 @@
     "cache:ios:clean": "rm -rf ./ios/Pods && rm -rf node_modules && watchman watch-del-all && npm ci && npx pod-install && npx react-native start --reset-cache",
     "cache:android:clean": "rm -rf node_modules && watchman watch-del-all && npm ci && npx react-native start --reset-cache",
     "graphql:codegen": "dotenv_config_path=.env.development node -r dotenv/config ./node_modules/.bin/ts-node-dev scripts/graphql.ts && npx --node-arg '-r dotenv/config' graphql-codegen --config codegen.yml -- dotenv_config_path=.env.development",
-    "deploy:ios:beta": "bundle exec fastlane ios beta --env production"
+    "deploy:ios:beta": "bundle exec fastlane ios beta --env production",
+    "ios:prod": "react-native run-ios --scheme Release --configuration Release",
+    "ios:dev": "react-native run-ios --scheme Debug",
+    "android:dev": "react-native run-android --variant debug",
+    "android:prod": "react-native run-android --variant release"
   },
   "private": true,
   "name": "mvips-driver-app",
