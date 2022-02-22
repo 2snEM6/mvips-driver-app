@@ -174,40 +174,32 @@ export default class LoginRegisterScreen extends React.Component<{ navigation: a
         <View style={styles.container}>
           <View style={styles.logoContainer}>
             <Logo color="black" size={80} />
-            {Config.ENVIRONMENT !== 'production' && (
-              <>
-                <Text>
-                  Environment:
-                  {Config.ENVIRONMENT}
-                </Text>
-                <Text>
-                  API URL:
-                  {Config.GRAPHQL_ENDPOINT}
-                </Text>
-              </>
-            )}
+            <Text>
+              Environment:
+              {Config.ENVIRONMENT}
+            </Text>
+            <Text>
+              API URL:
+              {Config.GRAPHQL_ENDPOINT}
+            </Text>
           </View>
 
           <View style={styles.loginButtonsContainer}>
             <View style={styles.loginButtonsGroup}>
-              {Config.ENVIRONMENT !== 'production' && (
-                <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('LoginWithEmail')}
-                  style={{ ...styles.loginButton, ...styles.phoneButton, marginTop: 10 }}
-                >
-                  <Text style={{ ...iOSUIKit.bodyEmphasizedObject }}>Login with email</Text>
-                </TouchableOpacity>
-              )}
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('LoginWithEmail')}
+                style={{ ...styles.loginButton, ...styles.phoneButton, marginTop: 10 }}
+              >
+                <Text style={{ ...iOSUIKit.bodyEmphasizedObject }}>Login with email</Text>
+              </TouchableOpacity>
             </View>
             <View style={styles.loginButtonsGroup}>
-              {Config.ENVIRONMENT !== 'production' && (
-                <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('LoginWithPhone')}
-                  style={{ ...styles.loginButton, ...styles.phoneButton, marginTop: 10 }}
-                >
-                  <Text style={{ ...iOSUIKit.bodyEmphasizedObject }}>Login with phone number</Text>
-                </TouchableOpacity>
-              )}
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('LoginWithPhone')}
+                style={{ ...styles.loginButton, ...styles.phoneButton, marginTop: 10 }}
+              >
+                <Text style={{ ...iOSUIKit.bodyEmphasizedObject }}>Login with phone number</Text>
+              </TouchableOpacity>
             </View>
             <View style={{ paddingHorizontal: 40 }}>
               <Text
