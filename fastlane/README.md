@@ -31,14 +31,6 @@ Fetch certificates and provisioning profiles
 
 Ship to Testflight.
 
-### ios version
-
-```sh
-[bundle exec] fastlane ios version
-```
-
-Get version and build number
-
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.

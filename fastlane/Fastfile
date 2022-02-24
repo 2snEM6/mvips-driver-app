@@ -16,9 +16,9 @@
 default_platform(:ios)
 
 before_all do
-  #ensure_git_branch
-  #ensure_git_status_clean
-  #git_pull
+  ensure_git_branch
+  ensure_git_status_clean
+  git_pull
 end
 
 platform :ios do
@@ -48,11 +48,5 @@ platform :ios do
   lane :beta do
     build
     pilot(username: "jpieres@gmail.com")
-  end
-
-  desc 'Get version and build number'
-  lane :version do
-    build_number = get_build_number(xcodeproj: "./ios/mvipsdriverapp.xcodeproj")
-    puts build_number
   end
 end
