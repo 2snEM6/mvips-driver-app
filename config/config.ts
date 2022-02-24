@@ -2,7 +2,7 @@ import { ENVIRONMENT, TERMS_AND_CONDITIONS_URL, PRIVACY_POLICY_URL } from '@env'
 
 const common = {
   APP: {
-    BUNDLE_ID: 'net.mvips.driver.dev',
+    BUNDLE_ID: 'net.mvips.driver',
     STORE_URL: '',
   },
 };

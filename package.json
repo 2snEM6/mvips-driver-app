@@ -80,7 +80,7 @@
     "deploy:ios:beta": "bundle exec fastlane ios beta --env production",
     "ios:prod": "react-native run-ios --scheme Release --configuration Release",
     "ios:dev": "react-native run-ios --scheme Debug",
-    "android:dev": "react-native run-android --variant debug",
+    "android:dev": "react-native run-android --variant debug --appIdSuffix dev",
     "android:prod": "react-native run-android --variant release"
   },
   "private": true,

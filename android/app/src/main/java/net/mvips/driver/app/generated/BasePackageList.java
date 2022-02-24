@@ -1,4 +1,4 @@
-package net.mvips.driver.dev.generated;
+package net.mvips.driver.generated;
 
 import java.util.Arrays;
 import java.util.List;

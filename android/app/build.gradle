@@ -133,11 +133,22 @@ android {
     }
 
     defaultConfig {
-        applicationId 'net.mvips.driver.dev'
+        applicationId 'net.mvips.driver'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            // proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            applicationIdSuffix ".dev"
+            debuggable true
+        }
     }
     splits {
         abi {

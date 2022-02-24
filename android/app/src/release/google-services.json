@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "475078152863-11nnokde7a0n5cll5m4tvpjuiuoee3dm.apps.googleusercontent.com",
+          "client_id": "475078152863-v2bf70frs2ipmcucpfej5an0qvk1bs7l.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "net.mvips.driver",
-            "certificate_hash": "b07cce510a124ac80363db10fca46e1b0ab56e93"
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
         },
         {
