@@ -3,36 +3,36 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>662349183941-tv4gi98prrqrevrnl84v1dd95mttgsei.apps.googleusercontent.com</string>
+	<string>475078152863-vmc2ihv6n3ss0ufcdhduh9nt14h7d1si.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.662349183941-tv4gi98prrqrevrnl84v1dd95mttgsei</string>
+	<string>com.googleusercontent.apps.475078152863-vmc2ihv6n3ss0ufcdhduh9nt14h7d1si</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>662349183941-cik3r8l0g37gkolj87m6f8envp9rrh03.apps.googleusercontent.com</string>
+	<string>475078152863-v2bf70frs2ipmcucpfej5an0qvk1bs7l.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyCn1Z5yvo0TPfMQNAHH_Kg3SGdJGZa_v1s</string>
+	<string>AIzaSyC91itQt9Zxsh_cK9CfAGgCbmJr8bGVQj0</string>
 	<key>GCM_SENDER_ID</key>
-	<string>662349183941</string>
+	<string>475078152863</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>net.mvips.driver.dev</string>
+	<string>net.mvips.driver</string>
 	<key>PROJECT_ID</key>
-	<string>mvips-dev</string>
+	<string>mvips-prod</string>
 	<key>STORAGE_BUCKET</key>
-	<string>mvips-dev.appspot.com</string>
+	<string>mvips-prod.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_GCM_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:662349183941:ios:226756bafb3db82e8be9ac</string>
+	<string>1:475078152863:ios:4804dc39cada136284c8aa</string>
 	<key>DATABASE_URL</key>
-	<string>https://mvips-dev.firebaseio.com</string>
+	<string>https://mvips-prod.firebaseio.com</string>
 </dict>
 </plist>
