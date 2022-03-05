@@ -79,6 +79,7 @@
     "graphql:codegen": "dotenv_config_path=.env.development node -r dotenv/config ./node_modules/.bin/ts-node-dev scripts/graphql.ts && npx --node-arg '-r dotenv/config' graphql-codegen --config codegen.yml -- dotenv_config_path=.env.development",
     "deploy:ios:beta": "bundle exec fastlane ios beta --env production",
     "deploy:android:beta": "cd android && bundle exec fastlane beta",
+    "deploy:android:internal": "cd android && bundle exec fastlane playstoreInternal",
     "ios:prod": "react-native run-ios --scheme Release --configuration Release",
     "ios:dev": "react-native run-ios --scheme Debug",
     "android:dev": "react-native run-android --variant debug --appIdSuffix dev",
