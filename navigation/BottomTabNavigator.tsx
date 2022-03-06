@@ -7,7 +7,7 @@ import { Button, SafeAreaView, Text } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { useNavigation } from '@react-navigation/native';
 import DeviceInfo from 'react-native-device-info';
-import RNLocation from 'react-native-location';
+// import RNLocation from 'react-native-location';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -54,7 +54,7 @@ const BottomTabNavigator: React.FC = () => {
 
   React.useEffect(() => {
     console.log('Check location permission');
-    RNLocation.requestPermission({
+    /*     RNLocation.requestPermission({
       // eslint-disable-next-line prettier/prettier
       ios: 'always',
       android: {
@@ -81,7 +81,7 @@ const BottomTabNavigator: React.FC = () => {
           });
         });
       }
-    });
+    }); */
   }, []);
   return (
     <BottomTab.Navigator
