@@ -12,6 +12,9 @@ import auth from '@react-native-firebase/auth';
 import { enableScreens } from 'react-native-screens';
 import { iOSUIKit } from 'react-native-typography';
 // import messaging from '@react-native-firebase/messaging';
+import * as Location from "expo-location";
+import * as TaskManager from "expo-task-manager";
+
 
 import Colors from './constants/Colors';
 
@@ -84,6 +87,42 @@ const _loggedIn = async () => {
   return false;
 };
 
+const LOCATION_TASK_NAME = 'BACKGROUND_LOCATION_TASK';
+
+TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
+  if (error) {
+    console.error(error);
+    return;
+  }
+  if (data) {
+    /* Data object example:
+      {
+        locations: [
+          {
+            coords: {
+              accuracy: 22.5,
+              altitude: 61.80000305175781,
+              altitudeAccuracy: 1.3333333730697632,
+              heading: 0,
+              latitude: 36.7384187,
+              longitude: 3.3464008,
+              speed: 0,
+            },
+            timestamp: 1640286402303,
+          },
+        ],
+      };
+    */
+    const { locations } = data;
+    const location = locations[0];
+
+    if (location) {
+      // Do something with location...
+      console.log('Location in background', location.coords);
+    }
+  }
+});
+
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function App() {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
@@ -109,6 +148,22 @@ export default function App() {
   AppState.addEventListener('change', stateHandler);
 
   // Load any resources or data that we need prior to rendering the app
+  // Request permissions right after starting the app
+  React.useEffect(() => {
+    const requestPermissions = async () => {
+      console.log('Requesting permissions');
+      const foreground = await Location.requestForegroundPermissionsAsync();
+      console.log(`FOREGROUND: ${foreground.granted}`);
+      if (foreground.granted) {
+        console.log('Requesting background permission');
+        const background = await Location.requestBackgroundPermissionsAsync();
+        console.log(`BACKGROUND: ${background.granted}`);
+      }
+    };
+    console.log('About to request location permissions');
+    requestPermissions();
+  }, []);
+
   React.useEffect(() => {
     console.debug('Mounting app');
     async function requestPermissions() {
